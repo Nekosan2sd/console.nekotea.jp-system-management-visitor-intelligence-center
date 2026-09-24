@@ -1,144 +1,546 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>おうちごはんレシピ工房</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="毎日の献立に役立つ、画像を使わない架空の家庭料理レシピサイトです。">
+  <meta name="theme-color" content="#ef6c47">
+  <title>おうちごはんレシピ工房</title>
+  <style>
+    :root {
+      --main: #e86645;
+      --main-dark: #b94328;
+      --accent: #ffb14c;
+      --cream: #fff9f1;
+      --paper: #ffffff;
+      --ink: #372d28;
+      --muted: #796c65;
+      --line: #eadbd0;
+      --green: #477c50;
+      --shadow: 0 10px 30px rgba(75, 44, 25, .09);
+      --radius: 18px;
+    }
 
-<style>
-body{
-    margin:0;
-    font-family:"Yu Gothic",sans-serif;
-    background:#fff8f0;
-    color:#333;
-}
-header{
-    background:#ff8c42;
-    color:white;
-    text-align:center;
-    padding:40px 20px;
-}
-nav{
-    background:#e76f51;
-    text-align:center;
-    padding:12px;
-}
-nav a{
-    color:white;
-    text-decoration:none;
-    margin:0 15px;
-    font-weight:bold;
-}
-.hero{
-    text-align:center;
-    padding:50px 20px;
-}
-.hero img{
-    max-width:100%;
-    border-radius:12px;
-}
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:20px;
-}
-.recipes{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-}
-.card{
-    background:white;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
-    overflow:hidden;
-}
-.card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-}
-.card-content{
-    padding:15px;
-}
-.card h3{
-    margin-top:0;
-}
-footer{
-    background:#333;
-    color:white;
-    text-align:center;
-    padding:20px;
-    margin-top:40px;
-}
-</style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+      line-height: 1.75;
+    }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+
+    .skip-link {
+      position: fixed;
+      top: 8px;
+      left: 8px;
+      z-index: 999;
+      padding: 10px 16px;
+      color: #fff;
+      background: #222;
+      border-radius: 8px;
+      transform: translateY(-160%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    header {
+      position: relative;
+      overflow: hidden;
+      padding: 58px 20px 48px;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(135deg, #ff914d, var(--main));
+    }
+    header::before, header::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border: 45px solid rgba(255,255,255,.09);
+      border-radius: 50%;
+    }
+    header::before { top: -150px; left: -80px; }
+    header::after { right: -70px; bottom: -170px; }
+    .brand {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      letter-spacing: .04em;
+      text-shadow: 0 2px 2px rgba(0,0,0,.1);
+    }
+    .tagline { position: relative; z-index: 1; margin: 8px 0 0; font-weight: 700; }
+    .updated { position: relative; z-index: 1; margin: 10px 0 0; font-size: .86rem; opacity: .9; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      background: rgba(185, 67, 40, .96);
+      backdrop-filter: blur(10px);
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      max-width: 1180px;
+      margin: auto;
+      padding: 9px 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    nav a {
+      flex: 0 0 auto;
+      padding: 8px 13px;
+      color: #fff;
+      font-size: .93rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 999px;
+    }
+    nav a:hover, nav a:focus-visible { background: rgba(255,255,255,.17); outline: none; }
+
+    main { max-width: 1160px; margin: auto; padding: 34px 18px 70px; }
+    .notice {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 26px;
+      padding: 17px 20px;
+      border: 1px solid #f0d4b5;
+      border-radius: 14px;
+      background: #fff3df;
+    }
+    .notice strong { color: #943d22; }
+
+    .section { margin: 30px 0; scroll-margin-top: 80px; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 17px;
+      font-size: clamp(1.45rem, 3.4vw, 2rem);
+    }
+    .section-title .icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      color: #fff;
+      background: var(--main);
+      border-radius: 13px;
+      box-shadow: 0 5px 15px rgba(232,102,69,.25);
+    }
+    .subtitle { margin: -10px 0 20px 54px; color: var(--muted); }
+
+    .grid { display: grid; gap: 18px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .ranking { counter-reset: rank; margin: 0; padding: 0; list-style: none; }
+    .ranking li {
+      counter-increment: rank;
+      display: grid;
+      grid-template-columns: 43px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 15px 4px;
+      border-bottom: 1px dashed var(--line);
+    }
+    .ranking li:last-child { border: 0; }
+    .ranking li::before {
+      content: counter(rank);
+      display: grid;
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      background: var(--main);
+      border-radius: 50%;
+    }
+    .ranking li:nth-child(1)::before { background: #d89b19; }
+    .ranking li:nth-child(2)::before { background: #89929b; }
+    .ranking li:nth-child(3)::before { background: #b46b3c; }
+    .ranking small { color: var(--muted); white-space: nowrap; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tag {
+      border: 1px solid #f2c2ad;
+      padding: 9px 14px;
+      color: #923d28;
+      background: #fff6f1;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .tag:hover, .tag.active { color: #fff; background: var(--main); border-color: var(--main); }
+
+    .filters { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #cebdb3;
+      padding: 12px 14px;
+      color: var(--ink);
+      background: #fff;
+      border-radius: 11px;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--main);
+      outline: 3px solid rgba(232,102,69,.14);
+    }
+    textarea { min-height: 125px; resize: vertical; }
+    label { display: block; margin: 12px 0 5px; font-weight: 700; }
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 48px;
+      border: 0;
+      padding: 11px 18px;
+      color: #fff;
+      font-weight: 800;
+      background: var(--main);
+      border-radius: 11px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(185,67,40,.18);
+    }
+    .btn:hover { background: var(--main-dark); }
+    .btn.secondary { color: var(--main-dark); background: #fff0e8; box-shadow: none; }
+
+    .materials { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      padding: 9px 12px;
+      font-weight: 600;
+      background: #f8f4ef;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .check input { width: auto; accent-color: var(--main); }
+
+    .recipe-card { display: flex; flex-direction: column; min-height: 250px; }
+    .recipe-card h3 { margin: 0 0 7px; font-size: 1.25rem; }
+    .recipe-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px; }
+    .pill { padding: 4px 9px; color: var(--green); font-size: .8rem; font-weight: 800; background: #eef8ef; border-radius: 999px; }
+    .recipe-card p { margin: 0 0 10px; color: var(--muted); }
+    .recipe-card details { margin-top: auto; border-top: 1px dashed var(--line); padding-top: 12px; }
+    summary { color: var(--main-dark); font-weight: 800; cursor: pointer; }
+    .empty { display: none; padding: 24px; text-align: center; color: var(--muted); }
+
+    .form-note { color: var(--muted); font-size: .88rem; }
+    .message { min-height: 1.8em; margin-top: 11px; color: var(--green); font-weight: 800; }
+    .comments { display: grid; gap: 12px; margin-top: 18px; }
+    .comment { padding: 15px; border-left: 5px solid var(--accent); background: #fffaf4; border-radius: 8px; }
+    .comment-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
+    .comment time { color: var(--muted); font-size: .82rem; }
+
+    footer { padding: 35px 20px; color: #eee; text-align: center; background: #362b26; }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-bottom: 15px; }
+    .footer-links a { color: #fff; }
+    .small { font-size: .82rem; color: #cdbeb7; }
+    .analysis-slot { margin-top: 12px; min-height: 12px; }
+
+    dialog { max-width: 620px; width: calc(100% - 28px); border: 0; padding: 0; border-radius: 18px; box-shadow: 0 24px 80px rgba(0,0,0,.28); }
+    dialog::backdrop { background: rgba(35,22,16,.58); }
+    .dialog-box { padding: 26px; }
+    .dialog-box h2 { margin-top: 0; }
+
+    @media (max-width: 780px) {
+      .two, .three { grid-template-columns: 1fr; }
+      .filters { grid-template-columns: 1fr; }
+      .subtitle { margin-left: 0; }
+      .ranking li { grid-template-columns: 43px 1fr; }
+      .ranking small { grid-column: 2; }
+      header { padding-top: 42px; }
+    }
+  </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">本文へ移動</a>
 
-<header>
-    <h1>🍳 おうちごはんレシピ工房</h1>
-    <p>毎日の料理をもっと楽しく、美味しく。</p>
-</header>
+  <header id="top">
+    <h1 class="brand">🍳 おうちごはんレシピ工房</h1>
+    <p class="tagline">毎日の料理を、かんたん・おいしく・無理なく。</p>
+    <p class="updated">最終更新：2026年9月24日</p>
+  </header>
 
-<nav>
-    #ホーム</a>
-    #人気レシピ</a>
-    <a href="#">季節 #お問い合わせ</a>
-</nav>
-
-<section class="hero">
-    <h2>本日のおすすめレシピ</h2>
-    <p>初心者でも簡単に作れる家庭料理を紹介しています。</p>
-    <img src="https://tos/900/350?food
-</section>
-
-<div class="container">
-    <h2>人気レシピ</h2>
-
-    <div class="recipes">
-
-        <div class="card">
-            https://picsum.photos/400/300?1
-            <div class="card-content">
-                <h3>ふわとろオムライス</h3>
-                <p>卵がとろける人気の洋食メニュー。</p>
-            </div>
-        </div>
-
-        <div class="card">
-            https://picsum.photos/400/300?2
-            <div class="card-content">
-                <h3>鶏の照り焼き</h3>
-                <p>甘辛いタレがご飯によく合います。</p>
-            </div>
-        </div>
-
-        <div class="card">
-            <img src="https://picsum.photos/400         <div class="card-content">
-                <h3>和風ハンバーグ</h3>
-                <p>大根おろしでさっぱり仕上げました。</p>
-            </div>
-        </div>
-
+  <nav aria-label="メインメニュー">
+    <div class="nav-inner">
+      <a href="#top">ホーム</a>
+      <a href="#ranking">献立ランキング</a>
+      <a href="#search">レシピ検索</a>
+      <a href="#register">会員登録</a>
+      <a href="#post">レシピ投稿</a>
+      <a href="#comments">コメント</a>
     </div>
-</div>
+  </nav>
 
-<footer>
-    <p>© 2026 おうちごはんレシピ工房</p>
+  <main id="main">
+    <div class="notice">
+      <span aria-hidden="true">📢</span>
+      <div><strong>本日のおすすめ：</strong>冷蔵庫にある材料と調理時間から、今夜の献立を探せます。画像を使わない軽量サイトです。</div>
+    </div>
 
-    <!--shinobi1-->
-    <script type="text/javascript" src="//xa <noscript>
-        <a href="//xa.shinobi.jp/2359900
-            <img src="//xa.shinobi.jp/bin/ll?192359900" border    <br>
-        <span style="font-size:9px">
-            <img style="margin:0;vertical-align:text-bottom;"
-                 src="//img.shinobi.jp/tadaima/fj.gif"
-                 width="19" height="11"> 
-        </span>
-    </noscript>
-    <!--shinobi2-->
+    <section class="section" id="ranking">
+      <h2 class="section-title"><span class="icon">1</span>今日の献立ランキング</h2>
+      <p class="subtitle">みんなによく見られている家庭料理を集計しました。</p>
+      <div class="card">
+        <ol class="ranking">
+          <li><strong>鶏の照り焼き</strong><small>25分・鶏肉</small></li>
+          <li><strong>ほくほく肉じゃが</strong><small>40分・豚肉</small></li>
+          <li><strong>ふわとろオムライス</strong><small>20分・卵</small></li>
+          <li><strong>だし香る親子丼</strong><small>15分・鶏肉</small></li>
+          <li><strong>やわらか生姜焼き</strong><small>20分・豚肉</small></li>
+        </ol>
+      </div>
+    </section>
 
-</footer>
+    <section class="section" aria-labelledby="keyword-title">
+      <h2 class="section-title" id="keyword-title"><span class="icon">#</span>人気検索キーワード</h2>
+      <div class="card tags" id="keywordTags">
+        <button class="tag" data-keyword="節約">#節約</button>
+        <button class="tag" data-keyword="10分">#10分レシピ</button>
+        <button class="tag" data-keyword="お弁当">#お弁当</button>
+        <button class="tag" data-keyword="作り置き">#作り置き</button>
+        <button class="tag" data-keyword="一人暮らし">#一人暮らし</button>
+        <button class="tag" data-keyword="鶏肉">#鶏肉</button>
+      </div>
+    </section>
 
+    <section class="section" id="search">
+      <h2 class="section-title"><span class="icon">⌕</span>調理時間・材料から探す</h2>
+      <p class="subtitle">条件を選ぶと、下のレシピがすぐに絞り込まれます。</p>
+      <div class="card">
+        <div class="filters">
+          <input id="textSearch" type="search" placeholder="料理名・キーワードを入力" aria-label="料理名・キーワード">
+          <select id="timeSearch" aria-label="調理時間">
+            <option value="999">調理時間を指定しない</option>
+            <option value="10">10分以内</option>
+            <option value="15">15分以内</option>
+            <option value="30">30分以内</option>
+            <option value="60">60分以内</option>
+          </select>
+          <button class="btn secondary" id="clearSearch" type="button">条件をリセット</button>
+        </div>
+        <div class="materials" aria-label="材料">
+          <label class="check"><input type="checkbox" name="material" value="鶏肉">鶏肉</label>
+          <label class="check"><input type="checkbox" name="material" value="豚肉">豚肉</label>
+          <label class="check"><input type="checkbox" name="material" value="牛肉">牛肉</label>
+          <label class="check"><input type="checkbox" name="material" value="卵">卵</label>
+          <label class="check"><input type="checkbox" name="material" value="玉ねぎ">玉ねぎ</label>
+          <label class="check"><input type="checkbox" name="material" value="じゃがいも">じゃがいも</label>
+        </div>
+        <p id="resultCount" aria-live="polite"></p>
+      </div>
+
+      <div class="grid three" id="recipeList" style="margin-top:18px">
+        <article class="card recipe-card" data-name="だし香る親子丼" data-time="15" data-material="鶏肉 卵 玉ねぎ" data-tags="10分 節約 一人暮らし">
+          <h3>だし香る親子丼</h3><div class="recipe-meta"><span class="pill">15分</span><span class="pill">節約</span></div>
+          <p>鶏肉と玉ねぎを甘辛いだしで煮て、半熟卵で仕上げます。</p>
+          <details><summary>材料と作り方</summary><p>鶏肉・卵・玉ねぎ・だし・しょうゆ・みりん。具材を煮て溶き卵を2回に分けて加えます。</p></details>
+        </article>
+        <article class="card recipe-card" data-name="鶏の照り焼き" data-time="25" data-material="鶏肉" data-tags="お弁当 作り置き">
+          <h3>鶏の照り焼き</h3><div class="recipe-meta"><span class="pill">25分</span><span class="pill">お弁当</span></div>
+          <p>皮を香ばしく焼き、しょうゆ・みりん・砂糖のたれを絡めます。</p>
+          <details><summary>材料と作り方</summary><p>鶏もも肉・しょうゆ・みりん・砂糖。皮目から焼き、余分な脂を取ってたれを煮詰めます。</p></details>
+        </article>
+        <article class="card recipe-card" data-name="ふわとろオムライス" data-time="20" data-material="卵 玉ねぎ 鶏肉" data-tags="一人暮らし">
+          <h3>ふわとろオムライス</h3><div class="recipe-meta"><span class="pill">20分</span><span class="pill">定番</span></div>
+          <p>ケチャップライスに半熟の卵をふんわりとのせます。</p>
+          <details><summary>材料と作り方</summary><p>ご飯・卵・鶏肉・玉ねぎ・ケチャップ。具材とご飯を炒め、別に焼いた卵をのせます。</p></details>
+        </article>
+        <article class="card recipe-card" data-name="ほくほく肉じゃが" data-time="40" data-material="豚肉 玉ねぎ じゃがいも" data-tags="作り置き 節約">
+          <h3>ほくほく肉じゃが</h3><div class="recipe-meta"><span class="pill">40分</span><span class="pill">作り置き</span></div>
+          <p>じゃがいもに甘辛い煮汁をしっかり含ませた家庭の味です。</p>
+          <details><summary>材料と作り方</summary><p>豚肉・じゃがいも・玉ねぎ・しょうゆ・砂糖。具材を炒め、落としぶたをして煮込みます。</p></details>
+        </article>
+        <article class="card recipe-card" data-name="豚の生姜焼き" data-time="20" data-material="豚肉 玉ねぎ" data-tags="お弁当 節約">
+          <h3>豚の生姜焼き</h3><div class="recipe-meta"><span class="pill">20分</span><span class="pill">ご飯に合う</span></div>
+          <p>すりおろし生姜が香る、手早く作れる定番おかずです。</p>
+          <details><summary>材料と作り方</summary><p>豚肉・玉ねぎ・生姜・しょうゆ・みりん。豚肉と玉ねぎを炒めて合わせだれを絡めます。</p></details>
+        </article>
+        <article class="card recipe-card" data-name="牛肉と玉ねぎの甘辛炒め" data-time="15" data-material="牛肉 玉ねぎ" data-tags="お弁当 10分">
+          <h3>牛肉と玉ねぎの甘辛炒め</h3><div class="recipe-meta"><span class="pill">15分</span><span class="pill">時短</span></div>
+          <p>牛肉と玉ねぎをさっと炒める、忙しい日に便利な一品です。</p>
+          <details><summary>材料と作り方</summary><p>牛薄切り肉・玉ねぎ・しょうゆ・酒・砂糖。強めの火で手早く炒めます。</p></details>
+        </article>
+      </div>
+      <div class="card empty" id="emptyResult">条件に合うレシピがありません。条件を減らして再検索してください。</div>
+    </section>
+
+    <div class="grid two">
+      <section class="section" id="register">
+        <h2 class="section-title"><span class="icon">人</span>会員登録</h2>
+        <div class="card">
+          <form id="registerForm">
+            <label for="nickname">ニックネーム</label><input id="nickname" maxlength="20" required autocomplete="nickname">
+            <label for="email">メールアドレス</label><input id="email" type="email" required autocomplete="email">
+            <label for="password">パスワード</label><input id="password" type="password" minlength="8" required autocomplete="new-password">
+            <p class="form-note">デモサイトのため、入力内容は送信されず、この端末内だけで処理されます。</p>
+            <button class="btn" type="submit">無料で登録する</button>
+            <p class="message" id="registerMessage" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="section" id="post">
+        <h2 class="section-title"><span class="icon">＋</span>レシピ投稿</h2>
+        <div class="card">
+          <form id="recipeForm">
+            <label for="recipeTitle">レシピ名</label><input id="recipeTitle" maxlength="50" required>
+            <label for="recipeMaterials">材料</label><textarea id="recipeMaterials" required placeholder="例：卵 2個、玉ねぎ 1/2個"></textarea>
+            <label for="recipeSteps">作り方</label><textarea id="recipeSteps" required placeholder="手順を入力してください"></textarea>
+            <button class="btn" type="submit">レシピを投稿する</button>
+            <p class="message" id="recipeMessage" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <section class="section" id="comments">
+      <h2 class="section-title"><span class="icon">話</span>みんなのコメント</h2>
+      <div class="card">
+        <form id="commentForm">
+          <div class="grid two">
+            <div><label for="commentName">お名前</label><input id="commentName" maxlength="20" required></div>
+            <div><label for="commentRecipe">レシピ</label><select id="commentRecipe"><option>鶏の照り焼き</option><option>肉じゃが</option><option>オムライス</option><option>親子丼</option><option>生姜焼き</option></select></div>
+          </div>
+          <label for="commentText">コメント</label><textarea id="commentText" maxlength="300" required></textarea>
+          <button class="btn" type="submit">コメントを送信する</button>
+        </form>
+        <div class="comments" id="commentList" aria-live="polite">
+          <article class="comment"><div class="comment-head"><strong>ねこ料理人｜鶏の照り焼き</strong><time>2026/09/24</time></div><div>たれがよく絡んで、ご飯にぴったりでした！</div></article>
+          <article class="comment"><div class="comment-head"><strong>ごはん大好き｜オムライス</strong><time>2026/09/23</time></div><div>作り方が簡単で、卵もふんわり仕上がりました。</div></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-links"><a href="#top">ホーム</a><a href="#" data-dialog="aboutDialog">当サイトについて</a><a href="#" data-dialog="privacyDialog">プライバシーポリシー</a><a href="#" data-dialog="termsDialog">利用規約</a><a href="#top">サイトマップ</a></div>
+    <div>© 2026 おうちごはんレシピ工房</div>
+    <p class="small">このサイトは架空のデモサイトです。掲載内容・会員機能・投稿機能は実在のサービスではありません。</p>
+    <div class="analysis-slot" aria-label="アクセス解析">
+      <!--shinobi1--><script type="text/javascript" src="//xa.shinobi.jp/ufo/192359900"></script><noscript><a href="//xa.shinobi.jp/bin/gg?192359900" target="_blank" rel="noopener"><img src="//xa.shinobi.jp/bin/ll?192359900" border="0" alt="アクセス解析"></a><br><span style="font-size:9px"><img style="margin:0;vertical-align:text-bottom" src="//img.shinobi.jp/tadaima/fj.gif" width="19" height="11" alt=""></span></noscript><!--shinobi2-->
+    </div>
+  </footer>
+
+  <dialog id="aboutDialog"><div class="dialog-box"><h2>当サイトについて</h2><p>「おうちごはんレシピ工房」は、家庭料理をテーマに制作された架空のデモサイトです。掲載レシピは一般的な調理例です。</p><button class="btn close-dialog">閉じる</button></div></dialog>
+  <dialog id="privacyDialog"><div class="dialog-box"><h2>プライバシーポリシー</h2><p>このデモページのフォーム入力は外部サーバーへ送信しません。端末内保存にはブラウザの localStorage を使用します。また、ページにはアクセス状況を集計する外部アクセス解析タグが設置されています。</p><button class="btn close-dialog">閉じる</button></div></dialog>
+  <dialog id="termsDialog"><div class="dialog-box"><h2>利用規約</h2><p>本ページは学習・表示確認用の架空サイトです。掲載情報を実在サービスの案内として利用しないでください。</p><button class="btn close-dialog">閉じる</button></div></dialog>
+
+  <script>
+    'use strict';
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+    const escapeHTML = (value) => String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+
+    const textSearch = $('#textSearch');
+    const timeSearch = $('#timeSearch');
+    const materialBoxes = $$('input[name="material"]');
+    const recipeCards = $$('.recipe-card');
+
+    function filterRecipes() {
+      const keyword = textSearch.value.trim().toLowerCase();
+      const maxTime = Number(timeSearch.value);
+      const materials = materialBoxes.filter(box => box.checked).map(box => box.value);
+      let count = 0;
+      recipeCards.forEach(card => {
+        const haystack = `${card.dataset.name} ${card.dataset.material} ${card.dataset.tags}`.toLowerCase();
+        const keywordOK = !keyword || haystack.includes(keyword);
+        const timeOK = Number(card.dataset.time) <= maxTime;
+        const materialOK = materials.length === 0 || materials.every(item => card.dataset.material.includes(item));
+        const show = keywordOK && timeOK && materialOK;
+        card.hidden = !show;
+        if (show) count++;
+      });
+      $('#resultCount').textContent = `${count}件のレシピが見つかりました。`;
+      $('#emptyResult').style.display = count ? 'none' : 'block';
+    }
+
+    [textSearch, timeSearch, ...materialBoxes].forEach(el => el.addEventListener('input', filterRecipes));
+    $('#clearSearch').addEventListener('click', () => {
+      textSearch.value = '';
+      timeSearch.value = '999';
+      materialBoxes.forEach(box => box.checked = false);
+      $$('.tag').forEach(tag => tag.classList.remove('active'));
+      filterRecipes();
+    });
+    $$('.tag').forEach(tag => tag.addEventListener('click', () => {
+      $$('.tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      textSearch.value = tag.dataset.keyword;
+      filterRecipes();
+      $('#search').scrollIntoView({behavior:'smooth'});
+    }));
+
+    $('#registerForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const name = $('#nickname').value.trim();
+      localStorage.setItem('recipeDemoMember', JSON.stringify({ nickname: name, savedAt: Date.now() }));
+      $('#registerMessage').textContent = `${name}さん、デモ会員登録が完了しました。`;
+      event.currentTarget.reset();
+    });
+
+    $('#recipeForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const posts = JSON.parse(localStorage.getItem('recipeDemoPosts') || '[]');
+      posts.unshift({ title: $('#recipeTitle').value.trim(), materials: $('#recipeMaterials').value.trim(), steps: $('#recipeSteps').value.trim(), savedAt: Date.now() });
+      localStorage.setItem('recipeDemoPosts', JSON.stringify(posts.slice(0, 20)));
+      $('#recipeMessage').textContent = 'レシピを端末内に保存しました。';
+      event.currentTarget.reset();
+    });
+
+    function addComment(comment, prepend = true) {
+      const article = document.createElement('article');
+      article.className = 'comment';
+      article.innerHTML = `<div class="comment-head"><strong>${escapeHTML(comment.name)}｜${escapeHTML(comment.recipe)}</strong><time>${escapeHTML(comment.date)}</time></div><div>${escapeHTML(comment.text)}</div>`;
+      prepend ? $('#commentList').prepend(article) : $('#commentList').append(article);
+    }
+
+    JSON.parse(localStorage.getItem('recipeDemoComments') || '[]').slice().reverse().forEach(c => addComment(c, true));
+    $('#commentForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const now = new Date();
+      const comment = {
+        name: $('#commentName').value.trim(),
+        recipe: $('#commentRecipe').value,
+        text: $('#commentText').value.trim(),
+        date: `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}`
+      };
+      const comments = JSON.parse(localStorage.getItem('recipeDemoComments') || '[]');
+      comments.unshift(comment);
+      localStorage.setItem('recipeDemoComments', JSON.stringify(comments.slice(0, 30)));
+      addComment(comment, true);
+      event.currentTarget.reset();
+    });
+
+    $$('[data-dialog]').forEach(link => link.addEventListener('click', event => {
+      event.preventDefault();
+      $('#' + link.dataset.dialog).showModal();
+    }));
+    $$('.close-dialog').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
+    $$('dialog').forEach(dialog => dialog.addEventListener('click', event => {
+      if (event.target === dialog) dialog.close();
+    }));
+
+    filterRecipes();
+  </script>
 </body>
 </html>
