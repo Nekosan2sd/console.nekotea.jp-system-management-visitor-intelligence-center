@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>おうちごはんレシピ工房</title>
+
+<style>
+body{
+    margin:0;
+    font-family:"Yu Gothic",sans-serif;
+    background:#fff8f0;
+    color:#333;
+}
+header{
+    background:#ff8c42;
+    color:white;
+    text-align:center;
+    padding:40px 20px;
+}
+nav{
+    background:#e76f51;
+    text-align:center;
+    padding:12px;
+}
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:0 15px;
+    font-weight:bold;
+}
+.hero{
+    text-align:center;
+    padding:50px 20px;
+}
+.hero img{
+    max-width:100%;
+    border-radius:12px;
+}
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+.recipes{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+.card{
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    overflow:hidden;
+}
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+.card-content{
+    padding:15px;
+}
+.card h3{
+    margin-top:0;
+}
+footer{
+    background:#333;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🍳 おうちごはんレシピ工房</h1>
+    <p>毎日の料理をもっと楽しく、美味しく。</p>
+</header>
+
+<nav>
+    #ホーム</a>
+    #人気レシピ</a>
+    <a href="#">季節 #お問い合わせ</a>
+</nav>
+
+<section class="hero">
+    <h2>本日のおすすめレシピ</h2>
+    <p>初心者でも簡単に作れる家庭料理を紹介しています。</p>
+    <img src="https://tos/900/350?food
+</section>
+
+<div class="container">
+    <h2>人気レシピ</h2>
+
+    <div class="recipes">
+
+        <div class="card">
+            https://picsum.photos/400/300?1
+            <div class="card-content">
+                <h3>ふわとろオムライス</h3>
+                <p>卵がとろける人気の洋食メニュー。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            https://picsum.photos/400/300?2
+            <div class="card-content">
+                <h3>鶏の照り焼き</h3>
+                <p>甘辛いタレがご飯によく合います。</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://picsum.photos/400         <div class="card-content">
+                <h3>和風ハンバーグ</h3>
+                <p>大根おろしでさっぱり仕上げました。</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 おうちごはんレシピ工房</p>
+
+    <!--shinobi1-->
+    <script type="text/javascript" src="//xa <noscript>
+        <a href="//xa.shinobi.jp/2359900
+            <img src="//xa.shinobi.jp/bin/ll?192359900" border    <br>
+        <span style="font-size:9px">
+            <img style="margin:0;vertical-align:text-bottom;"
+                 src="//img.shinobi.jp/tadaima/fj.gif"
+                 width="19" height="11"> 
+        </span>
+    </noscript>
+    <!--shinobi2-->
+
+</footer>
+
+</body>
+</html>
