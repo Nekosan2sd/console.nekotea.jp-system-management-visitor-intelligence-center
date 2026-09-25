@@ -1,546 +1,1729 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="毎日の献立に役立つ、画像を使わない架空の家庭料理レシピサイトです。">
-  <meta name="theme-color" content="#ef6c47">
-  <title>おうちごはんレシピ工房</title>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+  <meta content="#c95735" name="theme-color"/>
+  <title>
+   台所日和｜毎日の家庭料理
+  </title>
   <style>
-    :root {
-      --main: #e86645;
-      --main-dark: #b94328;
-      --accent: #ffb14c;
-      --cream: #fff9f1;
-      --paper: #ffffff;
-      --ink: #372d28;
-      --muted: #796c65;
-      --line: #eadbd0;
-      --green: #477c50;
-      --shadow: 0 10px 30px rgba(75, 44, 25, .09);
-      --radius: 18px;
-    }
+   :root {
+  --red:#c95735;
+  --dark:#79331f;
+  --cream:#fbf6ed;
+  --paper:#fff;
+  --ink:#302b27;
+  --muted:#756961;
+  --line:#eaded1;
+  --green:#477052;
+  --shadow:0 12px 35px #603d2412
+}
+* {
+  box-sizing:border-box
+}
+html {
+  scroll-behavior:smooth
+}
+body {
+  margin:0;
+  color:var(--ink);
+  background:var(--cream);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.75
+}
+button,input,select,textarea {
+  font:inherit
+}
+a {
+  color:inherit
+}
+.topline {
+  padding:8px 18px;
+  color:#fff;
+  text-align:center;
+  font-size:12px;
+  background:#70301f
+}
+.mast {
+  padding:38px 18px;
+  text-align:center;
+  background:#fff;
+  border-bottom:1px solid var(--line)
+}
+.mast h1 {
+  margin:0;
+  font-family:serif;
+  font-size:clamp(32px,6vw,55px);
+  letter-spacing:.12em
+}
+.mast p {
+  margin:4px 0;
+  color:var(--muted)
+}
+nav {
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#fffdf9eF;
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(12px)
+}
+nav div {
+  display:flex;
+  justify-content:center;
+  gap:5px;
+  max-width:1120px;
+  margin:auto;
+  padding:9px;
+  overflow:auto
+}
+nav a {
+  padding:7px 12px;
+  white-space:nowrap;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:700;
+  border-radius:20px
+}
+nav a:hover {
+  background:#f3e7dc
+}
+main {
+  max-width:1120px;
+  margin:auto;
+  padding:28px 18px 70px
+}
+.hero {
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:18px
+}
+.panel {
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:#fff;
+  box-shadow:var(--shadow)
+}
+.hero-main {
+  background:linear-gradient(135deg,#fff,#fff4e6)
+}
+.label {
+  display:inline-block;
+  padding:4px 10px;
+  color:var(--dark);
+  font-size:12px;
+  font-weight:900;
+  background:#f8e1d2;
+  border-radius:30px
+}
+.hero h2 {
+  margin:12px 0;
+  font-size:clamp(27px,4vw,46px);
+  line-height:1.35
+}
+.today {
+  color:#fff;
+  background:linear-gradient(145deg,#9c4029,#d76a45)
+}
+.today h3 {
+  font-size:23px
+}
+.btn {
+  display:inline-flex;
+  border:0;
+  padding:11px 17px;
+  color:#fff;
+  font-weight:800;
+  text-decoration:none;
+  background:var(--red);
+  border-radius:10px;
+  cursor:pointer
+}
+.numbers {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  margin:22px 0;
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden
+}
+.number {
+  padding:16px;
+  text-align:center;
+  background:#fff;
+  border-right:1px solid var(--line)
+}
+.number:last-child {
+  border:0
+}
+.number b {
+  display:block;
+  color:var(--dark);
+  font-size:22px
+}
+.number small {
+  color:var(--muted)
+}
+section {
+  margin:36px 0;
+  scroll-margin-top:65px
+}
+.title {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px
+}
+.title i {
+  display:grid;
+  width:38px;
+  height:38px;
+  place-items:center;
+  color:#fff;
+  font-style:normal;
+  background:var(--red);
+  border-radius:12px
+}
+.title h2 {
+  margin:0;
+  font-size:clamp(22px,3vw,31px)
+}
+.grid {
+  display:grid;
+  gap:16px
+}
+.g3 {
+  grid-template-columns:repeat(3,1fr)
+}
+.g2 {
+  grid-template-columns:repeat(2,1fr)
+}
+.card {
+  padding:21px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:#fff;
+  box-shadow:var(--shadow)
+}
+.rank {
+  display:grid;
+  grid-template-columns:38px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px dashed var(--line)
+}
+.rank:last-child {
+  border:0
+}
+.rank strong:first-child {
+  display:grid;
+  width:32px;
+  height:32px;
+  place-items:center;
+  color:#fff;
+  background:var(--red);
+  border-radius:50%
+}
+.rank small,.muted {
+  color:var(--muted)
+}
+.tags {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px
+}
+.tag {
+  border:1px solid #e3bca8;
+  padding:8px 12px;
+  color:var(--dark);
+  background:#fff8f3;
+  border-radius:30px;
+  cursor:pointer
+}
+.tag:hover {
+  color:#fff;
+  background:var(--red)
+}
+.cats {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px
+}
+.cat {
+  text-align:center
+}
+.cat b {
+  display:block;
+  font-size:18px
+}
+.filter {
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px
+}
+input,select,textarea {
+  width:100%;
+  border:1px solid #cdbeb4;
+  padding:11px 13px;
+  background:#fff;
+  border-radius:10px
+}
+label {
+  display:block;
+  margin:10px 0 4px;
+  font-weight:700
+}
+.materials {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:13px
+}
+.materials label {
+  margin:0;
+  padding:7px 10px;
+  background:#f6f1eb;
+  border-radius:9px
+}
+.materials input {
+  width:auto
+}
+.recipe h3 {
+  margin:0
+}
+.meta {
+  display:flex;
+  gap:6px;
+  margin:8px 0
+}
+.meta span {
+  padding:3px 8px;
+  color:var(--green);
+  font-size:12px;
+  font-weight:800;
+  background:#edf5ee;
+  border-radius:20px
+}
+details {
+  border-top:1px dashed var(--line);
+  padding-top:10px
+}
+summary {
+  color:var(--dark);
+  font-weight:800;
+  cursor:pointer
+}
+.comment {
+  margin-top:10px;
+  padding:12px;
+  border-left:4px solid #e28a5f;
+  background:#fff9f4
+}
+.fine {
+  font-size:12px;
+  color:var(--muted)
+}
+footer {
+  padding:32px 18px;
+  color:#eee;
+  text-align:center;
+  background:#302824
+}
+footer a {
+  margin:0 7px
+}
+.admin {
+  border:0;
+  color:#c8bbb4;
+  text-decoration:underline;
+  background:none;
+  cursor:pointer
+}
+dialog {
+  width:min(430px,calc(100% - 28px));
+  border:0;
+  padding:0;
+  border-radius:18px;
+  box-shadow:0 25px 90px #0006
+}
+dialog::backdrop {
+  background:#1f1712aa
+}
+.modal {
+  padding:25px
+}
+.err {
+  min-height:24px;
+  color:#b42318;
+  font-weight:700
+}
+#chatShell {
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  background:#000
+}
+#chatShell.on {
+  display:block
+}
+#chatFrame {
+  width:100%;
+  height:100%;
+  border:0
+}
+#backBtn {
+  position:fixed;
+  left:10px;
+  top:10px;
+  z-index:100001;
+  border:1px solid #ffffff22;
+  padding:7px 10px;
+  color:#ffffff77;
+  background:#0008;
+  border-radius:9px;
+  cursor:pointer
+}
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--cream);
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
-      line-height: 1.75;
-    }
-    button, input, select, textarea { font: inherit; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-    a { color: inherit; }
-
-    .skip-link {
-      position: fixed;
-      top: 8px;
-      left: 8px;
-      z-index: 999;
-      padding: 10px 16px;
-      color: #fff;
-      background: #222;
-      border-radius: 8px;
-      transform: translateY(-160%);
-    }
-    .skip-link:focus { transform: translateY(0); }
-
-    header {
-      position: relative;
-      overflow: hidden;
-      padding: 58px 20px 48px;
-      color: #fff;
-      text-align: center;
-      background: linear-gradient(135deg, #ff914d, var(--main));
-    }
-    header::before, header::after {
-      content: "";
-      position: absolute;
-      width: 240px;
-      height: 240px;
-      border: 45px solid rgba(255,255,255,.09);
-      border-radius: 50%;
-    }
-    header::before { top: -150px; left: -80px; }
-    header::after { right: -70px; bottom: -170px; }
-    .brand {
-      position: relative;
-      z-index: 1;
-      margin: 0;
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      letter-spacing: .04em;
-      text-shadow: 0 2px 2px rgba(0,0,0,.1);
-    }
-    .tagline { position: relative; z-index: 1; margin: 8px 0 0; font-weight: 700; }
-    .updated { position: relative; z-index: 1; margin: 10px 0 0; font-size: .86rem; opacity: .9; }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      border-bottom: 1px solid rgba(255,255,255,.2);
-      background: rgba(185, 67, 40, .96);
-      backdrop-filter: blur(10px);
-    }
-    .nav-inner {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      max-width: 1180px;
-      margin: auto;
-      padding: 9px 12px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .nav-inner::-webkit-scrollbar { display: none; }
-    nav a {
-      flex: 0 0 auto;
-      padding: 8px 13px;
-      color: #fff;
-      font-size: .93rem;
-      font-weight: 700;
-      text-decoration: none;
-      border-radius: 999px;
-    }
-    nav a:hover, nav a:focus-visible { background: rgba(255,255,255,.17); outline: none; }
-
-    main { max-width: 1160px; margin: auto; padding: 34px 18px 70px; }
-    .notice {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      margin-bottom: 26px;
-      padding: 17px 20px;
-      border: 1px solid #f0d4b5;
-      border-radius: 14px;
-      background: #fff3df;
-    }
-    .notice strong { color: #943d22; }
-
-    .section { margin: 30px 0; scroll-margin-top: 80px; }
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0 0 17px;
-      font-size: clamp(1.45rem, 3.4vw, 2rem);
-    }
-    .section-title .icon {
-      display: grid;
-      width: 42px;
-      height: 42px;
-      place-items: center;
-      color: #fff;
-      background: var(--main);
-      border-radius: 13px;
-      box-shadow: 0 5px 15px rgba(232,102,69,.25);
-    }
-    .subtitle { margin: -10px 0 20px 54px; color: var(--muted); }
-
-    .grid { display: grid; gap: 18px; }
-    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .card {
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: var(--shadow);
-    }
-
-    .ranking { counter-reset: rank; margin: 0; padding: 0; list-style: none; }
-    .ranking li {
-      counter-increment: rank;
-      display: grid;
-      grid-template-columns: 43px 1fr auto;
-      gap: 12px;
-      align-items: center;
-      padding: 15px 4px;
-      border-bottom: 1px dashed var(--line);
-    }
-    .ranking li:last-child { border: 0; }
-    .ranking li::before {
-      content: counter(rank);
-      display: grid;
-      width: 35px;
-      height: 35px;
-      place-items: center;
-      color: #fff;
-      font-weight: 900;
-      background: var(--main);
-      border-radius: 50%;
-    }
-    .ranking li:nth-child(1)::before { background: #d89b19; }
-    .ranking li:nth-child(2)::before { background: #89929b; }
-    .ranking li:nth-child(3)::before { background: #b46b3c; }
-    .ranking small { color: var(--muted); white-space: nowrap; }
-
-    .tags { display: flex; flex-wrap: wrap; gap: 10px; }
-    .tag {
-      border: 1px solid #f2c2ad;
-      padding: 9px 14px;
-      color: #923d28;
-      background: #fff6f1;
-      border-radius: 999px;
-      cursor: pointer;
-    }
-    .tag:hover, .tag.active { color: #fff; background: var(--main); border-color: var(--main); }
-
-    .filters { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; }
-    input, select, textarea {
-      width: 100%;
-      border: 1px solid #cebdb3;
-      padding: 12px 14px;
-      color: var(--ink);
-      background: #fff;
-      border-radius: 11px;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--main);
-      outline: 3px solid rgba(232,102,69,.14);
-    }
-    textarea { min-height: 125px; resize: vertical; }
-    label { display: block; margin: 12px 0 5px; font-weight: 700; }
-    .btn {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 48px;
-      border: 0;
-      padding: 11px 18px;
-      color: #fff;
-      font-weight: 800;
-      background: var(--main);
-      border-radius: 11px;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(185,67,40,.18);
-    }
-    .btn:hover { background: var(--main-dark); }
-    .btn.secondary { color: var(--main-dark); background: #fff0e8; box-shadow: none; }
-
-    .materials { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
-    .check {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      margin: 0;
-      padding: 9px 12px;
-      font-weight: 600;
-      background: #f8f4ef;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .check input { width: auto; accent-color: var(--main); }
-
-    .recipe-card { display: flex; flex-direction: column; min-height: 250px; }
-    .recipe-card h3 { margin: 0 0 7px; font-size: 1.25rem; }
-    .recipe-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 13px; }
-    .pill { padding: 4px 9px; color: var(--green); font-size: .8rem; font-weight: 800; background: #eef8ef; border-radius: 999px; }
-    .recipe-card p { margin: 0 0 10px; color: var(--muted); }
-    .recipe-card details { margin-top: auto; border-top: 1px dashed var(--line); padding-top: 12px; }
-    summary { color: var(--main-dark); font-weight: 800; cursor: pointer; }
-    .empty { display: none; padding: 24px; text-align: center; color: var(--muted); }
-
-    .form-note { color: var(--muted); font-size: .88rem; }
-    .message { min-height: 1.8em; margin-top: 11px; color: var(--green); font-weight: 800; }
-    .comments { display: grid; gap: 12px; margin-top: 18px; }
-    .comment { padding: 15px; border-left: 5px solid var(--accent); background: #fffaf4; border-radius: 8px; }
-    .comment-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 5px; }
-    .comment time { color: var(--muted); font-size: .82rem; }
-
-    footer { padding: 35px 20px; color: #eee; text-align: center; background: #362b26; }
-    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-bottom: 15px; }
-    .footer-links a { color: #fff; }
-    .small { font-size: .82rem; color: #cdbeb7; }
-    .analysis-slot { margin-top: 12px; min-height: 12px; }
-
-    dialog { max-width: 620px; width: calc(100% - 28px); border: 0; padding: 0; border-radius: 18px; box-shadow: 0 24px 80px rgba(0,0,0,.28); }
-    dialog::backdrop { background: rgba(35,22,16,.58); }
-    .dialog-box { padding: 26px; }
-    .dialog-box h2 { margin-top: 0; }
-
-    @media (max-width: 780px) {
-      .two, .three { grid-template-columns: 1fr; }
-      .filters { grid-template-columns: 1fr; }
-      .subtitle { margin-left: 0; }
-      .ranking li { grid-template-columns: 43px 1fr; }
-      .ranking small { grid-column: 2; }
-      header { padding-top: 42px; }
-    }
+@media(max-width:760px) {
+  .hero,.g3,.g2 {
+    grid-template-columns:1fr
+  }
+  .cats {
+    grid-template-columns:repeat(2,1fr)
+  }
+  .filter {
+    grid-template-columns:1fr
+  }
+  .numbers {
+    grid-template-columns:repeat(2,1fr)
+  }
+  .number:nth-child(2) {
+    border-right:0
+  }
+  .hero .panel {
+    padding:22px
+  }
+  
+}
   </style>
-</head>
-<body>
-  <a class="skip-link" href="#main">本文へ移動</a>
-
-  <header id="top">
-    <h1 class="brand">🍳 おうちごはんレシピ工房</h1>
-    <p class="tagline">毎日の料理を、かんたん・おいしく・無理なく。</p>
-    <p class="updated">最終更新：2026年9月24日</p>
+ </head>
+ <body>
+  <div class="topline">
+   旬の食材と、無理なく続く家庭料理を毎週お届け
+  </div>
+  <header class="mast">
+   <h1>
+    台所日和
+   </h1>
+   <p>
+    きょうの食卓に、ちょうどいい。
+   </p>
   </header>
-
-  <nav aria-label="メインメニュー">
-    <div class="nav-inner">
-      <a href="#top">ホーム</a>
-      <a href="#ranking">献立ランキング</a>
-      <a href="#search">レシピ検索</a>
-      <a href="#register">会員登録</a>
-      <a href="#post">レシピ投稿</a>
-      <a href="#comments">コメント</a>
-    </div>
+  <nav>
+   <div>
+    <a href="#top">
+     ホーム
+    </a>
+    <a href="#rank">
+     献立ランキング
+    </a>
+    <a href="#search">
+     材料から探す
+    </a>
+    <a href="#tips">
+     料理のコツ
+    </a>
+    <a href="#post">
+     レシピ投稿
+    </a>
+    <a href="#voice">
+     みんなの声
+    </a>
+   </div>
   </nav>
-
-  <main id="main">
-    <div class="notice">
-      <span aria-hidden="true">📢</span>
-      <div><strong>本日のおすすめ：</strong>冷蔵庫にある材料と調理時間から、今夜の献立を探せます。画像を使わない軽量サイトです。</div>
+  <main id="top">
+   <div class="hero">
+    <article class="panel hero-main">
+     <span class="label">
+      今週の台所特集
+     </span>
+     <h2>
+      冷蔵庫にあるもので、
+      <br/>
+      今日もちゃんとおいしい。
+     </h2>
+     <p class="muted">
+      定番料理から忙しい日の時短献立まで。調理時間と材料を選ぶだけで、今夜にぴったりのレシピが見つかります。
+     </p>
+     <a class="btn" href="#search">
+      レシピを探す
+     </a>
+    </article>
+    <aside class="panel today">
+     <small>
+      9月24日の献立案
+     </small>
+     <h3>
+      秋のほっと和食セット
+     </h3>
+     <ul>
+      <li>
+       鶏ときのこの炊き込みご飯
+      </li>
+      <li>
+       豆腐とわかめのみそ汁
+      </li>
+      <li>
+       かぼちゃのやさしい煮物
+      </li>
+     </ul>
+     <small>
+      目安45分・1人分 約520kcal
+     </small>
+    </aside>
+   </div>
+   <div class="numbers">
+    <div class="number">
+     <b>
+      1,248
+     </b>
+     <small>
+      掲載レシピ
+     </small>
     </div>
-
-    <section class="section" id="ranking">
-      <h2 class="section-title"><span class="icon">1</span>今日の献立ランキング</h2>
-      <p class="subtitle">みんなによく見られている家庭料理を集計しました。</p>
-      <div class="card">
-        <ol class="ranking">
-          <li><strong>鶏の照り焼き</strong><small>25分・鶏肉</small></li>
-          <li><strong>ほくほく肉じゃが</strong><small>40分・豚肉</small></li>
-          <li><strong>ふわとろオムライス</strong><small>20分・卵</small></li>
-          <li><strong>だし香る親子丼</strong><small>15分・鶏肉</small></li>
-          <li><strong>やわらか生姜焼き</strong><small>20分・豚肉</small></li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="keyword-title">
-      <h2 class="section-title" id="keyword-title"><span class="icon">#</span>人気検索キーワード</h2>
-      <div class="card tags" id="keywordTags">
-        <button class="tag" data-keyword="節約">#節約</button>
-        <button class="tag" data-keyword="10分">#10分レシピ</button>
-        <button class="tag" data-keyword="お弁当">#お弁当</button>
-        <button class="tag" data-keyword="作り置き">#作り置き</button>
-        <button class="tag" data-keyword="一人暮らし">#一人暮らし</button>
-        <button class="tag" data-keyword="鶏肉">#鶏肉</button>
-      </div>
-    </section>
-
-    <section class="section" id="search">
-      <h2 class="section-title"><span class="icon">⌕</span>調理時間・材料から探す</h2>
-      <p class="subtitle">条件を選ぶと、下のレシピがすぐに絞り込まれます。</p>
-      <div class="card">
-        <div class="filters">
-          <input id="textSearch" type="search" placeholder="料理名・キーワードを入力" aria-label="料理名・キーワード">
-          <select id="timeSearch" aria-label="調理時間">
-            <option value="999">調理時間を指定しない</option>
-            <option value="10">10分以内</option>
-            <option value="15">15分以内</option>
-            <option value="30">30分以内</option>
-            <option value="60">60分以内</option>
-          </select>
-          <button class="btn secondary" id="clearSearch" type="button">条件をリセット</button>
-        </div>
-        <div class="materials" aria-label="材料">
-          <label class="check"><input type="checkbox" name="material" value="鶏肉">鶏肉</label>
-          <label class="check"><input type="checkbox" name="material" value="豚肉">豚肉</label>
-          <label class="check"><input type="checkbox" name="material" value="牛肉">牛肉</label>
-          <label class="check"><input type="checkbox" name="material" value="卵">卵</label>
-          <label class="check"><input type="checkbox" name="material" value="玉ねぎ">玉ねぎ</label>
-          <label class="check"><input type="checkbox" name="material" value="じゃがいも">じゃがいも</label>
-        </div>
-        <p id="resultCount" aria-live="polite"></p>
-      </div>
-
-      <div class="grid three" id="recipeList" style="margin-top:18px">
-        <article class="card recipe-card" data-name="だし香る親子丼" data-time="15" data-material="鶏肉 卵 玉ねぎ" data-tags="10分 節約 一人暮らし">
-          <h3>だし香る親子丼</h3><div class="recipe-meta"><span class="pill">15分</span><span class="pill">節約</span></div>
-          <p>鶏肉と玉ねぎを甘辛いだしで煮て、半熟卵で仕上げます。</p>
-          <details><summary>材料と作り方</summary><p>鶏肉・卵・玉ねぎ・だし・しょうゆ・みりん。具材を煮て溶き卵を2回に分けて加えます。</p></details>
-        </article>
-        <article class="card recipe-card" data-name="鶏の照り焼き" data-time="25" data-material="鶏肉" data-tags="お弁当 作り置き">
-          <h3>鶏の照り焼き</h3><div class="recipe-meta"><span class="pill">25分</span><span class="pill">お弁当</span></div>
-          <p>皮を香ばしく焼き、しょうゆ・みりん・砂糖のたれを絡めます。</p>
-          <details><summary>材料と作り方</summary><p>鶏もも肉・しょうゆ・みりん・砂糖。皮目から焼き、余分な脂を取ってたれを煮詰めます。</p></details>
-        </article>
-        <article class="card recipe-card" data-name="ふわとろオムライス" data-time="20" data-material="卵 玉ねぎ 鶏肉" data-tags="一人暮らし">
-          <h3>ふわとろオムライス</h3><div class="recipe-meta"><span class="pill">20分</span><span class="pill">定番</span></div>
-          <p>ケチャップライスに半熟の卵をふんわりとのせます。</p>
-          <details><summary>材料と作り方</summary><p>ご飯・卵・鶏肉・玉ねぎ・ケチャップ。具材とご飯を炒め、別に焼いた卵をのせます。</p></details>
-        </article>
-        <article class="card recipe-card" data-name="ほくほく肉じゃが" data-time="40" data-material="豚肉 玉ねぎ じゃがいも" data-tags="作り置き 節約">
-          <h3>ほくほく肉じゃが</h3><div class="recipe-meta"><span class="pill">40分</span><span class="pill">作り置き</span></div>
-          <p>じゃがいもに甘辛い煮汁をしっかり含ませた家庭の味です。</p>
-          <details><summary>材料と作り方</summary><p>豚肉・じゃがいも・玉ねぎ・しょうゆ・砂糖。具材を炒め、落としぶたをして煮込みます。</p></details>
-        </article>
-        <article class="card recipe-card" data-name="豚の生姜焼き" data-time="20" data-material="豚肉 玉ねぎ" data-tags="お弁当 節約">
-          <h3>豚の生姜焼き</h3><div class="recipe-meta"><span class="pill">20分</span><span class="pill">ご飯に合う</span></div>
-          <p>すりおろし生姜が香る、手早く作れる定番おかずです。</p>
-          <details><summary>材料と作り方</summary><p>豚肉・玉ねぎ・生姜・しょうゆ・みりん。豚肉と玉ねぎを炒めて合わせだれを絡めます。</p></details>
-        </article>
-        <article class="card recipe-card" data-name="牛肉と玉ねぎの甘辛炒め" data-time="15" data-material="牛肉 玉ねぎ" data-tags="お弁当 10分">
-          <h3>牛肉と玉ねぎの甘辛炒め</h3><div class="recipe-meta"><span class="pill">15分</span><span class="pill">時短</span></div>
-          <p>牛肉と玉ねぎをさっと炒める、忙しい日に便利な一品です。</p>
-          <details><summary>材料と作り方</summary><p>牛薄切り肉・玉ねぎ・しょうゆ・酒・砂糖。強めの火で手早く炒めます。</p></details>
-        </article>
-      </div>
-      <div class="card empty" id="emptyResult">条件に合うレシピがありません。条件を減らして再検索してください。</div>
-    </section>
-
-    <div class="grid two">
-      <section class="section" id="register">
-        <h2 class="section-title"><span class="icon">人</span>会員登録</h2>
-        <div class="card">
-          <form id="registerForm">
-            <label for="nickname">ニックネーム</label><input id="nickname" maxlength="20" required autocomplete="nickname">
-            <label for="email">メールアドレス</label><input id="email" type="email" required autocomplete="email">
-            <label for="password">パスワード</label><input id="password" type="password" minlength="8" required autocomplete="new-password">
-            <p class="form-note">デモサイトのため、入力内容は送信されず、この端末内だけで処理されます。</p>
-            <button class="btn" type="submit">無料で登録する</button>
-            <p class="message" id="registerMessage" aria-live="polite"></p>
-          </form>
-        </div>
-      </section>
-
-      <section class="section" id="post">
-        <h2 class="section-title"><span class="icon">＋</span>レシピ投稿</h2>
-        <div class="card">
-          <form id="recipeForm">
-            <label for="recipeTitle">レシピ名</label><input id="recipeTitle" maxlength="50" required>
-            <label for="recipeMaterials">材料</label><textarea id="recipeMaterials" required placeholder="例：卵 2個、玉ねぎ 1/2個"></textarea>
-            <label for="recipeSteps">作り方</label><textarea id="recipeSteps" required placeholder="手順を入力してください"></textarea>
-            <button class="btn" type="submit">レシピを投稿する</button>
-            <p class="message" id="recipeMessage" aria-live="polite"></p>
-          </form>
-        </div>
-      </section>
+    <div class="number">
+     <b>
+      186
+     </b>
+     <small>
+      時短レシピ
+     </small>
     </div>
-
-    <section class="section" id="comments">
-      <h2 class="section-title"><span class="icon">話</span>みんなのコメント</h2>
-      <div class="card">
-        <form id="commentForm">
-          <div class="grid two">
-            <div><label for="commentName">お名前</label><input id="commentName" maxlength="20" required></div>
-            <div><label for="commentRecipe">レシピ</label><select id="commentRecipe"><option>鶏の照り焼き</option><option>肉じゃが</option><option>オムライス</option><option>親子丼</option><option>生姜焼き</option></select></div>
-          </div>
-          <label for="commentText">コメント</label><textarea id="commentText" maxlength="300" required></textarea>
-          <button class="btn" type="submit">コメントを送信する</button>
-        </form>
-        <div class="comments" id="commentList" aria-live="polite">
-          <article class="comment"><div class="comment-head"><strong>ねこ料理人｜鶏の照り焼き</strong><time>2026/09/24</time></div><div>たれがよく絡んで、ご飯にぴったりでした！</div></article>
-          <article class="comment"><div class="comment-head"><strong>ごはん大好き｜オムライス</strong><time>2026/09/23</time></div><div>作り方が簡単で、卵もふんわり仕上がりました。</div></article>
-        </div>
+    <div class="number">
+     <b>
+      92%
+     </b>
+     <small>
+      また作りたい
+     </small>
+    </div>
+    <div class="number">
+     <b>
+      毎週
+     </b>
+     <small>
+      献立更新
+     </small>
+    </div>
+   </div>
+   <section id="rank">
+    <div class="title">
+     <i>
+      1
+     </i>
+     <h2>
+      今日の献立ランキング
+     </h2>
+    </div>
+    <div class="panel">
+     <div class="rank">
+      <strong>
+       1
+      </strong>
+      <b>
+       鶏の照り焼き
+      </b>
+      <small>
+       25分
+      </small>
+     </div>
+     <div class="rank">
+      <strong>
+       2
+      </strong>
+      <b>
+       ほくほく肉じゃが
+      </b>
+      <small>
+       40分
+      </small>
+     </div>
+     <div class="rank">
+      <strong>
+       3
+      </strong>
+      <b>
+       ふわとろオムライス
+      </b>
+      <small>
+       20分
+      </small>
+     </div>
+     <div class="rank">
+      <strong>
+       4
+      </strong>
+      <b>
+       だし香る親子丼
+      </b>
+      <small>
+       15分
+      </small>
+     </div>
+     <div class="rank">
+      <strong>
+       5
+      </strong>
+      <b>
+       豚の生姜焼き
+      </b>
+      <small>
+       20分
+      </small>
+     </div>
+    </div>
+   </section>
+   <section>
+    <div class="title">
+     <i>
+      #
+     </i>
+     <h2>
+      人気検索キーワード
+     </h2>
+    </div>
+    <div class="panel tags">
+     <button class="tag">
+      #節約
+     </button>
+     <button class="tag">
+      #10分レシピ
+     </button>
+     <button class="tag">
+      #お弁当
+     </button>
+     <button class="tag">
+      #作り置き
+     </button>
+     <button class="tag">
+      #一人暮らし
+     </button>
+     <button class="tag">
+      #鶏肉
+     </button>
+    </div>
+   </section>
+   <section>
+    <div class="title">
+     <i>
+      分
+     </i>
+     <h2>
+      料理の種類から探す
+     </h2>
+    </div>
+    <div class="cats">
+     <div class="card cat">
+      <b>
+       和食
+      </b>
+      <small>
+       だしを楽しむ定番
+      </small>
+     </div>
+     <div class="card cat">
+      <b>
+       洋食
+      </b>
+      <small>
+       家族に人気のごちそう
+      </small>
+     </div>
+     <div class="card cat">
+      <b>
+       中華
+      </b>
+      <small>
+       ご飯が進むおかず
+      </small>
+     </div>
+     <div class="card cat">
+      <b>
+       お菓子
+      </b>
+      <small>
+       休日の手作りおやつ
+      </small>
+     </div>
+    </div>
+   </section>
+   <section id="search">
+    <div class="title">
+     <i>
+      ⌕
+     </i>
+     <h2>
+      調理時間・材料から探す
+     </h2>
+    </div>
+    <div class="panel">
+     <div class="filter">
+      <input id="q" placeholder="料理名・キーワード"/>
+      <select id="tm">
+       <option value="99">
+        時間を指定しない
+       </option>
+       <option value="15">
+        15分以内
+       </option>
+       <option value="30">
+        30分以内
+       </option>
+       <option value="60">
+        60分以内
+       </option>
+      </select>
+      <button class="btn" id="reset">
+       リセット
+      </button>
+     </div>
+     <div class="materials">
+      <label>
+       <input type="checkbox" value="鶏肉"/>
+       鶏肉
+      </label>
+      <label>
+       <input type="checkbox" value="豚肉"/>
+       豚肉
+      </label>
+      <label>
+       <input type="checkbox" value="卵"/>
+       卵
+      </label>
+      <label>
+       <input type="checkbox" value="玉ねぎ"/>
+       玉ねぎ
+      </label>
+      <label>
+       <input type="checkbox" value="じゃがいも"/>
+       じゃがいも
+      </label>
+     </div>
+     <p class="muted" id="count">
+     </p>
+    </div>
+    <div class="grid g3" id="recipes" style="margin-top:16px">
+     <article class="card recipe" data-key="親子丼 鶏肉 卵 玉ねぎ 節約" data-time="15">
+      <h3>
+       だし香る親子丼
+      </h3>
+      <div class="meta">
+       <span>
+        15分
+       </span>
+       <span>
+        節約
+       </span>
       </div>
+      <p>
+       甘辛いだしと半熟卵で仕上げる定番丼。
+      </p>
+      <details>
+       <summary>
+        材料と作り方
+       </summary>
+       <p>
+        鶏肉、卵、玉ねぎ、だし、しょうゆ、みりん。具材を煮て卵を2回に分けて加えます。
+       </p>
+      </details>
+     </article>
+     <article class="card recipe" data-key="照り焼き 鶏肉 お弁当" data-time="25">
+      <h3>
+       鶏の照り焼き
+      </h3>
+      <div class="meta">
+       <span>
+        25分
+       </span>
+       <span>
+        お弁当
+       </span>
+      </div>
+      <p>
+       香ばしく焼いた鶏肉に甘辛いたれを絡めます。
+      </p>
+      <details>
+       <summary>
+        材料と作り方
+       </summary>
+       <p>
+        鶏もも肉、しょうゆ、みりん、砂糖。皮目から焼いてたれを煮詰めます。
+       </p>
+      </details>
+     </article>
+     <article class="card recipe" data-key="オムライス 卵 玉ねぎ 鶏肉" data-time="20">
+      <h3>
+       ふわとろオムライス
+      </h3>
+      <div class="meta">
+       <span>
+        20分
+       </span>
+       <span>
+        定番
+       </span>
+      </div>
+      <p>
+       ケチャップライスに半熟卵をふんわり。
+      </p>
+      <details>
+       <summary>
+        材料と作り方
+       </summary>
+       <p>
+        ご飯、卵、鶏肉、玉ねぎ、ケチャップ。炒めたご飯に卵をのせます。
+       </p>
+      </details>
+     </article>
+     <article class="card recipe" data-key="肉じゃが 豚肉 玉ねぎ じゃがいも 作り置き" data-time="40">
+      <h3>
+       ほくほく肉じゃが
+      </h3>
+      <div class="meta">
+       <span>
+        40分
+       </span>
+       <span>
+        作り置き
+       </span>
+      </div>
+      <p>
+       甘辛い煮汁を含ませた家庭の味。
+      </p>
+      <details>
+       <summary>
+        材料と作り方
+       </summary>
+       <p>
+        豚肉、じゃがいも、玉ねぎ。落としぶたをして煮込みます。
+       </p>
+      </details>
+     </article>
+     <article class="card recipe" data-key="生姜焼き 豚肉 玉ねぎ" data-time="20">
+      <h3>
+       豚の生姜焼き
+      </h3>
+      <div class="meta">
+       <span>
+        20分
+       </span>
+       <span>
+        ご飯に合う
+       </span>
+      </div>
+      <p>
+       生姜が香る手早い定番おかず。
+      </p>
+      <details>
+       <summary>
+        材料と作り方
+       </summary>
+       <p>
+        豚肉、玉ねぎ、生姜、しょうゆ、みりん。強めの火で炒めます。
+       </p>
+      </details>
+     </article>
+     <article class="card recipe" data-key="卵 玉ねぎ スープ 10分" data-time="15">
+      <h3>
+       ふんわり卵スープ
+      </h3>
+      <div class="meta">
+       <span>
+        15分
+       </span>
+       <span>
+        時短
+       </span>
+      </div>
+      <p>
+       献立にもう一品ほしい日に便利。
+      </p>
+      <details>
+       <summary>
+        材料と作り方
+       </summary>
+       <p>
+        卵、玉ねぎ、鶏がらスープ。沸騰したスープに卵を細く流します。
+       </p>
+      </details>
+     </article>
+    </div>
+   </section>
+   <section id="tips">
+    <div class="title">
+     <i>
+      技
+     </i>
+     <h2>
+      料理をおいしくする小さなコツ
+     </h2>
+    </div>
+    <div class="grid g3">
+     <div class="card">
+      <b>
+       調味料は先に合わせる
+      </b>
+      <p class="muted">
+       加熱中に慌てず、味のばらつきを防げます。
+      </p>
+     </div>
+     <div class="card">
+      <b>
+       肉の水気を取る
+      </b>
+      <p class="muted">
+       表面が香ばしく焼け、たれも絡みます。
+      </p>
+     </div>
+     <div class="card">
+      <b>
+       煮物は一度冷ます
+      </b>
+      <p class="muted">
+       冷める過程で味が入り、翌日もおいしく。
+      </p>
+     </div>
+    </div>
+   </section>
+   <div class="grid g2">
+    <section id="post">
+     <div class="title">
+      <i>
+       ＋
+      </i>
+      <h2>
+       レシピ投稿
+      </h2>
+     </div>
+     <form class="card" id="postForm">
+      <label>
+       レシピ名
+      </label>
+      <input required=""/>
+      <label>
+       材料
+      </label>
+      <textarea required="" rows="4"></textarea>
+      <label>
+       作り方
+      </label>
+      <textarea required="" rows="4"></textarea>
+      <p class="fine">
+       投稿はこの端末内だけに保存されます。
+      </p>
+      <button class="btn">
+       投稿する
+      </button>
+      <p id="postMsg">
+      </p>
+     </form>
     </section>
+    <section id="voice">
+     <div class="title">
+      <i>
+       話
+      </i>
+      <h2>
+       みんなの声
+      </h2>
+     </div>
+     <form class="card" id="commentForm">
+      <label>
+       お名前
+      </label>
+      <input id="cn" required=""/>
+      <label>
+       コメント
+      </label>
+      <textarea id="ct" required="" rows="4"></textarea>
+      <button class="btn">
+       送信する
+      </button>
+      <div id="comments">
+       <div class="comment">
+        <b>
+         ねこ料理人
+        </b>
+        <br/>
+        照り焼きがご飯にぴったりでした！
+       </div>
+       <div class="comment">
+        <b>
+         ごはん大好き
+        </b>
+        <br/>
+        オムライスがふんわり作れました。
+       </div>
+      </div>
+     </form>
+    </section>
+   </div>
   </main>
-
   <footer>
-    <div class="footer-links"><a href="#top">ホーム</a><a href="#" data-dialog="aboutDialog">当サイトについて</a><a href="#" data-dialog="privacyDialog">プライバシーポリシー</a><a href="#" data-dialog="termsDialog">利用規約</a><a href="#top">サイトマップ</a></div>
-    <div>© 2026 おうちごはんレシピ工房</div>
-    <p class="small">このサイトは架空のデモサイトです。掲載内容・会員機能・投稿機能は実在のサービスではありません。</p>
-    <div class="analysis-slot" aria-label="アクセス解析">
-      <!--shinobi1--><script type="text/javascript" src="//xa.shinobi.jp/ufo/192359900"></script><noscript><a href="//xa.shinobi.jp/bin/gg?192359900" target="_blank" rel="noopener"><img src="//xa.shinobi.jp/bin/ll?192359900" border="0" alt="アクセス解析"></a><br><span style="font-size:9px"><img style="margin:0;vertical-align:text-bottom" src="//img.shinobi.jp/tadaima/fj.gif" width="19" height="11" alt=""></span></noscript><!--shinobi2-->
-    </div>
+   <p>
+    <a href="#top">
+     ホーム
+    </a>
+    <a href="#rank">
+     人気レシピ
+    </a>
+    <a href="#">
+     利用規約
+    </a>
+    <a href="#">
+     プライバシー
+    </a>
+   </p>
+   <b>
+    台所日和
+   </b>
+   <p class="fine">
+    © 2026 台所日和　このサイトは架空のレシピメディアです。
+   </p>
+   <button class="admin" id="adminOpen">
+    サイト管理
+   </button>
+   <div>
+    <!--shinobi1-->
+    <script src="//xa.shinobi.jp/ufo/192359900">
+    </script>
+    <noscript>
+     <a href="//xa.shinobi.jp/bin/gg?192359900">
+      <img alt="" src="//xa.shinobi.jp/bin/ll?192359900"/>
+     </a>
+    </noscript>
+    <!--shinobi2-->
+   </div>
   </footer>
-
-  <dialog id="aboutDialog"><div class="dialog-box"><h2>当サイトについて</h2><p>「おうちごはんレシピ工房」は、家庭料理をテーマに制作された架空のデモサイトです。掲載レシピは一般的な調理例です。</p><button class="btn close-dialog">閉じる</button></div></dialog>
-  <dialog id="privacyDialog"><div class="dialog-box"><h2>プライバシーポリシー</h2><p>このデモページのフォーム入力は外部サーバーへ送信しません。端末内保存にはブラウザの localStorage を使用します。また、ページにはアクセス状況を集計する外部アクセス解析タグが設置されています。</p><button class="btn close-dialog">閉じる</button></div></dialog>
-  <dialog id="termsDialog"><div class="dialog-box"><h2>利用規約</h2><p>本ページは学習・表示確認用の架空サイトです。掲載情報を実在サービスの案内として利用しないでください。</p><button class="btn close-dialog">閉じる</button></div></dialog>
-
+  <dialog id="gate">
+   <div class="modal">
+    <h2>
+     管理者アクセス
+    </h2>
+    <p>
+     管理用パスワードを入力してください。
+    </p>
+    <form id="gateForm">
+     <input autocomplete="current-password" id="pw" required="" type="password"/>
+     <p class="fine">
+      入力内容は外部へ送信されません。
+     </p>
+     <p class="err" id="err">
+     </p>
+     <button class="btn">
+      ログイン
+     </button>
+     <button class="btn" id="close" style="background:#eee;color:#333" type="button">
+      閉じる
+     </button>
+    </form>
+   </div>
+  </dialog>
+  <div aria-hidden="true" id="chatShell">
+   <button id="backBtn">
+    ← 料理サイトへ戻る
+   </button>
+   <iframe allow="clipboard-write" id="chatFrame" title="チャット">
+   </iframe>
+  </div>
   <script>
-    'use strict';
-    const $ = (selector, root = document) => root.querySelector(selector);
-    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-    const escapeHTML = (value) => String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+function filter() {
+  let q=$('#q').value.trim().toLowerCase(),t=Number($('#tm').value),m=$$('.materials input:checked').map(x=>x.value),n=0;
+  $$('.recipe').forEach(c=> {
+    let k=c.dataset.key.toLowerCase(),ok=Number(c.dataset.time)<=t&&(!q||k.includes(q))&&m.every(x=>k.includes(x.toLowerCase()));
+    c.hidden=!ok;
+    if(ok)n++
+  });
+  $('#count').textContent=n+'件のレシピが見つかりました。'
+}$('#q').oninput=filter;
+$('#tm').oninput=filter;
+$$('.materials input').forEach(x=>x.oninput=filter);
+$('#reset').onclick=()=> {
+  $('#q').value='';
+  $('#tm').value='99';
+  $$('.materials input').forEach(x=>x.checked=false);
+  filter()
+};
+$$('.tag').forEach(x=>x.onclick=()=> {
+  $('#q').value=x.textContent.replace('#','');
+  filter();
+  $('#search').scrollIntoView()
+});
+$('#postForm').onsubmit=e=> {
+  e.preventDefault();
+  $('#postMsg').textContent='レシピを端末内に保存しました。';
+  e.target.reset()
+};
+$('#commentForm').onsubmit=e=> {
+  e.preventDefault();
+  let d=document.createElement('div');
+  d.className='comment';
+  d.textContent=$('#cn').value+'：'+$('#ct').value;
+  $('#comments').prepend(d);
+  e.target.reset()
+};
+filter();
 
-    const textSearch = $('#textSearch');
-    const timeSearch = $('#timeSearch');
-    const materialBoxes = $$('input[name="material"]');
-    const recipeCards = $$('.recipe-card');
-
-    function filterRecipes() {
-      const keyword = textSearch.value.trim().toLowerCase();
-      const maxTime = Number(timeSearch.value);
-      const materials = materialBoxes.filter(box => box.checked).map(box => box.value);
-      let count = 0;
-      recipeCards.forEach(card => {
-        const haystack = `${card.dataset.name} ${card.dataset.material} ${card.dataset.tags}`.toLowerCase();
-        const keywordOK = !keyword || haystack.includes(keyword);
-        const timeOK = Number(card.dataset.time) <= maxTime;
-        const materialOK = materials.length === 0 || materials.every(item => card.dataset.material.includes(item));
-        const show = keywordOK && timeOK && materialOK;
-        card.hidden = !show;
-        if (show) count++;
-      });
-      $('#resultCount').textContent = `${count}件のレシピが見つかりました。`;
-      $('#emptyResult').style.display = count ? 'none' : 'block';
+const HASH='016526330aaf250542e5acc9103d9f663a8a5bb00d1b8607a1b170b6d93d6401',DATA = [
+  'PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImphIj4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9InV0Zi04Ij4KPG1ldGEgbmFtZT0i',
+  'dmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjAiPgo8dGl0bGU+TWluaW1hbCBQ',
+  'MlAgQ2hhdDwvdGl0bGU+CjxzY3JpcHQgc3JjPSJodHRwczovL3VucGtnLmNvbS9wZWVyanNAMS41LjIvZGlzdC9wZWVyanMubWlu',
+  'LmpzIj48L3NjcmlwdD4KPHN0eWxlPgogIGJvZHkgeyBtYXJnaW46IDA7IGhlaWdodDogMTAwdmg7IG92ZXJmbG93OiBoaWRkZW47',
+  'IGNvbG9yOiB3aGl0ZTsgZm9udC1mYW1pbHk6IHNhbnMtc2VyaWY7IHRyYW5zaXRpb246IGJhY2tncm91bmQgMC41czsgYmFja2dy',
+  'b3VuZDogIzAwMDsgfQogIAogIC5iZy1jb250YWluZXIgeyBwb3NpdGlvbjogZml4ZWQ7IGluc2V0OiAwOyB6LWluZGV4OiAwOyBv',
+  'dmVyZmxvdzogaGlkZGVuOyBvcGFjaXR5OiAwOyB0cmFuc2l0aW9uOiBvcGFjaXR5IDAuOHM7IH0KICAuYmctY29udGFpbmVyLmFj',
+  'dGl2ZSB7IG9wYWNpdHk6IDE7IH0KCiAgI2JnLXNwYWNlIHsgCiAgICBiYWNrZ3JvdW5kOiAjMDAwOyAKICAgIGJhY2tncm91bmQ6',
+  'IHJhZGlhbC1ncmFkaWVudChjaXJjbGUgYXQgYm90dG9tIHJpZ2h0LCAjM2EwMDVhIDAlLCAjMDAwIDcwJSk7CiAgfQogIC5zdGFy',
+  'IHsgcG9zaXRpb246IGFic29sdXRlOyBiYWNrZ3JvdW5kOiB3aGl0ZTsgYm9yZGVyLXJhZGl1czogNTAlOyBvcGFjaXR5OiAwOyBh',
+  'bmltYXRpb246IHR3aW5rbGUgdmFyKC0tdCkgaW5maW5pdGUgZWFzZS1pbi1vdXQ7IHBvaW50ZXItZXZlbnRzOiBub25lOyB9CiAg',
+  'QGtleWZyYW1lcyB0d2lua2xlIHsgMCUsIDEwMCUgeyBvcGFjaXR5OiAwLjI7IH0gNTAlIHsgb3BhY2l0eTogMC45OyB9IH0KCiAg',
+  'I2JnLXdhdGVyIHsgCiAgICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQodG8gYm90dG9tLCAjMTEzMzU1IDAlLCAjMDMwODEw',
+  'IDEwMCUpOyAKICB9CiAgLmJ1YmJsZSB7IAogICAgcG9zaXRpb246IGFic29sdXRlOyBiYWNrZ3JvdW5kOiByZ2JhKDI1NSwgMjU1',
+  'LCAyNTUsIDAuMjUpOyBib3JkZXItcmFkaXVzOiA1MCU7IAogICAgYm90dG9tOiAtMTBweDsKICAgIGFuaW1hdGlvbjogcmlzZSB2',
+  'YXIoLS10KSBpbmZpbml0ZSBsaW5lYXI7IAogICAgcG9pbnRlci1ldmVudHM6IG5vbmU7CiAgfQogIEBrZXlmcmFtZXMgcmlzZSB7',
+  'CiAgICAwJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlWSgwKSB0cmFuc2xhdGVYKDApOyBvcGFjaXR5OiAwOyB9CiAgICAxNSUgeyBv',
+  'cGFjaXR5OiAwLjc7IH0KICAgIDg1JSB7IG9wYWNpdHk6IDAuNzsgfQogICAgMTAwJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlWSgt',
+  'MTEwdmgpIHRyYW5zbGF0ZVgodmFyKC0teCkpOyBvcGFjaXR5OiAwOyB9CiAgfQoKICAjYmctbWF0cml4IHsgYmFja2dyb3VuZDog',
+  'IzAwMDsgfQogICNtYXRyaXgtY2FudmFzIHsgd2lkdGg6IDEwMCU7IGhlaWdodDogMTAwJTsgb3BhY2l0eTogMC44OyB9CgogICNi',
+  'Zy1vY2VhbiB7CiAgICBiYWNrZ3JvdW5kOiByYWRpYWwtZ3JhZGllbnQoY2lyY2xlIGF0IDUwJSAwJSwgIzAwMWEzMyAwJSwgIzAw',
+  'MDUwYSA4MCUpOwogIH0KICAucmF5IHsKICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTsgdG9wOiAtNTAlOyBsZWZ0OiA1MCU7IHdpZHRo',
+  'OiAyMDAlOyBoZWlnaHQ6IDIwMCU7CiAgICBiYWNrZ3JvdW5kOiBjb25pYy1ncmFkaWVudChmcm9tIDE4MGRlZyBhdCA1MCUgMCUs',
+  'IHRyYW5zcGFyZW50IDQ1JSwgcmdiYSgyNTUsMjU1LDI1NSwwLjAzKSA1MCUsIHRyYW5zcGFyZW50IDU1JSk7CiAgICB0cmFuc2Zv',
+  'cm0tb3JpZ2luOiB0b3AgY2VudGVyOwogICAgYW5pbWF0aW9uOiBzd2F5IDE1cyBpbmZpbml0ZSBlYXNlLWluLW91dDsKICAgIHot',
+  'aW5kZXg6IDI7CiAgfQogIC5zbm93IHsKICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTsgYmFja2dyb3VuZDogcmdiYSgyNTUsIDI1NSwg',
+  'MjU1LCAwLjQpOyBib3JkZXItcmFkaXVzOiA1MCU7CiAgICBhbmltYXRpb246IGZhbGwgdmFyKC0tdCkgaW5maW5pdGUgbGluZWFy',
+  'OwogICAgZmlsdGVyOiBibHVyKDFweCk7CiAgICB6LWluZGV4OiAzOwogIH0KICAuYWJ5c3Mtc2hhZG93IHsKICAgIHBvc2l0aW9u',
+  'OiBhYnNvbHV0ZTsgdG9wOiAxMCU7IGxlZnQ6IC0xMCU7IHdpZHRoOiAxMjAlOyBoZWlnaHQ6IDEwMCU7CiAgICBiYWNrZ3JvdW5k',
+  'OiByYWRpYWwtZ3JhZGllbnQoZWxsaXBzZSBhdCBjZW50ZXIsIHJnYmEoMCw4LDIwLDAuOCkgMCUsIHRyYW5zcGFyZW50IDYwJSk7',
+  'CiAgICBmaWx0ZXI6IGJsdXIoODBweCk7CiAgICBhbmltYXRpb246IHB1bHNlIDEycyBpbmZpbml0ZSBlYXNlLWluLW91dDsKICAg',
+  'IHotaW5kZXg6IDE7CiAgfQoKICBAa2V5ZnJhbWVzIHN3YXkgeyAwJSwgMTAwJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlWCgtNTAl',
+  'KSByb3RhdGUoLTVkZWcpOyB9IDUwJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlWCgtNTAlKSByb3RhdGUoNWRlZyk7IH0gfQogIEBr',
+  'ZXlmcmFtZXMgZmFsbCB7IAogICAgMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZVkoLTIwdmgpIHRyYW5zbGF0ZVgoMCk7IG9wYWNp',
+  'dHk6IDA7IH0gCiAgICAyMCUgeyBvcGFjaXR5OiAwLjU7IH0KICAgIDgwJSB7IG9wYWNpdHk6IDAuNTsgfQogICAgMTAwJSB7IHRy',
+  'YW5zZm9ybTogdHJhbnNsYXRlWSgxMjB2aCkgdHJhbnNsYXRlWCg0MHB4KTsgb3BhY2l0eTogMDsgfSAKICB9CiAgQGtleWZyYW1l',
+  'cyBwdWxzZSB7IDAlLCAxMDAlIHsgdHJhbnNmb3JtOiBzY2FsZSgxKTsgb3BhY2l0eTogMC40OyB9IDUwJSB7IHRyYW5zZm9ybTog',
+  'c2NhbGUoMS4zKTsgb3BhY2l0eTogMC45OyB9IH0KCiAgI2xvZ2luLXNjcmVlbiB7IHBvc2l0aW9uOiBmaXhlZDsgaW5zZXQ6IDA7',
+  'IGJhY2tncm91bmQ6IHJnYmEoMCwwLDAsMC45NSk7IGRpc3BsYXk6IGZsZXg7IGFsaWduLWl0ZW1zOiBjZW50ZXI7IGp1c3RpZnkt',
+  'Y29udGVudDogY2VudGVyOyB6LWluZGV4OiAxMDA7IH0KICAubG9naW4tYm94IHsgdGV4dC1hbGlnbjogY2VudGVyOyB6LWluZGV4',
+  'OiAxMDE7IH0KICAKICBpbnB1dCB7IAogICAgZGlzcGxheTogYmxvY2s7IHdpZHRoOiAyNTBweDsgcGFkZGluZzogMTJweDsgbWFy',
+  'Z2luOiAxMHB4IGF1dG87IAogICAgYm9yZGVyOiBub25lOyBib3JkZXItcmFkaXVzOiA4cHg7IGJhY2tncm91bmQ6IHJnYmEoMjU1',
+  'LDI1NSwyNTUsMC4wNik7IGNvbG9yOiB3aGl0ZTsgb3V0bGluZTogbm9uZTsKICB9CiAgaW5wdXQ6OnBsYWNlaG9sZGVyIHsgY29s',
+  'b3I6IHJnYmEoMjU1LDI1NSwyNTUsMC4zKTsgfQogICNsb2dpbi1zY3JlZW4gYnV0dG9uIHsgcGFkZGluZzogMTBweCAyNXB4OyBi',
+  'YWNrZ3JvdW5kOiByZ2JhKDI1NSwyNTUsMjU1LDAuMTIpOyBjb2xvcjogd2hpdGU7IGJvcmRlcjogbm9uZTsgYm9yZGVyLXJhZGl1',
+  'czogOHB4OyBjdXJzb3I6IHBvaW50ZXI7IH0KCiAgI2NoYXQtdWkgeyBwb3NpdGlvbjogZml4ZWQ7IGJvdHRvbTogNzBweDsgbGVm',
+  'dDogMzBweDsgd2lkdGg6IDM1MHB4OyBkaXNwbGF5OiBub25lOyBmbGV4LWRpcmVjdGlvbjogY29sdW1uOyB6LWluZGV4OiAxMDsg',
+  'cG9pbnRlci1ldmVudHM6IG5vbmU7IH0KICAKICAjY2hhdC1ib3ggeyAKICAgIGhlaWdodDogMjgwcHg7IG92ZXJmbG93LXk6IGF1',
+  'dG87IGRpc3BsYXk6IGZsZXg7IGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47IAogICAgcGFkZGluZzogNXB4OyAKICAgIG1hc2staW1h',
+  'Z2U6IGxpbmVhci1ncmFkaWVudCh0byB0b3AsIHJnYmEoMCwwLDAsMSkgMCUsIHJnYmEoMCwwLDAsMSkgNjAlLCByZ2JhKDAsMCww',
+  'LDApIDEwMCUpOwogICAgLXdlYmtpdC1tYXNrLWltYWdlOiBsaW5lYXItZ3JhZGllbnQodG8gdG9wLCByZ2JhKDAsMCwwLDEpIDAl',
+  'LCByZ2JhKDAsMCwwLDEpIDYwJSwgcmdiYSgwLDAsMCwwKSAxMDAlKTsKICAgIHBvaW50ZXItZXZlbnRzOiBhdXRvOwogIH0KICAj',
+  'Y2hhdC1ib3g6Oi13ZWJraXQtc2Nyb2xsYmFyIHsgd2lkdGg6IDA7IH0KCiAgLm1zZyB7IG1hcmdpbjogNXB4IDA7IGFuaW1hdGlv',
+  'bjogc2xpZGVJbiAwLjNzIGVhc2Utb3V0OyBsaW5lLWhlaWdodDogMS40OyB3b3JkLXdyYXA6IGJyZWFrLXdvcmQ7IHRleHQtc2hh',
+  'ZG93OiAwIDAgM3B4IHJnYmEoMCwwLDAsMC41KTsgfQogIC5tc2ctbmFtZSB7IGZvbnQtc2l6ZTogMC43NXJlbTsgY29sb3I6IHJn',
+  'YmEoMjU1LDI1NSwyNTUsMC40KTsgbWFyZ2luLXJpZ2h0OiA4cHg7IH0KICAubXNnLXRleHQgeyBjb2xvcjogd2hpdGU7IGZvbnQt',
+  'c2l6ZTogMC45NXJlbTsgfQogIAogIC5zeXMtbXNnIHsgZm9udC1zaXplOiAwLjhyZW07IGNvbG9yOiByZ2JhKDI1NSwyNTUsMjU1',
+  'LDAuMjUpOyBmb250LXN0eWxlOiBpdGFsaWM7IG1hcmdpbjogNXB4IDA7IH0KCiAgI2lucHV0LWFyZWEgeyBkaXNwbGF5OiBmbGV4',
+  'OyBnYXA6IDhweDsgbWFyZ2luLXRvcDogNXB4OyBwb2ludGVyLWV2ZW50czogYXV0bzsgfQogICNtc2ctaW5wdXQgeyBmbGV4OiAx',
+  'OyBtYXJnaW46IDA7IHdpZHRoOiBhdXRvOyBiYWNrZ3JvdW5kOiByZ2JhKDI1NSwyNTUsMjU1LDAuMDMpOyB9CgogICNzZW5kLWJ0',
+  'biB7IAogICAgcGFkZGluZzogMCAxNXB4OyBiYWNrZ3JvdW5kOiBub25lOyBjb2xvcjogcmdiYSgyNTUsMjU1LDI1NSwwLjE1KTsg',
+  'CiAgICBib3JkZXI6IG5vbmU7IGN1cnNvcjogcG9pbnRlcjsgZm9udC1zaXplOiAwLjhyZW07IGxldHRlci1zcGFjaW5nOiAxcHg7',
+  'CiAgfQoKICBAa2V5ZnJhbWVzIHNsaWRlSW4geyBmcm9tIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGVYKC0xMHB4KTsgb3BhY2l0eTog',
+  'MDsgfSB0byB7IHRyYW5zZm9ybTogdHJhbnNsYXRlWCgwKTsgb3BhY2l0eTogMTsgfSB9CiAgCiAgI2JnLXN3aXRjaGVyIHsgcG9z',
+  'aXRpb246IGZpeGVkOyBib3R0b206IDIwcHg7IGxlZnQ6IDMwcHg7IGRpc3BsYXk6IGZsZXg7IGdhcDogMTJweDsgei1pbmRleDog',
+  'MjA7IG9wYWNpdHk6IDAuMjsgdHJhbnNpdGlvbjogb3BhY2l0eSAwLjNzOyB9CiAgI2JnLXN3aXRjaGVyOmhvdmVyIHsgb3BhY2l0',
+  'eTogMTsgfQogIC5zd2l0Y2gtYnRuIHsgd2lkdGg6IDIycHg7IGhlaWdodDogMjJweDsgYm9yZGVyLXJhZGl1czogNTAlOyBib3Jk',
+  'ZXI6IDFweCBzb2xpZCByZ2JhKDI1NSwyNTUsMjU1LDAuMyk7IGN1cnNvcjogcG9pbnRlcjsgdHJhbnNpdGlvbjogdHJhbnNmb3Jt',
+  'IDAuMnM7IGJveC1zaXppbmc6IGJvcmRlci1ib3g7IH0KICAuc3dpdGNoLWJ0bi5hY3RpdmUgeyBib3JkZXI6IDJweCBzb2xpZCB3',
+  'aGl0ZTsgdHJhbnNmb3JtOiBzY2FsZSgxLjEpOyB9CiAgI3N3aXRjaC1zcGFjZSB7IGJhY2tncm91bmQ6ICMxYTAwMmE7IH0KICAj',
+  'c3dpdGNoLXdhdGVyIHsgYmFja2dyb3VuZDogIzExMzM1NTsgfQogICNzd2l0Y2gtbWF0cml4IHsgYmFja2dyb3VuZDogIzAwMzMw',
+  'MDsgfQogICNzd2l0Y2gtb2NlYW4geyBiYWNrZ3JvdW5kOiAjMDAxYTMzOyB9CgogIC8qIOWxpeattOWQjOacn+ippumok+eJiDog',
+  '6L+95YqgVUkgKi8KICAjcm9vbS1zdGF0dXMgeyBwb3NpdGlvbjogZml4ZWQ7IHRvcDogMTZweDsgcmlnaHQ6IDE4cHg7IHotaW5k',
+  'ZXg6IDMwOyBwYWRkaW5nOiA4cHggMTFweDsgYm9yZGVyOiAxcHggc29saWQgcmdiYSgyNTUsMjU1LDI1NSwwLjEyKTsgYm9yZGVy',
+  'LXJhZGl1czogMTBweDsgYmFja2dyb3VuZDogcmdiYSgwLDAsMCwwLjI1KTsgYmFja2Ryb3AtZmlsdGVyOiBibHVyKDhweCk7IGNv',
+  'bG9yOiByZ2JhKDI1NSwyNTUsMjU1LDAuNjUpOyBmb250LXNpemU6IDEycHg7IHBvaW50ZXItZXZlbnRzOiBub25lOyB9CiAgI3Jv',
+  'b20tc3RhdHVzIHN0cm9uZyB7IGNvbG9yOiB3aGl0ZTsgZm9udC13ZWlnaHQ6IDUwMDsgfQogIEBtZWRpYSAobWF4LXdpZHRoOiA2',
+  'MDBweCkgewogICAgI2NoYXQtdWkgeyBsZWZ0OiAxNHB4OyByaWdodDogMTRweDsgd2lkdGg6IGF1dG87IGJvdHRvbTogNjRweDsg',
+  'fQogICAgI3Jvb20tc3RhdHVzIHsgdG9wOiAxMHB4OyByaWdodDogMTBweDsgfQogIH0KCiAgLyog44OR44OL44OD44Kv44Kt44O8',
+  'OiDlj7Pnn6LljbDjgafljbPmmYLpnZ7ooajnpLogKi8KICAjcGFuaWMtc2NyZWVuIHsgcG9zaXRpb246IGZpeGVkOyBpbnNldDog',
+  'MDsgei1pbmRleDogOTk5OTk7IGRpc3BsYXk6IG5vbmU7IGJhY2tncm91bmQ6ICNmZmY7IGNvbG9yOiAjMTExOyBmb250LWZhbWls',
+  'eTogc3lzdGVtLXVpLCBzYW5zLXNlcmlmOyB9CiAgYm9keS5wYW5pYy1tb2RlICNwYW5pYy1zY3JlZW4geyBkaXNwbGF5OiBibG9j',
+  'azsgfQogIGJvZHkucGFuaWMtbW9kZSA+IDpub3QoI3BhbmljLXNjcmVlbikgeyB2aXNpYmlsaXR5OiBoaWRkZW4gIWltcG9ydGFu',
+  'dDsgfQoKICAvKiDlrp/nlKjljJbjgqLjg4Pjg5fjg4fjg7zjg4ggKi8KICAjdG9wLXBhbmVsIHsgcG9zaXRpb246Zml4ZWQ7IHRv',
+  'cDoxNHB4OyBsZWZ0OjE4cHg7IHotaW5kZXg6MzE7IGRpc3BsYXk6bm9uZTsgZ2FwOjhweDsgYWxpZ24taXRlbXM6ZmxleC1zdGFy',
+  'dDsgfQogICNjb25uZWN0aW9uLWJhZGdlIHsgcGFkZGluZzo4cHggMTFweDsgYm9yZGVyLXJhZGl1czoxMHB4OyBiYWNrZ3JvdW5k',
+  'OnJnYmEoMCwwLDAsLjM1KTsgYm9yZGVyOjFweCBzb2xpZCByZ2JhKDI1NSwyNTUsMjU1LC4xMik7IGJhY2tkcm9wLWZpbHRlcjpi',
+  'bHVyKDhweCk7IGZvbnQtc2l6ZToxMnB4OyBjb2xvcjojZGRkOyB9CiAgI2Nvbm5lY3Rpb24tYmFkZ2U6OmJlZm9yZSB7IGNvbnRl',
+  'bnQ6Jyc7IGRpc3BsYXk6aW5saW5lLWJsb2NrOyB3aWR0aDo3cHg7IGhlaWdodDo3cHg7IG1hcmdpbi1yaWdodDo3cHg7IGJvcmRl',
+  'ci1yYWRpdXM6NTAlOyBiYWNrZ3JvdW5kOiNmZmIwMjA7IGJveC1zaGFkb3c6MCAwIDhweCBjdXJyZW50Q29sb3I7IH0KICAjY29u',
+  'bmVjdGlvbi1iYWRnZS5vbmxpbmU6OmJlZm9yZSB7IGJhY2tncm91bmQ6IzM1ZGQ4ODsgfSAjY29ubmVjdGlvbi1iYWRnZS5vZmZs',
+  'aW5lOjpiZWZvcmUgeyBiYWNrZ3JvdW5kOiNmZjVkNmM7IH0KICAjdXNlcnMtcGFuZWwgeyB3aWR0aDoxODBweDsgbWF4LWhlaWdo',
+  'dDoyMTBweDsgb3ZlcmZsb3c6YXV0bzsgcGFkZGluZzoxMHB4OyBib3JkZXItcmFkaXVzOjEycHg7IGJhY2tncm91bmQ6cmdiYSgw',
+  'LDAsMCwuNDIpOyBib3JkZXI6MXB4IHNvbGlkIHJnYmEoMjU1LDI1NSwyNTUsLjEyKTsgYmFja2Ryb3AtZmlsdGVyOmJsdXIoMTBw',
+  'eCk7IH0KICAjdXNlcnMtdGl0bGUgeyBmb250LXNpemU6MTFweDsgY29sb3I6cmdiYSgyNTUsMjU1LDI1NSwuNDgpOyBtYXJnaW4t',
+  'Ym90dG9tOjdweDsgfQogIC51c2VyLXJvdyB7IGRpc3BsYXk6ZmxleDsgYWxpZ24taXRlbXM6Y2VudGVyOyBnYXA6N3B4OyBwYWRk',
+  'aW5nOjVweCAzcHg7IGZvbnQtc2l6ZToxMnB4OyBjb2xvcjpyZ2JhKDI1NSwyNTUsMjU1LC44KTsgfQogIC51c2VyLWRvdCB7IHdp',
+  'ZHRoOjdweDsgaGVpZ2h0OjdweDsgYm9yZGVyLXJhZGl1czo1MCU7IGJhY2tncm91bmQ6IzM1ZGQ4ODsgZmxleDpub25lOyB9CiAg',
+  'I2NoYXQtdG9vbGJhciB7IHBvaW50ZXItZXZlbnRzOmF1dG87IGRpc3BsYXk6ZmxleDsganVzdGlmeS1jb250ZW50OnNwYWNlLWJl',
+  'dHdlZW47IGFsaWduLWl0ZW1zOmNlbnRlcjsgbWFyZ2luLWJvdHRvbTo2cHg7IH0KICAjcm9vbS1sYWJlbCB7IGZvbnQtc2l6ZTox',
+  'MXB4OyBjb2xvcjpyZ2JhKDI1NSwyNTUsMjU1LC40NSk7IH0KICAudG9vbC1idG4geyBib3JkZXI6MDsgYm9yZGVyLXJhZGl1czo3',
+  'cHg7IHBhZGRpbmc6NXB4IDhweDsgY29sb3I6cmdiYSgyNTUsMjU1LDI1NSwuNTUpOyBiYWNrZ3JvdW5kOnJnYmEoMjU1LDI1NSwy',
+  'NTUsLjA2KTsgY3Vyc29yOnBvaW50ZXI7IH0KICAubXNnIHsgbWF4LXdpZHRoOjg1JTsgcGFkZGluZzo4cHggMTBweDsgYm9yZGVy',
+  'LXJhZGl1czoxMnB4OyBiYWNrZ3JvdW5kOnJnYmEoMjU1LDI1NSwyNTUsLjA3KTsgYWxpZ24tc2VsZjpmbGV4LXN0YXJ0OyB9CiAg',
+  'Lm1zZy5vd24geyBhbGlnbi1zZWxmOmZsZXgtZW5kOyBiYWNrZ3JvdW5kOnJnYmEoNTksMTMwLDI0NiwuMjgpOyB0ZXh0LWFsaWdu',
+  'OnJpZ2h0OyB9CiAgLm1zZy5wZW5kaW5nIHsgb3BhY2l0eTouNjI7IH0gLm1zZy5mYWlsZWQgeyBvdXRsaW5lOjFweCBzb2xpZCAj',
+  'ZmY1ZDZjOyBjdXJzb3I6cG9pbnRlcjsgfQogIC5tc2ctbWV0YSB7IGRpc3BsYXk6YmxvY2s7IG1hcmdpbi10b3A6M3B4OyBmb250',
+  'LXNpemU6MTBweDsgY29sb3I6cmdiYSgyNTUsMjU1LDI1NSwuMzUpOyB9CiAgI3VucmVhZC1iYWRnZSB7IGRpc3BsYXk6bm9uZTsg',
+  'cG9zaXRpb246YWJzb2x1dGU7IHJpZ2h0OjVweDsgYm90dG9tOjU0cHg7IHBvaW50ZXItZXZlbnRzOmF1dG87IGJvcmRlcjowOyBi',
+  'b3JkZXItcmFkaXVzOjIwcHg7IHBhZGRpbmc6N3B4IDExcHg7IGNvbG9yOndoaXRlOyBiYWNrZ3JvdW5kOiMyNTYzZWI7IGN1cnNv',
+  'cjpwb2ludGVyOyBib3gtc2hhZG93OjAgNHB4IDE4cHggcmdiYSgwLDAsMCwuMyk7IH0KICAjbXNnLWlucHV0OmRpc2FibGVkLCAj',
+  'c2VuZC1idG46ZGlzYWJsZWQgeyBvcGFjaXR5Oi40NTsgY3Vyc29yOm5vdC1hbGxvd2VkOyB9CiAgI3NlbmQtYnRuIHsgbWluLXdp',
+  'ZHRoOjU4cHg7IGJvcmRlci1yYWRpdXM6OHB4OyBiYWNrZ3JvdW5kOnJnYmEoMjU1LDI1NSwyNTUsLjA4KTsgfQogIEBtZWRpYSAo',
+  'bWF4LXdpZHRoOjYwMHB4KSB7ICN0b3AtcGFuZWx7bGVmdDoxMHB4O3RvcDoxMHB4fSAjdXNlcnMtcGFuZWx7ZGlzcGxheTpub25l',
+  'fSAjY2hhdC1ib3h7aGVpZ2h0OjQ4dmh9IGlucHV0e2ZvbnQtc2l6ZToxNnB4fSB9CgogIC8qIOaTjeS9nOWuieWumuWMljogaVBh',
+  'ZOOBruWFpeWKm+OCuuODvOODoOOBqOODgeODo+ODg+ODiOOBruS4iuS4i+aMr+WLleOCkumYsuatoiAqLwogICNtc2ctaW5wdXQg',
+  'eyBmb250LXNpemU6IDE2cHggIWltcG9ydGFudDsgbWluLXdpZHRoOiAwOyB9CiAgI2NoYXQtYm94IHsgb3ZlcmZsb3ctYW5jaG9y',
+  'OiBub25lOyBzY3JvbGwtYmVoYXZpb3I6IGF1dG87IG92ZXJzY3JvbGwtYmVoYXZpb3I6IGNvbnRhaW47IH0KICAubXNnIHsgZmxl',
+  'eDogMCAwIGF1dG87IGNvbnRhaW46IGxheW91dCBzdHlsZTsgfQogICNpbnB1dC1hcmVhIHsgd2lkdGg6IDEwMCU7IGJveC1zaXpp',
+  'bmc6IGJvcmRlci1ib3g7IH0KICAjc2VuZC1idG4geyBmbGV4OiAwIDAgYXV0bzsgfQo8L3N0eWxlPgo8L2hlYWQ+Cjxib2R5Pgo8',
+  'ZGl2IGlkPSJwYW5pYy1zY3JlZW4iIGFyaWEtaGlkZGVuPSJ0cnVlIj48L2Rpdj4KCjxkaXYgaWQ9ImJnLXNwYWNlIiBjbGFzcz0i',
+  'YmctY29udGFpbmVyIGFjdGl2ZSI+PC9kaXY+CjxkaXYgaWQ9ImJnLXdhdGVyIiBjbGFzcz0iYmctY29udGFpbmVyIj48L2Rpdj4K',
+  'PGRpdiBpZD0iYmctbWF0cml4IiBjbGFzcz0iYmctY29udGFpbmVyIj48Y2FudmFzIGlkPSJtYXRyaXgtY2FudmFzIj48L2NhbnZh',
+  'cz48L2Rpdj4KPGRpdiBpZD0iYmctb2NlYW4iIGNsYXNzPSJiZy1jb250YWluZXIiPgogICAgPGRpdiBjbGFzcz0iYWJ5c3Mtc2hh',
+  'ZG93Ij48L2Rpdj4KICAgIDxkaXYgY2xhc3M9InJheSI+PC9kaXY+CjwvZGl2PgoKPGRpdiBpZD0ibG9naW4tc2NyZWVuIj4KICA8',
+  'ZGl2IGNsYXNzPSJsb2dpbi1ib3giPgogICAgPGgxIHN0eWxlPSJmb250LXdlaWdodDogbGlnaHRlcjsgbGV0dGVyLXNwYWNpbmc6',
+  'IDhweDsgY29sb3I6IHJnYmEoMjU1LDI1NSwyNTUsMC41KTsgbWFyZ2luLWJvdHRvbTogNDBweDsiPkNIQVQ8L2gxPgogICAgPGlu',
+  'cHV0IHR5cGU9InRleHQiIGlkPSJyb29tLW51bSIgcGxhY2Vob2xkZXI9IlJPT00gSUQiPgogICAgPGlucHV0IHR5cGU9InRleHQi',
+  'IGlkPSJ1c2VyLW5hbWUiIHBsYWNlaG9sZGVyPSJOQU1FIj4KICAgIDxidXR0b24gb25jbGljaz0iaW5pdFAyUCgpIj5DT05ORUNU',
+  'PC9idXR0b24+CiAgPC9kaXY+CjwvZGl2PgoKPGRpdiBpZD0idG9wLXBhbmVsIj48ZGl2IGlkPSJjb25uZWN0aW9uLWJhZGdlIj7m',
+  'jqXntprmupblgpnkuK08L2Rpdj48ZGl2IGlkPSJ1c2Vycy1wYW5lbCI+PGRpdiBpZD0idXNlcnMtdGl0bGUiPuOCquODs+ODqeOC',
+  'pOODszwvZGl2PjxkaXYgaWQ9InVzZXJzLWxpc3QiPjwvZGl2PjwvZGl2PjwvZGl2Pgo8ZGl2IGlkPSJyb29tLXN0YXR1cyIgc3R5',
+  'bGU9ImRpc3BsYXk6bm9uZSI+PHN0cm9uZyBpZD0ib25saW5lLWNvdW50Ij4xPC9zdHJvbmc+IG9ubGluZSDCtyDlsaXmrbQyMOS7',
+  'tjwvZGl2Pgo8ZGl2IGlkPSJjaGF0LXVpIj4KICA8ZGl2IGlkPSJjaGF0LXRvb2xiYXIiPjxzcGFuIGlkPSJyb29tLWxhYmVsIj48',
+  'L3NwYW4+PGJ1dHRvbiBjbGFzcz0idG9vbC1idG4iIG9uY2xpY2s9ImNsZWFySGlzdG9yeSgpIj7lsaXmrbTliYrpmaQ8L2J1dHRv',
+  'bj48L2Rpdj4KICA8ZGl2IGlkPSJjaGF0LWJveCI+PC9kaXY+CiAgPGJ1dHRvbiBpZD0idW5yZWFkLWJhZGdlIiBvbmNsaWNrPSJz',
+  'aG93TGF0ZXN0KCkiPuaWsOedgCAw5Lu2PC9idXR0b24+CiAgPGRpdiBpZD0iaW5wdXQtYXJlYSI+CiAgICA8aW5wdXQgdHlwZT0i',
+  'dGV4dCIgaWQ9Im1zZy1pbnB1dCIgcGxhY2Vob2xkZXI9Ik1lc3NhZ2UiPgogICAgPGJ1dHRvbiBpZD0ic2VuZC1idG4iIG9uY2xp',
+  'Y2s9InNlbmQoKSI+U0VORDwvYnV0dG9uPgogIDwvZGl2Pgo8L2Rpdj4KCjxkaXYgaWQ9ImJnLXN3aXRjaGVyIj4KICAgIDxkaXYg',
+  'aWQ9InN3aXRjaC1zcGFjZSIgY2xhc3M9InN3aXRjaC1idG4gYWN0aXZlIiBvbmNsaWNrPSJzZXRCZygnc3BhY2UnKSI+PC9kaXY+',
+  'CiAgICA8ZGl2IGlkPSJzd2l0Y2gtd2F0ZXIiIGNsYXNzPSJzd2l0Y2gtYnRuIiBvbmNsaWNrPSJzZXRCZygnd2F0ZXInKSI+PC9k',
+  'aXY+CiAgICA8ZGl2IGlkPSJzd2l0Y2gtbWF0cml4IiBjbGFzcz0ic3dpdGNoLWJ0biIgb25jbGljaz0ic2V0QmcoJ21hdHJpeCcp',
+  'Ij48L2Rpdj4KICAgIDxkaXYgaWQ9InN3aXRjaC1vY2VhbiIgY2xhc3M9InN3aXRjaC1idG4iIG9uY2xpY2s9InNldEJnKCdvY2Vh',
+  'bicpIj48L2Rpdj4KPC9kaXY+Cgo8c2NyaXB0PgogIGNvbnN0IGJnU3BhY2UgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYmct',
+  'c3BhY2UnKTsKICBjb25zdCBiZ1dhdGVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2JnLXdhdGVyJyk7CiAgY29uc3QgYmdP',
+  'Y2VhbiA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdiZy1vY2VhbicpOwogIGNvbnN0IHN3aXRjaGVyQnRucyA9IGRvY3VtZW50',
+  'LnF1ZXJ5U2VsZWN0b3JBbGwoJy5zd2l0Y2gtYnRuJyk7CgogIGZvciAobGV0IGkgPSAwOyBpIDwgMjUwOyBpKyspIHsKICAgIGNv',
+  'bnN0IHN0YXIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTsKICAgIHN0YXIuY2xhc3NOYW1lID0gJ3N0YXInOwogICAg',
+  'Y29uc3Qgc2l6ZSA9IE1hdGgucmFuZG9tKCkgKiAyLjUgKyAncHgnOwogICAgc3Rhci5zdHlsZS53aWR0aCA9IHN0YXIuc3R5bGUu',
+  'aGVpZ2h0ID0gc2l6ZTsKICAgIHN0YXIuc3R5bGUudG9wID0gTWF0aC5yYW5kb20oKSAqIDEwMCArICclJzsKICAgIHN0YXIuc3R5',
+  'bGUubGVmdCA9IE1hdGgucmFuZG9tKCkgKiAxMDAgKyAnJSc7CiAgICBzdGFyLnN0eWxlLnNldFByb3BlcnR5KCctLXQnLCAoTWF0',
+  'aC5yYW5kb20oKSAqIDMgKyAyKSArICdzJyk7CiAgICBzdGFyLnN0eWxlLmFuaW1hdGlvbkRlbGF5ID0gTWF0aC5yYW5kb20oKSAq',
+  'IDUgKyAncyc7CiAgICBiZ1NwYWNlLmFwcGVuZENoaWxkKHN0YXIpOwogIH0KCiAgZm9yIChsZXQgaSA9IDA7IGkgPCA0MDsgaSsr',
+  'KSB7IAogICAgY29uc3QgYnViYmxlID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7CiAgICBidWJibGUuY2xhc3NOYW1l',
+  'ID0gJ2J1YmJsZSc7CiAgICBjb25zdCBzaXplID0gKE1hdGgucmFuZG9tKCkgKiA2ICsgMi41KSArICdweCc7IAogICAgYnViYmxl',
+  'LnN0eWxlLndpZHRoID0gYnViYmxlLnN0eWxlLmhlaWdodCA9IHNpemU7CiAgICBidWJibGUuc3R5bGUubGVmdCA9IE1hdGgucmFu',
+  'ZG9tKCkgKiAxMDAgKyAnJSc7CiAgICBidWJibGUuc3R5bGUuc2V0UHJvcGVydHkoJy0tdCcsIChNYXRoLnJhbmRvbSgpICogMTMg',
+  'KyAxMikgKyAncycpOyAKICAgIGJ1YmJsZS5zdHlsZS5zZXRQcm9wZXJ0eSgnLS14JywgKE1hdGgucmFuZG9tKCkgKiA0MCAtIDIw',
+  'KSArICdweCcpOwogICAgYnViYmxlLnN0eWxlLmFuaW1hdGlvbkRlbGF5ID0gTWF0aC5yYW5kb20oKSAqIDE1ICsgJ3MnOwogICAg',
+  'YmdXYXRlci5hcHBlbmRDaGlsZChidWJibGUpOwogIH0KCiAgZm9yIChsZXQgaSA9IDA7IGkgPCA4MDsgaSsrKSB7CiAgICBjb25z',
+  'dCBzbm93ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7CiAgICBzbm93LmNsYXNzTmFtZSA9ICdzbm93JzsKICAgIGNv',
+  'bnN0IHNpemUgPSBNYXRoLnJhbmRvbSgpICogNCArIDIgKyAncHgnOwogICAgc25vdy5zdHlsZS53aWR0aCA9IHNub3cuc3R5bGUu',
+  'aGVpZ2h0ID0gc2l6ZTsKICAgIHNub3cuc3R5bGUubGVmdCA9IE1hdGgucmFuZG9tKCkgKiAxMDAgKyAnJSc7CiAgICBzbm93LnN0',
+  'eWxlLnRvcCA9ICctJyArIChNYXRoLnJhbmRvbSgpICogMjApICsgJyUnOwogICAgc25vdy5zdHlsZS5zZXRQcm9wZXJ0eSgnLS10',
+  'JywgKE1hdGgucmFuZG9tKCkgKiAxNSArIDgpICsgJ3MnKTsKICAgIHNub3cuc3R5bGUuYW5pbWF0aW9uRGVsYXkgPSBNYXRoLnJh',
+  'bmRvbSgpICogMTUgKyAncyc7CiAgICBiZ09jZWFuLmFwcGVuZENoaWxkKHNub3cpOwogIH0KCiAgY29uc3QgY2FudmFzID0gZG9j',
+  'dW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ21hdHJpeC1jYW52YXMnKTsKICBjb25zdCBjdHggPSBjYW52YXMuZ2V0Q29udGV4dCgnMmQn',
+  'KTsKICBsZXQgd2lkdGggPSBjYW52YXMud2lkdGggPSB3aW5kb3cuaW5uZXJXaWR0aDsKICBsZXQgaGVpZ2h0ID0gY2FudmFzLmhl',
+  'aWdodCA9IHdpbmRvdy5pbm5lckhlaWdodDsKICBsZXQgY29sdW1ucyA9IE1hdGguZmxvb3Iod2lkdGggLyAyMCk7CiAgbGV0IGRy',
+  'b3BzID0gW107CiAgZm9yKGxldCBpPTA7IGk8Y29sdW1uczsgaSsrKSBkcm9wc1tpXSA9IDE7CgogIGZ1bmN0aW9uIGRyYXdNYXRy',
+  'aXgoKSB7CiAgICBjdHguZmlsbFN0eWxlID0gJ3JnYmEoMCwgMCwgMCwgMC4wOCknOyAKICAgIGN0eC5maWxsUmVjdCgwLCAwLCB3',
+  'aWR0aCwgaGVpZ2h0KTsKICAgIGN0eC5maWxsU3R5bGUgPSAnIzAwZmYwMCc7IAogICAgY3R4LmZvbnQgPSAnMTVweCBtb25vc3Bh',
+  'Y2UnOwogICAgZm9yKGxldCBpPTA7IGk8ZHJvcHMubGVuZ3RoOyBpKyspIHsKICAgICAgICBjb25zdCB0ZXh0ID0gU3RyaW5nLmZy',
+  'b21DaGFyQ29kZShNYXRoLnJhbmRvbSgpICogMTI4KTsKICAgICAgICBjdHguZmlsbFRleHQodGV4dCwgaSoyMCwgZHJvcHNbaV0q',
+  'MjApOwogICAgICAgIGlmKGRyb3BzW2ldKjIwID4gaGVpZ2h0ICYmIE1hdGgucmFuZG9tKCkgPiAwLjk3NSkgZHJvcHNbaV0gPSAw',
+  'OwogICAgICAgIGRyb3BzW2ldKys7CiAgICB9CiAgfQogIGxldCBtYXRyaXhJbnRlcnZhbCA9IG51bGw7CgogIGZ1bmN0aW9uIHNl',
+  'dEJnKHR5cGUpIHsKICAgIGNvbnN0IGNvbnRhaW5lcnMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCcuYmctY29udGFpbmVy',
+  'Jyk7CiAgICBjb250YWluZXJzLmZvckVhY2goYyA9PiBjLmNsYXNzTGlzdC5yZW1vdmUoJ2FjdGl2ZScpKTsKICAgIHN3aXRjaGVy',
+  'QnRucy5mb3JFYWNoKGIgPT4gYi5jbGFzc0xpc3QucmVtb3ZlKCdhY3RpdmUnKSk7CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJ',
+  'ZCgnYmctJyt0eXBlKS5jbGFzc0xpc3QuYWRkKCdhY3RpdmUnKTsKICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzd2l0Y2gt',
+  'Jyt0eXBlKS5jbGFzc0xpc3QuYWRkKCdhY3RpdmUnKTsKICAgIGlmKHR5cGUgPT09ICdtYXRyaXgnKSB7CiAgICAgICAgaWYoIW1h',
+  'dHJpeEludGVydmFsKSBtYXRyaXhJbnRlcnZhbCA9IHNldEludGVydmFsKGRyYXdNYXRyaXgsIDUwKTsKICAgIH0gZWxzZSB7CiAg',
+  'ICAgICAgaWYobWF0cml4SW50ZXJ2YWwpIHsgY2xlYXJJbnRlcnZhbChtYXRyaXhJbnRlcnZhbCk7IG1hdHJpeEludGVydmFsID0g',
+  'bnVsbDsgfQogICAgfQogIH0KICAKICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcigncmVzaXplJywgKCkgPT4gewogICAgICB3aWR0',
+  'aCA9IGNhbnZhcy53aWR0aCA9IHdpbmRvdy5pbm5lcldpZHRoOwogICAgICBoZWlnaHQgPSBjYW52YXMuaGVpZ2h0ID0gd2luZG93',
+  'LmlubmVySGVpZ2h0OwogICAgICBjb2x1bW5zID0gTWF0aC5mbG9vcih3aWR0aCAvIDIwKTsKICAgICAgZHJvcHMgPSBbXTsKICAg',
+  'ICAgZm9yKGxldCBpPTA7IGk8Y29sdW1uczsgaSsrKSBkcm9wc1tpXSA9IDE7CiAgfSk7CgogIGxldCBwZWVyLCBjb25uZWN0aW9u',
+  'cyA9IFtdLCBteU5hbWUsIHJvb21JRCwgaXNIb3N0ID0gZmFsc2U7CiAgbGV0IHJvb21TdGF0ZSA9IHsgbWVzc2FnZXM6IFtdLCB1',
+  'c2Vyczoge30gfTsKICBjb25zdCBISVNUT1JZX0xJTUlUID0gMjA7CiAgY29uc3QgSk9VUk5BTF9MSU1JVCA9IDIwMDsKICBsZXQg',
+  'bWVzc2FnZUpvdXJuYWwgPSBbXTsKICBsZXQgaG9zdFNlcXVlbmNlID0gMDsKICBsZXQgYWN0aXZlSG9zdExpbmtUb2tlbiA9IDA7',
+  'CiAgbGV0IGNoYXRSZWFkeSA9IGZhbHNlOwogIGNvbnN0IGRlbGl2ZXJ5VHJhY2tlcnMgPSBuZXcgTWFwKCk7CiAgY29uc3QgREVM',
+  'SVZFUllfVElNRU9VVCA9IDgwMDA7CiAgbGV0IHNjcm9sbEZyYW1lID0gMDsKICBsZXQgbGFzdFJlbmRlcmVkU2lnbmF0dXJlID0g',
+  'Jyc7CiAgbGV0IHNlZW5NZXNzYWdlSWRzID0gbmV3IFNldCgpOwogIGxldCBob3N0SUQgPSAnJzsKICBsZXQgaG9zdENvbm5lY3Rp',
+  'b24gPSBudWxsOwogIGxldCBtaWdyYXRpb25SdW5uaW5nID0gZmFsc2U7CiAgbGV0IHJlY29ubmVjdFRpbWVyID0gbnVsbDsKICBs',
+  'ZXQgY29ubmVjdGlvblN0YXRlID0gJ2Nvbm5lY3RpbmcnOwogIGxldCBwZW5kaW5nTWVzc2FnZXMgPSBuZXcgTWFwKCk7CiAgbGV0',
+  'IHNlbmRRdWV1ZSA9IFtdOwogIGxldCB1bnJlYWRDb3VudCA9IDA7CiAgbGV0IHJldHJ5VGltZXIgPSBudWxsOwogIGxldCBwYWdl',
+  'VmlzaWJsZSA9ICFkb2N1bWVudC5oaWRkZW47CiAgbGV0IG1pZ3JhdGlvblJvdW5kID0gMDsKICBsZXQgbWlncmF0aW9uVGltZXIg',
+  'PSBudWxsOwogIGxldCByZWNvdmVyeVdhdGNoZG9nID0gbnVsbDsKICBsZXQgcmVjb3ZlcnlTdGFydGVkQXQgPSAwOwogIGxldCBj',
+  'b25zZWN1dGl2ZVJlY292ZXJ5RmFpbHVyZXMgPSAwOwogIGNvbnN0IE1BWF9QRU5ESU5HX0FHRSA9IDI0ICogNjAgKiA2MCAqIDEw',
+  'MDA7CiAgY29uc3QgY2xpZW50SWQgPSBzZXNzaW9uU3RvcmFnZS5nZXRJdGVtKCdwMnAtY2xpZW50LWlkJykgfHwKICAgIChjcnlw',
+  'dG8ucmFuZG9tVVVJRCA/IGNyeXB0by5yYW5kb21VVUlEKCkgOiBEYXRlLm5vdygpICsgJy0nICsgTWF0aC5yYW5kb20oKS50b1N0',
+  'cmluZygzNikuc2xpY2UoMikpOwogIHNlc3Npb25TdG9yYWdlLnNldEl0ZW0oJ3AycC1jbGllbnQtaWQnLCBjbGllbnRJZCk7CiAg',
+  'Y29uc3QgZWxlY3Rpb25TY29yZSA9IE51bWJlcihzZXNzaW9uU3RvcmFnZS5nZXRJdGVtKCdwMnAtZWxlY3Rpb24tc2NvcmUnKSkg',
+  'fHwgTWF0aC5yYW5kb20oKTsKICBzZXNzaW9uU3RvcmFnZS5zZXRJdGVtKCdwMnAtZWxlY3Rpb24tc2NvcmUnLCBTdHJpbmcoZWxl',
+  'Y3Rpb25TY29yZSkpOwoKICBmdW5jdGlvbiBzdG9yYWdlS2V5KCkgeyByZXR1cm4gJ21pbmltYWwtcDJwLWNoYXQ6JyArIHJvb21J',
+  'RDsgfQoKICBmdW5jdGlvbiBtZXNzYWdlT3JkZXJWYWx1ZShtKSB7CiAgICAvLyDooajnpLrkvY3nva7jga/kvZzmiJDmmYLliLvj',
+  'gaflm7rlrprjgZnjgovjgIJBQ0vjgoTlho3mjqXntprjgadob3N0U2Vx44GM5LuY44GE44Gm44KC6aOb44Gw44GV44Gq44GE44CC',
+  'CiAgICByZXR1cm4gTnVtYmVyKG0udGltZSB8fCBtLnJlY2VpdmVkQXQgfHwgMCk7CiAgfQoKICBmdW5jdGlvbiBub3JtYWxpemVN',
+  'ZXNzYWdlKG0pIHsKICAgIGlmICghaXNWYWxpZE1lc3NhZ2UobSkpIHJldHVybiBudWxsOwogICAgcmV0dXJuIHsuLi5tLCByZWNl',
+  'aXZlZEF0Ok51bWJlcihtLnJlY2VpdmVkQXQgfHwgbS50aW1lIHx8IERhdGUubm93KCkpfTsKICB9CgogIGZ1bmN0aW9uIG1lcmdl',
+  'TWVzc2FnZXMoLi4uZ3JvdXBzKSB7CiAgICBjb25zdCBieUlkID0gbmV3IE1hcCgpOwogICAgZ3JvdXBzLmZsYXQoKS5mb3JFYWNo',
+  'KHJhdyA9PiB7CiAgICAgIGNvbnN0IG09bm9ybWFsaXplTWVzc2FnZShyYXcpOyBpZighbSkgcmV0dXJuOwogICAgICBjb25zdCBw',
+  'cmV2PWJ5SWQuZ2V0KG0uaWQpOwogICAgICBpZighcHJldiB8fCAoTnVtYmVyLmlzRmluaXRlKG0uaG9zdFNlcSkgJiYgIU51bWJl',
+  'ci5pc0Zpbml0ZShwcmV2Lmhvc3RTZXEpKSB8fAogICAgICAgIE51bWJlcihtLnJlY2VpdmVkQXR8fDApID4gTnVtYmVyKHByZXYu',
+  'cmVjZWl2ZWRBdHx8MCkpIGJ5SWQuc2V0KG0uaWQsbSk7CiAgICB9KTsKICAgIHJldHVybiBbLi4uYnlJZC52YWx1ZXMoKV0uc29y',
+  'dCgoYSxiKSA9PiBtZXNzYWdlT3JkZXJWYWx1ZShhKS1tZXNzYWdlT3JkZXJWYWx1ZShiKSB8fCBhLmlkLmxvY2FsZUNvbXBhcmUo',
+  'Yi5pZCkpOwogIH0KCiAgZnVuY3Rpb24gc2FmZUxvYWRIaXN0b3J5KCkgewogICAgdHJ5IHsKICAgICAgY29uc3Qgc2F2ZWQgPSBK',
+  'U09OLnBhcnNlKGxvY2FsU3RvcmFnZS5nZXRJdGVtKHN0b3JhZ2VLZXkoKSkgfHwgJ1tdJyk7CiAgICAgIG1lc3NhZ2VKb3VybmFs',
+  'ID0gQXJyYXkuaXNBcnJheShzYXZlZCkgPyBtZXJnZU1lc3NhZ2VzKHNhdmVkKS5zbGljZSgtSk9VUk5BTF9MSU1JVCkgOiBbXTsK',
+  'ICAgICAgcmV0dXJuIG1lc3NhZ2VKb3VybmFsLnNsaWNlKC1ISVNUT1JZX0xJTUlUKTsKICAgIH0gY2F0Y2ggKGUpIHsgY29uc29s',
+  'ZS53YXJuKCflsaXmrbTjga7oqq3jgb/ovrzjgb/jgavlpLHmlZc6JywgZSk7IG1lc3NhZ2VKb3VybmFsPVtdOyByZXR1cm4gW107',
+  'IH0KICB9CgogIGZ1bmN0aW9uIHNhdmVIaXN0b3J5KCkgewogICAgdHJ5IHsKICAgICAgbWVzc2FnZUpvdXJuYWwgPSBtZXJnZU1l',
+  'c3NhZ2VzKG1lc3NhZ2VKb3VybmFsLCByb29tU3RhdGUubWVzc2FnZXMpLnNsaWNlKC1KT1VSTkFMX0xJTUlUKTsKICAgICAgbG9j',
+  'YWxTdG9yYWdlLnNldEl0ZW0oc3RvcmFnZUtleSgpLCBKU09OLnN0cmluZ2lmeShtZXNzYWdlSm91cm5hbCkpOwogICAgfSBjYXRj',
+  'aCAoZSkgeyBjb25zb2xlLndhcm4oJ+WxpeattOOBruS/neWtmOOBq+WkseaVlzonLCBlKTsgfQogIH0KCiAgZnVuY3Rpb24gaXNW',
+  'YWxpZE1lc3NhZ2UoZGF0YSkgewogICAgcmV0dXJuIGRhdGEgJiYgZGF0YS50eXBlID09PSAnY2hhdCcgJiYgdHlwZW9mIGRhdGEu',
+  'aWQgPT09ICdzdHJpbmcnICYmCiAgICAgIHR5cGVvZiBkYXRhLm5hbWUgPT09ICdzdHJpbmcnICYmIHR5cGVvZiBkYXRhLm1zZyA9',
+  'PT0gJ3N0cmluZycgJiYgTnVtYmVyLmlzRmluaXRlKGRhdGEudGltZSk7CiAgfQoKICBmdW5jdGlvbiBhZGRNZXNzYWdlVG9TdGF0',
+  'ZShkYXRhKSB7CiAgICBjb25zdCBub3JtYWxpemVkPW5vcm1hbGl6ZU1lc3NhZ2UoZGF0YSk7CiAgICBpZiAoIW5vcm1hbGl6ZWQp',
+  'IHJldHVybiBmYWxzZTsKICAgIGNvbnN0IGV4aXN0ZWQ9c2Vlbk1lc3NhZ2VJZHMuaGFzKG5vcm1hbGl6ZWQuaWQpOwogICAgbWVz',
+  'c2FnZUpvdXJuYWw9bWVyZ2VNZXNzYWdlcyhtZXNzYWdlSm91cm5hbCxbbm9ybWFsaXplZF0pLnNsaWNlKC1KT1VSTkFMX0xJTUlU',
+  'KTsKICAgIHJvb21TdGF0ZS5tZXNzYWdlcz1tZXNzYWdlSm91cm5hbC5zbGljZSgtSElTVE9SWV9MSU1JVCk7CiAgICBzZWVuTWVz',
+  'c2FnZUlkcz1uZXcgU2V0KHJvb21TdGF0ZS5tZXNzYWdlcy5tYXAobT0+bS5pZCkpOwogICAgc2F2ZUhpc3RvcnkoKTsKICAgIHJl',
+  'dHVybiAhZXhpc3RlZDsKICB9CgogIGZ1bmN0aW9uIG15VXNlclJlY29yZChob3N0ID0gZmFsc2UpIHsKICAgIHJldHVybiB7IGNs',
+  'aWVudElkLCBuYW1lOiBteU5hbWUuc2xpY2UoMCwgNDApLCBzY29yZTogZWxlY3Rpb25TY29yZSwgaG9zdCwgdXBkYXRlZEF0OiBE',
+  'YXRlLm5vdygpIH07CiAgfQoKICBmdW5jdGlvbiBvdXRib3hLZXkoKSB7IHJldHVybiAncHJhY3RpY2FsLWNoYXQtb3V0Ym94Oicg',
+  'KyByb29tSUQ7IH0KCiAgZnVuY3Rpb24gcGVyc2lzdE91dGJveCgpIHsKICAgIHRyeSB7CiAgICAgIGNvbnN0IHJvd3MgPSBbLi4u',
+  'cGVuZGluZ01lc3NhZ2VzLnZhbHVlcygpXS5tYXAoaXRlbSA9PiAoewogICAgICAgIGRhdGE6IGl0ZW0uZGF0YSwgYXR0ZW1wdHM6',
+  'IGl0ZW0uYXR0ZW1wdHMsIGxhc3RTZW50OiBpdGVtLmxhc3RTZW50LCBxdWV1ZWRBdDogaXRlbS5xdWV1ZWRBdCB8fCBEYXRlLm5v',
+  'dygpCiAgICAgIH0pKS5maWx0ZXIoaXRlbSA9PiBEYXRlLm5vdygpIC0gaXRlbS5xdWV1ZWRBdCA8IE1BWF9QRU5ESU5HX0FHRSk7',
+  'CiAgICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKG91dGJveEtleSgpLCBKU09OLnN0cmluZ2lmeShyb3dzKSk7CiAgICB9IGNhdGNo',
+  'IChlKSB7IGNvbnNvbGUud2Fybign6YCB5L+h5b6F44Gh5L+d5a2Y5aSx5pWXOicsIGUpOyB9CiAgfQoKICBmdW5jdGlvbiByZXN0',
+  'b3JlT3V0Ym94KCkgewogICAgdHJ5IHsKICAgICAgY29uc3Qgcm93cyA9IEpTT04ucGFyc2UobG9jYWxTdG9yYWdlLmdldEl0ZW0o',
+  'b3V0Ym94S2V5KCkpIHx8ICdbXScpOwogICAgICBpZiAoIUFycmF5LmlzQXJyYXkocm93cykpIHJldHVybjsKICAgICAgcm93cy5m',
+  'b3JFYWNoKGl0ZW0gPT4gewogICAgICAgIGlmICghaXRlbSB8fCAhaXNWYWxpZE1lc3NhZ2UoaXRlbS5kYXRhKSkgcmV0dXJuOwog',
+  'ICAgICAgIGlmIChEYXRlLm5vdygpIC0gTnVtYmVyKGl0ZW0ucXVldWVkQXQgfHwgMCkgPj0gTUFYX1BFTkRJTkdfQUdFKSByZXR1',
+  'cm47CiAgICAgICAgcGVuZGluZ01lc3NhZ2VzLnNldChpdGVtLmRhdGEuaWQsIHsKICAgICAgICAgIGRhdGE6IGl0ZW0uZGF0YSwg',
+  'YXR0ZW1wdHM6IE51bWJlcihpdGVtLmF0dGVtcHRzIHx8IDApLCBsYXN0U2VudDogMCwgcXVldWVkQXQ6IE51bWJlcihpdGVtLnF1',
+  'ZXVlZEF0IHx8IERhdGUubm93KCkpCiAgICAgICAgfSk7CiAgICAgICAgaWYgKCFzZWVuTWVzc2FnZUlkcy5oYXMoaXRlbS5kYXRh',
+  'LmlkKSkgYWRkTWVzc2FnZVRvU3RhdGUoaXRlbS5kYXRhKTsKICAgICAgICBzZW5kUXVldWUucHVzaChpdGVtLmRhdGEuaWQpOwog',
+  'ICAgICB9KTsKICAgIH0gY2F0Y2ggKGUpIHsgY29uc29sZS53YXJuKCfpgIHkv6HlvoXjgaHlvqnlhYPlpLHmlZc6JywgZSk7IH0K',
+  'ICB9CgogIGZ1bmN0aW9uIHN0YXJ0UmVjb3ZlcnlXYXRjaGRvZygpIHsKICAgIGNsZWFySW50ZXJ2YWwocmVjb3ZlcnlXYXRjaGRv',
+  'Zyk7CiAgICByZWNvdmVyeVN0YXJ0ZWRBdCA9IERhdGUubm93KCk7CiAgICByZWNvdmVyeVdhdGNoZG9nID0gc2V0SW50ZXJ2YWwo',
+  'KCkgPT4gewogICAgICBpZiAoaXNIb3N0IHx8IChob3N0Q29ubmVjdGlvbiAmJiBob3N0Q29ubmVjdGlvbi5vcGVuKSkgewogICAg',
+  'ICAgIGNvbnNlY3V0aXZlUmVjb3ZlcnlGYWlsdXJlcyA9IDA7CiAgICAgICAgcmVjb3ZlcnlTdGFydGVkQXQgPSAwOwogICAgICAg',
+  'IGNsZWFySW50ZXJ2YWwocmVjb3ZlcnlXYXRjaGRvZyk7CiAgICAgICAgcmVjb3ZlcnlXYXRjaGRvZyA9IG51bGw7CiAgICAgICAg',
+  'Zmx1c2hRdWV1ZSgpOwogICAgICAgIHJldHVybjsKICAgICAgfQogICAgICBjb25zdCBlbGFwc2VkID0gRGF0ZS5ub3coKSAtIHJl',
+  'Y292ZXJ5U3RhcnRlZEF0OwogICAgICBpZiAoZWxhcHNlZCA+IDgwMDApIHsKICAgICAgICByZWNvdmVyeVN0YXJ0ZWRBdCA9IERh',
+  'dGUubm93KCk7CiAgICAgICAgY29uc2VjdXRpdmVSZWNvdmVyeUZhaWx1cmVzKys7CiAgICAgICAgbWlncmF0aW9uUnVubmluZyA9',
+  'IGZhbHNlOwogICAgICAgIG1pZ3JhdGlvblJvdW5kKys7CiAgICAgICAgc2FmZWx5RGVzdHJveVBlZXIoZmFsc2UpOwogICAgICAg',
+  'IHNldENvbm5lY3Rpb25TdGF0ZSgnY29ubmVjdGluZycsICflvqnml6fjgpLlho3oqabooYzkuK0gJyArIGNvbnNlY3V0aXZlUmVj',
+  'b3ZlcnlGYWlsdXJlcyk7CiAgICAgICAgaWYgKG5hdmlnYXRvci5vbkxpbmUpIGNyZWF0ZVJlY292ZXJ5UGVlcigpOwogICAgICB9',
+  'CiAgICB9LCA3NTApOwogIH0KCiAgZnVuY3Rpb24gY3JlYXRlUmVjb3ZlcnlQZWVyKCkgewogICAgaWYgKCFuYXZpZ2F0b3Iub25M',
+  'aW5lIHx8IGlzSG9zdCkgcmV0dXJuOwogICAgcGVlciA9IG5ldyBQZWVyKCk7CiAgICBiaW5kUGVlckJhc2VFdmVudHMocGVlcik7',
+  'CiAgICBsZXQgb3BlbmVkID0gZmFsc2U7CiAgICBjb25zdCBvcGVuVGltZW91dCA9IHNldFRpbWVvdXQoKCkgPT4gewogICAgICBp',
+  'ZiAoIW9wZW5lZCkgeyBzYWZlbHlEZXN0cm95UGVlcihmYWxzZSk7IGJlZ2luSG9zdE1pZ3JhdGlvbih0cnVlKTsgfQogICAgfSwg',
+  'MjIwMCk7CiAgICBwZWVyLm9uKCdvcGVuJywgKCkgPT4gewogICAgICBvcGVuZWQgPSB0cnVlOwogICAgICBjbGVhclRpbWVvdXQo',
+  'b3BlblRpbWVvdXQpOwogICAgICBtaWdyYXRpb25SdW5uaW5nID0gZmFsc2U7CiAgICAgIHN0YXJ0Q2hhdCgpOwogICAgICBjb25u',
+  'ZWN0VG9Ib3N0KDApOwogICAgfSk7CiAgICBwZWVyLm9uKCdlcnJvcicsICgpID0+IHsKICAgICAgY2xlYXJUaW1lb3V0KG9wZW5U',
+  'aW1lb3V0KTsKICAgICAgc2FmZWx5RGVzdHJveVBlZXIoZmFsc2UpOwogICAgICBzZXRUaW1lb3V0KCgpID0+IGJlZ2luSG9zdE1p',
+  'Z3JhdGlvbih0cnVlKSwgMjUwICsgTWF0aC5yYW5kb20oKSAqIDI1MCk7CiAgICB9KTsKICB9CgogIGZ1bmN0aW9uIGluaXRQMlAo',
+  'KSB7CiAgICByb29tSUQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgncm9vbS1udW0nKS52YWx1ZS50cmltKCk7CiAgICBteU5h',
+  'bWUgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndXNlci1uYW1lJykudmFsdWUudHJpbSgpOwogICAgbG9jYWxTdG9yYWdlLnNl',
+  'dEl0ZW0oJ3ByYWN0aWNhbC1jaGF0LXJvb20nLCByb29tSUQpOwogICAgbG9jYWxTdG9yYWdlLnNldEl0ZW0oJ3ByYWN0aWNhbC1j',
+  'aGF0LW5hbWUnLCBteU5hbWUpOwogICAgaWYgKCFyb29tSUQgfHwgIW15TmFtZSkgcmV0dXJuOwogICAgaG9zdElEID0gJ1NQQUNF',
+  'LVJPT00tJyArIHJvb21JRDsKICAgIHJvb21TdGF0ZS5tZXNzYWdlcyA9IHNhZmVMb2FkSGlzdG9yeSgpOwogICAgc2Vlbk1lc3Nh',
+  'Z2VJZHMgPSBuZXcgU2V0KHJvb21TdGF0ZS5tZXNzYWdlcy5tYXAobSA9PiBtLmlkKSk7CiAgICByZXN0b3JlT3V0Ym94KCk7CiAg',
+  'ICBjcmVhdGVJbml0aWFsUGVlcigpOwogIH0KCiAgZnVuY3Rpb24gY3JlYXRlSW5pdGlhbFBlZXIoKSB7CiAgICBwZWVyID0gbmV3',
+  'IFBlZXIoaG9zdElEKTsKICAgIGJpbmRQZWVyQmFzZUV2ZW50cyhwZWVyKTsKICAgIHBlZXIub24oJ29wZW4nLCAoKSA9PiBiZWNv',
+  'bWVIb3N0KGZhbHNlKSk7CiAgICBwZWVyLm9uKCdlcnJvcicsIGVyciA9PiB7CiAgICAgIGlmIChlcnIudHlwZSA9PT0gJ3VuYXZh',
+  'aWxhYmxlLWlkJykgewogICAgICAgIHNhZmVseURlc3Ryb3lQZWVyKCk7CiAgICAgICAgY3JlYXRlQ2xpZW50UGVlcigpOwogICAg',
+  'ICB9IGVsc2UgaWYgKCFtaWdyYXRpb25SdW5uaW5nKSB7CiAgICAgICAgYWRkU3lzdGVtTG9nKCfmjqXntprjgqjjg6njg7w6ICcg',
+  'KyAoZXJyLnR5cGUgfHwgJ3Vua25vd24nKSk7CiAgICAgIH0KICAgIH0pOwogIH0KCiAgZnVuY3Rpb24gY3JlYXRlQ2xpZW50UGVl',
+  'cigpIHsKICAgIHBlZXIgPSBuZXcgUGVlcigpOwogICAgYmluZFBlZXJCYXNlRXZlbnRzKHBlZXIpOwogICAgcGVlci5vbignb3Bl',
+  'bicsICgpID0+IHsKICAgICAgaXNIb3N0ID0gZmFsc2U7CiAgICAgIHN0YXJ0Q2hhdCgpOwogICAgICByZW5kZXJIaXN0b3J5KCk7',
+  'CiAgICAgIGNvbm5lY3RUb0hvc3QoKTsKICAgIH0pOwogICAgcGVlci5vbignZXJyb3InLCBlcnIgPT4gewogICAgICBpZiAoZXJy',
+  'LnR5cGUgIT09ICdwZWVyLXVuYXZhaWxhYmxlJyAmJiBlcnIudHlwZSAhPT0gJ25ldHdvcmsnKQogICAgICAgIGFkZFN5c3RlbUxv',
+  'Zygn5o6l57aa44Ko44Op44O8OiAnICsgKGVyci50eXBlIHx8ICd1bmtub3duJykpOwogICAgfSk7CiAgfQoKICBmdW5jdGlvbiBi',
+  'aW5kUGVlckJhc2VFdmVudHModGFyZ2V0UGVlcikgewogICAgdGFyZ2V0UGVlci5vbignY29ubmVjdGlvbicsIHNldHVwQ29ubik7',
+  'CiAgfQoKICBmdW5jdGlvbiBjb25uZWN0VG9Ib3N0KGF0dGVtcHQgPSAwKSB7CiAgICBjbGVhclRpbWVvdXQocmVjb25uZWN0VGlt',
+  'ZXIpOwogICAgaWYgKCFyZWNvdmVyeVdhdGNoZG9nKSBzdGFydFJlY292ZXJ5V2F0Y2hkb2coKTsKICAgIGlmICghcGVlciB8fCBw',
+  'ZWVyLmRlc3Ryb3llZCB8fCBpc0hvc3QpIHJldHVybjsKICAgIGlmIChhdHRlbXB0ID49IDIpIHsKICAgICAgYmVnaW5Ib3N0TWln',
+  'cmF0aW9uKHRydWUpOwogICAgICByZXR1cm47CiAgICB9CiAgICBzZXRDb25uZWN0aW9uU3RhdGUoJ2Nvbm5lY3RpbmcnLCBhdHRl',
+  'bXB0ID8gJ+mrmOmAn+WGjeaOpee2muS4rSAnICsgYXR0ZW1wdCA6ICfmjqXntprnorroqo3kuK0nKTsKICAgIGlmIChhdHRlbXB0',
+  'ID09PSAwKSBhZGRTeXN0ZW1Mb2coJ+ODm+OCueODiOOBuOaOpee2muOBl+OBpuOBhOOBvuOBmeKApicpOwogICAgY29uc3QgYyA9',
+  'IHBlZXIuY29ubmVjdChob3N0SUQsIHsgcmVsaWFibGU6IHRydWUgfSk7CiAgICBob3N0Q29ubmVjdGlvbiA9IGM7CiAgICBjb25z',
+  'dCBsaW5rVG9rZW49KythY3RpdmVIb3N0TGlua1Rva2VuOwogICAgYy5fX2hvc3RMaW5rVG9rZW49bGlua1Rva2VuOwogICAgc2V0',
+  'dXBDb25uKGMsIHRydWUpOwogICAgY29uc3QgdGltZW91dCA9IGF0dGVtcHQgPT09IDAgPyA1NTAgOiA5MDA7CiAgICByZWNvbm5l',
+  'Y3RUaW1lciA9IHNldFRpbWVvdXQoKCkgPT4gewogICAgICBpZiAoIWlzSG9zdCAmJiAoIWhvc3RDb25uZWN0aW9uIHx8ICFob3N0',
+  'Q29ubmVjdGlvbi5vcGVuKSkgY29ubmVjdFRvSG9zdChhdHRlbXB0ICsgMSk7CiAgICB9LCB0aW1lb3V0KTsKICB9CgogIGZ1bmN0',
+  'aW9uIGJlY29tZUhvc3QobWlncmF0ZWQpIHsKICAgIGlzSG9zdCA9IHRydWU7CiAgICBjaGF0UmVhZHk9dHJ1ZTsKICAgIHNldENv',
+  'bm5lY3Rpb25TdGF0ZSgnb25saW5lJywgJ+aOpee2mua4iOOBv+ODu+ODm+OCueODiCcpOwogICAgbWlncmF0aW9uUnVubmluZyA9',
+  'IGZhbHNlOwogICAgY2xlYXJUaW1lb3V0KG1pZ3JhdGlvblRpbWVyKTsKICAgIGNsZWFyVGltZW91dChyZWNvbm5lY3RUaW1lcik7',
+  'CiAgICBjbGVhckludGVydmFsKHJlY292ZXJ5V2F0Y2hkb2cpOyByZWNvdmVyeVdhdGNoZG9nID0gbnVsbDsgcmVjb3ZlcnlTdGFy',
+  'dGVkQXQgPSAwOyBjb25zZWN1dGl2ZVJlY292ZXJ5RmFpbHVyZXMgPSAwOwogICAgaG9zdENvbm5lY3Rpb24gPSBudWxsOwogICAg',
+  'Y29ubmVjdGlvbnMgPSBbXTsKICAgIE9iamVjdC52YWx1ZXMocm9vbVN0YXRlLnVzZXJzKS5mb3JFYWNoKHUgPT4gdS5ob3N0ID0g',
+  'ZmFsc2UpOwogICAgcm9vbVN0YXRlLnVzZXJzW2NsaWVudElkXSA9IG15VXNlclJlY29yZCh0cnVlKTsKICAgIGhvc3RTZXF1ZW5j',
+  'ZT1NYXRoLm1heCgwLC4uLm1lc3NhZ2VKb3VybmFsLm1hcChtPT5OdW1iZXIobS5ob3N0U2VxKXx8MCkpOwogICAgc3RhcnRDaGF0',
+  'KCk7IHJlbmRlckhpc3RvcnkoKTsgdXBkYXRlU3RhdHVzKCk7CiAgICBhZGRTeXN0ZW1Mb2cobWlncmF0ZWQgPyAn44Ob44K544OI',
+  '44KS5byV44GN57aZ44GO44G+44GX44Gf44CCJyA6ICfjgZPjga7nq6/mnKvjgYzjg5vjgrnjg4jjgafjgZnjgIInKTsKICB9Cgog',
+  'IGZ1bmN0aW9uIHN0YXJ0Q2hhdCgpIHsKICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdsb2dpbi1zY3JlZW4nKS5zdHlsZS5k',
+  'aXNwbGF5ID0gJ25vbmUnOwogICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NoYXQtdWknKS5zdHlsZS5kaXNwbGF5ID0gJ2Zs',
+  'ZXgnOwogICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb20tc3RhdHVzJykuc3R5bGUuZGlzcGxheSA9ICdibG9jayc7CiAg',
+  'ICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndG9wLXBhbmVsJykuc3R5bGUuZGlzcGxheSA9ICdmbGV4JzsKICAgIGRvY3VtZW50',
+  'LmdldEVsZW1lbnRCeUlkKCdyb29tLWxhYmVsJykudGV4dENvbnRlbnQgPSAnUk9PTSAnICsgcm9vbUlEOwogICAgZG9jdW1lbnQu',
+  'Z2V0RWxlbWVudEJ5SWQoJ21zZy1pbnB1dCcpLm9ua2V5ZG93biA9IGUgPT4geyBpZiAoZS5rZXkgPT09ICdFbnRlcicpIHNlbmQo',
+  'KTsgfTsKICB9CgogIGZ1bmN0aW9uIHNldHVwQ29ubihjLCBpc0hvc3RMaW5rID0gZmFsc2UpIHsKICAgIGlmICghYyB8fCBjLl9f',
+  'Y29uZmlndXJlZCkgcmV0dXJuOwogICAgYy5fX2NvbmZpZ3VyZWQgPSB0cnVlOwogICAgYy5vbignb3BlbicsICgpID0+IHsKICAg',
+  'ICAgaWYgKGlzSG9zdExpbmsgJiYgIWlzSG9zdCAmJiBjICE9PSBob3N0Q29ubmVjdGlvbikgeyB0cnl7Yy5jbG9zZSgpO31jYXRj',
+  'aChfKXt9IHJldHVybjsgfQogICAgICBpZiAoIWNvbm5lY3Rpb25zLmluY2x1ZGVzKGMpKSBjb25uZWN0aW9ucy5wdXNoKGMpOwog',
+  'ICAgICBpZiAoaXNIb3N0TGluayB8fCAhaXNIb3N0KSB7CiAgICAgICAgc2V0Q29ubmVjdGlvblN0YXRlKCdvbmxpbmUnLCBpc0hv',
+  'c3QgPyAn5o6l57aa5riI44G/44O744Ob44K544OIJyA6ICflkIzmnJ/norroqo3kuK0nKTsKICAgICAgICBjaGF0UmVhZHk9aXNI',
+  'b3N0OwogICAgICAgIG1pZ3JhdGlvblJ1bm5pbmcgPSBmYWxzZTsKICAgICAgICBjbGVhclRpbWVvdXQobWlncmF0aW9uVGltZXIp',
+  'OwogICAgICAgIGNsZWFySW50ZXJ2YWwocmVjb3ZlcnlXYXRjaGRvZyk7IHJlY292ZXJ5V2F0Y2hkb2cgPSBudWxsOyByZWNvdmVy',
+  'eVN0YXJ0ZWRBdCA9IDA7IGNvbnNlY3V0aXZlUmVjb3ZlcnlGYWlsdXJlcyA9IDA7CiAgICAgIH0KICAgICAgaWYgKGlzSG9zdExp',
+  'bmspIGhvc3RDb25uZWN0aW9uID0gYzsKICAgICAgYy5zZW5kKHsgdHlwZTogJ2hlbGxvJywgdXNlcjogbXlVc2VyUmVjb3JkKGlz',
+  'SG9zdCkgfSk7CiAgICAgIHVwZGF0ZVN0YXR1cygpOwogICAgfSk7CgogICAgYy5vbignZGF0YScsIGRhdGEgPT4gewogICAgICBp',
+  'ZiAoaXNIb3N0TGluayAmJiAhaXNIb3N0ICYmIChjICE9PSBob3N0Q29ubmVjdGlvbiB8fCBjLl9faG9zdExpbmtUb2tlbiAhPT0g',
+  'YWN0aXZlSG9zdExpbmtUb2tlbikpIHJldHVybjsKICAgICAgaWYgKCFkYXRhIHx8IHR5cGVvZiBkYXRhLnR5cGUgIT09ICdzdHJp',
+  'bmcnKSByZXR1cm47CiAgICAgIGlmIChkYXRhLnR5cGUgPT09ICdoZWxsbycgJiYgaXNIb3N0ICYmIHZhbGlkVXNlcihkYXRhLnVz',
+  'ZXIpKSB7CiAgICAgICAgY29uc3Qgd2FzS25vd249Qm9vbGVhbihyb29tU3RhdGUudXNlcnNbZGF0YS51c2VyLmNsaWVudElkXSk7',
+  'CiAgICAgICAgcm9vbVN0YXRlLnVzZXJzW2RhdGEudXNlci5jbGllbnRJZF0gPSB7Li4uZGF0YS51c2VyLCBwZWVySWQ6IGMucGVl',
+  'ciwgaG9zdDogZmFsc2UsIHVwZGF0ZWRBdDogRGF0ZS5ub3coKX07CiAgICAgICAgaWYoIXdhc0tub3duKSBhZGRTeXN0ZW1Mb2co',
+  'ZGF0YS51c2VyLm5hbWUgKyAnIOOBjOWFpeWupOOBl+OBvuOBl+OBn+OAgicpOwogICAgICAgIC8vIOWxpeattOOCkuWQq+OCgOWu',
+  'jOWFqOeKtuaFi+OBr+OAgeaWsOOBl+OBj+WFpeOBo+OBn+err+acq+OBoOOBkeOBuOmAgeOCi+OAggogICAgICAgIHNlbmRGdWxs',
+  'U3RhdGUoYyk7CiAgICAgICAgLy8g5pei5a2Y5Y+C5Yqg6ICF44G444Gv6Lu96YeP44Gq5Zyo5a6k5LiA6Kan44Gg44GR44KS6YCB',
+  '44KL44CC5YaN5o+P55S744O75YaN5ZCM5pyf44Gv44GV44Gb44Gq44GE44CCCiAgICAgICAgYnJvYWRjYXN0UHJlc2VuY2UoYy5w',
+  'ZWVyKTsKICAgICAgfSBlbHNlIGlmIChkYXRhLnR5cGUgPT09ICdzdGF0ZScgJiYgIWlzSG9zdCkgewogICAgICAgIGFwcGx5U3Rh',
+  'dGUoZGF0YS5zdGF0ZSk7CiAgICAgIH0gZWxzZSBpZiAoZGF0YS50eXBlID09PSAncHJlc2VuY2UnICYmICFpc0hvc3QgJiYgZGF0',
+  'YS51c2VycyAmJiB0eXBlb2YgZGF0YS51c2VycyA9PT0gJ29iamVjdCcpIHsKICAgICAgICByb29tU3RhdGUudXNlcnMgPSBkYXRh',
+  'LnVzZXJzOwogICAgICAgIHJvb21TdGF0ZS51c2Vyc1tjbGllbnRJZF0gPSBteVVzZXJSZWNvcmQoZmFsc2UpOwogICAgICAgIHVw',
+  'ZGF0ZVN0YXR1cygpOwogICAgICB9IGVsc2UgaWYgKGRhdGEudHlwZSA9PT0gJ2NoYXQnICYmIGlzVmFsaWRNZXNzYWdlKGRhdGEp',
+  'KSB7CiAgICAgICAgaWYgKGlzSG9zdCAmJiAhTnVtYmVyLmlzRmluaXRlKGRhdGEuaG9zdFNlcSkpIHsKICAgICAgICAgIGRhdGEu',
+  'aG9zdFNlcT0rK2hvc3RTZXF1ZW5jZTsgZGF0YS5yZWNlaXZlZEF0PURhdGUubm93KCk7CiAgICAgICAgfQogICAgICAgIGlmIChh',
+  'ZGRNZXNzYWdlVG9TdGF0ZShkYXRhKSkgewogICAgICAgICAgY29uc3QgZm9sbG93TGF0ZXN0PWlzTmVhckxhdGVzdCgpOwogICAg',
+  'ICAgICAgYWRkTG9nKGRhdGEubmFtZSwgZGF0YS5tc2csIGRhdGEudGltZSwgZGF0YS5pZCwgZmFsc2UsICdkZWxpdmVyZWQnLCBm',
+  'b2xsb3dMYXRlc3QpOwogICAgICAgICAgaWYoIWZvbGxvd0xhdGVzdCkgc2hvd1VucmVhZEluc2lkZUNoYXQoKTsKICAgICAgICAg',
+  'IGhhbmRsZVVucmVhZCgpOwogICAgICAgIH0KICAgICAgICBpZihpc0hvc3QpewogICAgICAgICAgLy8g5YWI44Gr44Ob44K544OI',
+  '5Y+X5L+h44KS6YCa55+l44GX44CB44Gd44Gu5b6M44Gr5ZCE5Y+X5L+h56uv5pyr44Gu56K66KqN44KS6ZuG6KiI44GZ44KL44CC',
+  'CiAgICAgICAgICAvLyDlj5fkv6HogIUw5Lq644Gu5aC05ZCI44KC5pyA57WC6YCa55+l44GM5b6M44GL44KJ5bGK44GP6aCG5bqP',
+  '44Gr5Zu65a6a44GZ44KL44CCCiAgICAgICAgICB0cnl7Yy5zZW5kKHt0eXBlOidob3N0QWNjZXB0ZWQnLGlkOmRhdGEuaWQsaG9z',
+  'dFNlcTpkYXRhLmhvc3RTZXF9KTt9Y2F0Y2goXyl7fQogICAgICAgICAgYnJvYWRjYXN0KGRhdGEsYy5wZWVyKTsKICAgICAgICAg',
+  'IGJlZ2luRGVsaXZlcnlUcmFja2luZyhkYXRhLGMpOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICB0cnl7Yy5zZW5kKHt0eXBl',
+  'OidyZWNpcGllbnRBY2snLGlkOmRhdGEuaWR9KTt9Y2F0Y2goXyl7fQogICAgICAgIH0KICAgICAgfSBlbHNlIGlmIChkYXRhLnR5',
+  'cGUgPT09ICdob3N0QWNjZXB0ZWQnICYmIHR5cGVvZiBkYXRhLmlkID09PSAnc3RyaW5nJykgewogICAgICAgIGNvbnN0IHdhaXRp',
+  'bmc9cGVuZGluZ01lc3NhZ2VzLmdldChkYXRhLmlkKTsKICAgICAgICBpZih3YWl0aW5nJiZOdW1iZXIuaXNGaW5pdGUoZGF0YS5o',
+  'b3N0U2VxKSl7CiAgICAgICAgICB3YWl0aW5nLmRhdGEuaG9zdFNlcT1kYXRhLmhvc3RTZXE7IHdhaXRpbmcuZGF0YS5yZWNlaXZl',
+  'ZEF0PURhdGUubm93KCk7CiAgICAgICAgICBtZXNzYWdlSm91cm5hbD1tZXJnZU1lc3NhZ2VzKG1lc3NhZ2VKb3VybmFsLFt3YWl0',
+  'aW5nLmRhdGFdKS5zbGljZSgtSk9VUk5BTF9MSU1JVCk7IHNhdmVIaXN0b3J5KCk7CiAgICAgICAgfQogICAgICAgIG1hcmtIb3N0',
+  'QWNjZXB0ZWQoZGF0YS5pZCk7CiAgICAgIH0gZWxzZSBpZiAoZGF0YS50eXBlID09PSAncmVjaXBpZW50QWNrJyAmJiBpc0hvc3Qg',
+  'JiYgdHlwZW9mIGRhdGEuaWQgPT09ICdzdHJpbmcnKSB7CiAgICAgICAgcmVjb3JkUmVjaXBpZW50QWNrKGRhdGEuaWQsYy5wZWVy',
+  'KTsKICAgICAgfSBlbHNlIGlmIChkYXRhLnR5cGUgPT09ICdkZWxpdmVyeVJlY2VpcHQnICYmIHR5cGVvZiBkYXRhLmlkID09PSAn',
+  'c3RyaW5nJykgewogICAgICAgIHVwZGF0ZURlbGl2ZXJ5UmVjZWlwdChkYXRhKTsKICAgICAgfQogICAgfSk7CgogICAgYy5vbign',
+  'Y2xvc2UnLCAoKSA9PiBoYW5kbGVDb25uZWN0aW9uQ2xvc2VkKGMsIGlzSG9zdExpbmspKTsKICAgIGMub24oJ2Vycm9yJywgKCkg',
+  'PT4gaGFuZGxlQ29ubmVjdGlvbkNsb3NlZChjLCBpc0hvc3RMaW5rKSk7CiAgfQoKICBmdW5jdGlvbiB2YWxpZFVzZXIodSkgewog',
+  'ICAgcmV0dXJuIHUgJiYgdHlwZW9mIHUuY2xpZW50SWQgPT09ICdzdHJpbmcnICYmIHR5cGVvZiB1Lm5hbWUgPT09ICdzdHJpbmcn',
+  'ICYmIE51bWJlci5pc0Zpbml0ZSh1LnNjb3JlKTsKICB9CgogIGZ1bmN0aW9uIGhhbmRsZUNvbm5lY3Rpb25DbG9zZWQoYywgaXNI',
+  'b3N0TGluaykgewogICAgaWYgKGMuX19jbG9zZWRIYW5kbGVkKSByZXR1cm47CiAgICBpZiAoaXNIb3N0TGluayAmJiAhaXNIb3N0',
+  'ICYmIChjICE9PSBob3N0Q29ubmVjdGlvbiB8fCBjLl9faG9zdExpbmtUb2tlbiAhPT0gYWN0aXZlSG9zdExpbmtUb2tlbikpIHJl',
+  'dHVybjsKICAgIGMuX19jbG9zZWRIYW5kbGVkID0gdHJ1ZTsKICAgIGNvbm5lY3Rpb25zID0gY29ubmVjdGlvbnMuZmlsdGVyKHgg',
+  'PT4geCAhPT0gYyk7CiAgICBpZihpc0hvc3QpewogICAgICBkZWxpdmVyeVRyYWNrZXJzLmZvckVhY2goKHRyYWNrZXIsaWQpPT57',
+  'CiAgICAgICAgdHJhY2tlci5leHBlY3RlZC5kZWxldGUoYy5wZWVyKTsKICAgICAgICBpZih0cmFja2VyLmFja2VkLnNpemU+PXRy',
+  'YWNrZXIuZXhwZWN0ZWQuc2l6ZSkgZmluaXNoRGVsaXZlcnlUcmFja2luZyhpZCxmYWxzZSk7CiAgICAgIH0pOwogICAgfQogICAg',
+  'aWYgKGlzSG9zdExpbmsgJiYgIWlzSG9zdCkgewogICAgICBjaGF0UmVhZHk9ZmFsc2U7CiAgICAgIGhvc3RDb25uZWN0aW9uID0g',
+  'bnVsbDsKICAgICAgYmVnaW5Ib3N0TWlncmF0aW9uKCk7CiAgICB9IGVsc2UgaWYgKGlzSG9zdCkgewogICAgICBjb25zdCBlbnRy',
+  'eSA9IE9iamVjdC52YWx1ZXMocm9vbVN0YXRlLnVzZXJzKS5maW5kKHUgPT4gdS5wZWVySWQgPT09IGMucGVlcik7CiAgICAgIGlm',
+  'IChlbnRyeSAmJiBlbnRyeS5wZWVySWQ9PT1jLnBlZXIpIHsKICAgICAgICBkZWxldGUgcm9vbVN0YXRlLnVzZXJzW2VudHJ5LmNs',
+  'aWVudElkXTsKICAgICAgICBhZGRTeXN0ZW1Mb2coZW50cnkubmFtZSArICcg44GM6YCA5Ye644GX44G+44GX44Gf44CCJyk7CiAg',
+  'ICAgIH0KICAgICAgYnJvYWRjYXN0UHJlc2VuY2UoKTsKICAgIH0KICAgIHVwZGF0ZVN0YXR1cygpOwogIH0KCiAgZnVuY3Rpb24g',
+  'YmVnaW5Ib3N0TWlncmF0aW9uKGZvcmNlID0gZmFsc2UpIHsKICAgIGlmICgobWlncmF0aW9uUnVubmluZyAmJiAhZm9yY2UpIHx8',
+  'IGlzSG9zdCkgcmV0dXJuOwogICAgbWlncmF0aW9uUnVubmluZyA9IHRydWU7CiAgICBpZiAoIXJlY292ZXJ5V2F0Y2hkb2cpIHN0',
+  'YXJ0UmVjb3ZlcnlXYXRjaGRvZygpOwogICAgbWlncmF0aW9uUm91bmQrKzsKICAgIGNvbnN0IHRoaXNSb3VuZCA9IG1pZ3JhdGlv',
+  'blJvdW5kOwogICAgY2xlYXJUaW1lb3V0KHJlY29ubmVjdFRpbWVyKTsKICAgIGNsZWFyVGltZW91dChtaWdyYXRpb25UaW1lcik7',
+  'CiAgICBzZXRDb25uZWN0aW9uU3RhdGUoJ2Nvbm5lY3RpbmcnLCAn44Ob44K544OI5YaN6YG45Ye65LitJyk7CiAgICBhZGRTeXN0',
+  'ZW1Mb2coZm9yY2UgPyAn44Ob44K544OI44Gr5o6l57aa44Gn44GN44Gq44GE44Gf44KB5YaN6YG45Ye644GX44G+44GZ4oCmJyA6',
+  'ICfjg5vjgrnjg4jjgYzpgIDlh7rjgZfjgb7jgZfjgZ/jgILlho3pgbjlh7rjgZfjgb7jgZnigKYnKTsKCiAgICBjb25zdCBjYW5k',
+  'aWRhdGVzID0gT2JqZWN0LnZhbHVlcyhyb29tU3RhdGUudXNlcnMpCiAgICAgIC5maWx0ZXIodSA9PiB2YWxpZFVzZXIodSkgJiYg',
+  'IXUuaG9zdCk7CiAgICBpZiAoIWNhbmRpZGF0ZXMuc29tZSh1ID0+IHUuY2xpZW50SWQgPT09IGNsaWVudElkKSkgY2FuZGlkYXRl',
+  'cy5wdXNoKG15VXNlclJlY29yZChmYWxzZSkpOwogICAgY2FuZGlkYXRlcy5zb3J0KChhLCBiKSA9PiBiLnNjb3JlIC0gYS5zY29y',
+  'ZSB8fCBhLmNsaWVudElkLmxvY2FsZUNvbXBhcmUoYi5jbGllbnRJZCkpOwogICAgY29uc3QgcmFuayA9IE1hdGgubWF4KDAsIGNh',
+  'bmRpZGF0ZXMuZmluZEluZGV4KHUgPT4gdS5jbGllbnRJZCA9PT0gY2xpZW50SWQpKTsKCiAgICAvLyDjgZnjgbnjgabjga7lj4Ll',
+  'iqDogIXjgYzpoIbkvY3poIbjgavjg5vjgrnjg4jlj5blvpfjgbjmjJHmiKbjgZnjgovjgIIKICAgIC8vIOS4iuS9jeerr+acq+OB',
+  'jOOCueODquODvOODl+ODu+WIh+aWreS4reOBp+OCguasoemghuS9jeOBjOW8leOBjee2meOBkuOCi+OAggogICAgY29uc3QgZGVs',
+  'YXkgPSAxODAgKyByYW5rICogMzIwICsgTWF0aC5mbG9vcihNYXRoLnJhbmRvbSgpICogNzApOwogICAgc2V0Q29ubmVjdGlvblN0',
+  'YXRlKCdjb25uZWN0aW5nJywgJ+ODm+OCueODiOWAmeijnCAnICsgKHJhbmsgKyAxKSArICfkvY3jg7vlvoXmqZ/kuK0nKTsKICAg',
+  'IG1pZ3JhdGlvblRpbWVyID0gc2V0VGltZW91dCgoKSA9PiB7CiAgICAgIGlmIChpc0hvc3QgfHwgdGhpc1JvdW5kICE9PSBtaWdy',
+  'YXRpb25Sb3VuZCkgcmV0dXJuOwogICAgICBjbGFpbUhvc3RJZCh0aGlzUm91bmQpOwogICAgfSwgZGVsYXkpOwogIH0KCiAgZnVu',
+  'Y3Rpb24gY2xhaW1Ib3N0SWQocm91bmQpIHsKICAgIGlmIChpc0hvc3QgfHwgcm91bmQgIT09IG1pZ3JhdGlvblJvdW5kKSByZXR1',
+  'cm47CiAgICBzZXRDb25uZWN0aW9uU3RhdGUoJ2Nvbm5lY3RpbmcnLCAn44Ob44K544OI5byV44GN57aZ44GO6Kmm6KGM5LitJyk7',
+  'CiAgICBzYWZlbHlEZXN0cm95UGVlcihmYWxzZSk7CiAgICBwZWVyID0gbmV3IFBlZXIoaG9zdElEKTsKICAgIGJpbmRQZWVyQmFz',
+  'ZUV2ZW50cyhwZWVyKTsKICAgIGxldCBmaW5pc2hlZCA9IGZhbHNlOwogICAgY29uc3QgZmFsbGJhY2tUaW1lciA9IHNldFRpbWVv',
+  'dXQoKCkgPT4gewogICAgICBpZiAoZmluaXNoZWQgfHwgaXNIb3N0IHx8IHJvdW5kICE9PSBtaWdyYXRpb25Sb3VuZCkgcmV0dXJu',
+  'OwogICAgICBmaW5pc2hlZCA9IHRydWU7CiAgICAgIGJlY29tZUNsaWVudEFmdGVyRWxlY3Rpb24ocm91bmQpOwogICAgfSwgMTQw',
+  'MCk7CgogICAgcGVlci5vbignb3BlbicsICgpID0+IHsKICAgICAgaWYgKGZpbmlzaGVkIHx8IHJvdW5kICE9PSBtaWdyYXRpb25S',
+  'b3VuZCkgcmV0dXJuOwogICAgICBmaW5pc2hlZCA9IHRydWU7CiAgICAgIGNsZWFyVGltZW91dChmYWxsYmFja1RpbWVyKTsKICAg',
+  'ICAgYmVjb21lSG9zdCh0cnVlKTsKICAgICAgZmx1c2hRdWV1ZSgpOwogICAgfSk7CiAgICBwZWVyLm9uKCdlcnJvcicsIGVyciA9',
+  'PiB7CiAgICAgIGlmIChmaW5pc2hlZCB8fCByb3VuZCAhPT0gbWlncmF0aW9uUm91bmQpIHJldHVybjsKICAgICAgZmluaXNoZWQg',
+  'PSB0cnVlOwogICAgICBjbGVhclRpbWVvdXQoZmFsbGJhY2tUaW1lcik7CiAgICAgIC8vIHVuYXZhaWxhYmxlLWlkIOOBr+WIpeer',
+  'r+acq+OBjOWPluW+l+a4iOOBv+OAgeOBneOBruS7luOCguS4gOW6puOCr+ODqeOCpOOCouODs+ODiOOBqOOBl+OBpuaOoue0ouOB',
+  'meOCi+OAggogICAgICBiZWNvbWVDbGllbnRBZnRlckVsZWN0aW9uKHJvdW5kKTsKICAgIH0pOwogIH0KCiAgZnVuY3Rpb24gYmVj',
+  'b21lQ2xpZW50QWZ0ZXJFbGVjdGlvbihyb3VuZCkgewogICAgaWYgKGlzSG9zdCB8fCByb3VuZCAhPT0gbWlncmF0aW9uUm91bmQp',
+  'IHJldHVybjsKICAgIHNhZmVseURlc3Ryb3lQZWVyKGZhbHNlKTsKICAgIHBlZXIgPSBuZXcgUGVlcigpOwogICAgYmluZFBlZXJC',
+  'YXNlRXZlbnRzKHBlZXIpOwogICAgcGVlci5vbignb3BlbicsICgpID0+IHsKICAgICAgaWYgKHJvdW5kICE9PSBtaWdyYXRpb25S',
+  'b3VuZCB8fCBpc0hvc3QpIHJldHVybjsKICAgICAgbWlncmF0aW9uUnVubmluZyA9IGZhbHNlOwogICAgICBzdGFydENoYXQoKTsK',
+  'ICAgICAgY29ubmVjdFRvSG9zdCgwKTsKICAgIH0pOwogICAgcGVlci5vbignZXJyb3InLCAoKSA9PiB7CiAgICAgIGlmIChyb3Vu',
+  'ZCAhPT0gbWlncmF0aW9uUm91bmQgfHwgaXNIb3N0KSByZXR1cm47CiAgICAgIG1pZ3JhdGlvblJ1bm5pbmcgPSBmYWxzZTsKICAg',
+  'ICAgbWlncmF0aW9uVGltZXIgPSBzZXRUaW1lb3V0KCgpID0+IGJlZ2luSG9zdE1pZ3JhdGlvbih0cnVlKSwgMzUwICsgTWF0aC5y',
+  'YW5kb20oKSAqIDI1MCk7CiAgICB9KTsKICB9CgogIGZ1bmN0aW9uIHNhZmVseURlc3Ryb3lQZWVyKGNsZWFyRWxlY3Rpb24gPSB0',
+  'cnVlKSB7CiAgICBkZWxpdmVyeVRyYWNrZXJzLmZvckVhY2godD0+Y2xlYXJUaW1lb3V0KHQudGltZXIpKTsgZGVsaXZlcnlUcmFj',
+  'a2Vycy5jbGVhcigpOwogICAgY2hhdFJlYWR5PWZhbHNlOwogICAgY2xlYXJUaW1lb3V0KHJlY29ubmVjdFRpbWVyKTsKICAgIGlm',
+  'IChjbGVhckVsZWN0aW9uKSBjbGVhclRpbWVvdXQobWlncmF0aW9uVGltZXIpOwogICAgY29ubmVjdGlvbnMuZm9yRWFjaChjID0+',
+  'IHsgdHJ5IHsgYy5jbG9zZSgpOyB9IGNhdGNoIChfKSB7fSB9KTsKICAgIGNvbm5lY3Rpb25zID0gW107CiAgICB0cnkgeyBpZiAo',
+  'cGVlciAmJiAhcGVlci5kZXN0cm95ZWQpIHBlZXIuZGVzdHJveSgpOyB9IGNhdGNoIChfKSB7fQogIH0KCiAgZnVuY3Rpb24gYXBw',
+  'bHlTdGF0ZShzdGF0ZSkgewogICAgaWYgKCFzdGF0ZSB8fCAhQXJyYXkuaXNBcnJheShzdGF0ZS5tZXNzYWdlcykpIHJldHVybjsK',
+  'ICAgIGNvbnN0IHBlbmRpbmc9Wy4uLnBlbmRpbmdNZXNzYWdlcy52YWx1ZXMoKV0ubWFwKGl0ZW09Pml0ZW0uZGF0YSk7CiAgICBt',
+  'ZXNzYWdlSm91cm5hbD1tZXJnZU1lc3NhZ2VzKG1lc3NhZ2VKb3VybmFsLHJvb21TdGF0ZS5tZXNzYWdlcyxzdGF0ZS5tZXNzYWdl',
+  'cyxwZW5kaW5nKS5zbGljZSgtSk9VUk5BTF9MSU1JVCk7CiAgICByb29tU3RhdGUubWVzc2FnZXM9bWVzc2FnZUpvdXJuYWwuc2xp',
+  'Y2UoLUhJU1RPUllfTElNSVQpOwogICAgcm9vbVN0YXRlLnVzZXJzPXN0YXRlLnVzZXJzICYmIHR5cGVvZiBzdGF0ZS51c2Vycz09',
+  'PSdvYmplY3QnID8gc3RhdGUudXNlcnMgOiB7fTsKICAgIHJvb21TdGF0ZS51c2Vyc1tjbGllbnRJZF09bXlVc2VyUmVjb3JkKGZh',
+  'bHNlKTsKICAgIHNlZW5NZXNzYWdlSWRzPW5ldyBTZXQocm9vbVN0YXRlLm1lc3NhZ2VzLm1hcChtPT5tLmlkKSk7CiAgICBob3N0',
+  'U2VxdWVuY2U9TWF0aC5tYXgoaG9zdFNlcXVlbmNlLC4uLm1lc3NhZ2VKb3VybmFsLm1hcChtPT5OdW1iZXIobS5ob3N0U2VxKXx8',
+  'MCkpOwogICAgc2F2ZUhpc3RvcnkoKTsKICAgIGNvbnN0IG5leHRTaWduYXR1cmU9cm9vbVN0YXRlLm1lc3NhZ2VzLm1hcChtPT5t',
+  'LmlkKS5qb2luKCd8Jyk7CiAgICBpZihuZXh0U2lnbmF0dXJlIT09bGFzdFJlbmRlcmVkU2lnbmF0dXJlKSByZW5kZXJIaXN0b3J5',
+  'KCk7CiAgICB1cGRhdGVTdGF0dXMoKTsKICAgIGNoYXRSZWFkeT10cnVlOyBzZXRDb25uZWN0aW9uU3RhdGUoJ29ubGluZScsJ+aO',
+  'pee2mua4iOOBvycpOyBmbHVzaFF1ZXVlKCk7CiAgfQoKICBmdW5jdGlvbiBzZW5kRnVsbFN0YXRlKHRhcmdldCkgewogICAgaWYg',
+  'KCFpc0hvc3QpIHJldHVybjsKICAgIHJvb21TdGF0ZS51c2Vyc1tjbGllbnRJZF0gPSBteVVzZXJSZWNvcmQodHJ1ZSk7CiAgICBj',
+  'b25zdCBkYXRhID0geyB0eXBlOiAnc3RhdGUnLCBzdGF0ZTogeyBtZXNzYWdlczogcm9vbVN0YXRlLm1lc3NhZ2VzLCB1c2Vyczog',
+  'cm9vbVN0YXRlLnVzZXJzIH0gfTsKICAgIGlmICh0YXJnZXQgJiYgdGFyZ2V0Lm9wZW4pIHRhcmdldC5zZW5kKGRhdGEpOyBlbHNl',
+  'IGJyb2FkY2FzdChkYXRhKTsKICAgIHVwZGF0ZVN0YXR1cygpOwogIH0KCiAgZnVuY3Rpb24gYnJvYWRjYXN0UHJlc2VuY2Uoc2tp',
+  'cFBlZXIpIHsKICAgIGlmICghaXNIb3N0KSByZXR1cm47CiAgICByb29tU3RhdGUudXNlcnNbY2xpZW50SWRdID0gbXlVc2VyUmVj',
+  'b3JkKHRydWUpOwogICAgYnJvYWRjYXN0KHsgdHlwZToncHJlc2VuY2UnLCB1c2Vyczpyb29tU3RhdGUudXNlcnMgfSwgc2tpcFBl',
+  'ZXIpOwogICAgdXBkYXRlU3RhdHVzKCk7CiAgfQoKCiAgZnVuY3Rpb24gYnJvYWRjYXN0KGRhdGEsIHNraXBQZWVyKSB7CiAgICBj',
+  'b25uZWN0aW9ucy5zbGljZSgpLmZvckVhY2goYyA9PiB7CiAgICAgIGlmICghYyB8fCAhYy5vcGVuIHx8IGMucGVlciA9PT0gc2tp',
+  'cFBlZXIpIHJldHVybjsKICAgICAgdHJ5IHsgYy5zZW5kKGRhdGEpOyB9IGNhdGNoIChfKSB7fQogICAgfSk7CiAgfQoKICBmdW5j',
+  'dGlvbiBjb25uZWN0ZWRSZWNpcGllbnRQZWVycyhleGNlcHRQZWVyPScnKSB7CiAgICByZXR1cm4gY29ubmVjdGlvbnMuZmlsdGVy',
+  'KGM9PmMgJiYgYy5vcGVuICYmIGMucGVlciE9PWV4Y2VwdFBlZXIpLm1hcChjPT5jLnBlZXIpOwogIH0KCiAgZnVuY3Rpb24gYmVn',
+  'aW5EZWxpdmVyeVRyYWNraW5nKG1lc3NhZ2UsIHNlbmRlckNvbm49bnVsbCkgewogICAgaWYoIWlzSG9zdCB8fCAhbWVzc2FnZSB8',
+  'fCAhbWVzc2FnZS5pZCkgcmV0dXJuOwogICAgY29uc3Qgc2VuZGVyUGVlcj1zZW5kZXJDb25uID8gc2VuZGVyQ29ubi5wZWVyIDog',
+  'bnVsbDsKICAgIGNvbnN0IGV4cGVjdGVkPW5ldyBTZXQoY29ubmVjdGVkUmVjaXBpZW50UGVlcnMoc2VuZGVyUGVlcikpOwogICAg',
+  'Y29uc3QgdHJhY2tlcj17bWVzc2FnZUlkOm1lc3NhZ2UuaWQsIHNlbmRlckNvbm4sIGV4cGVjdGVkLCBhY2tlZDpuZXcgU2V0KCks',
+  'IHRpbWVyOm51bGx9OwogICAgZGVsaXZlcnlUcmFja2Vycy5zZXQobWVzc2FnZS5pZCx0cmFja2VyKTsKICAgIGlmKGV4cGVjdGVk',
+  'LnNpemU9PT0wKXsgZmluaXNoRGVsaXZlcnlUcmFja2luZyhtZXNzYWdlLmlkLGZhbHNlKTsgcmV0dXJuOyB9CiAgICB0cmFja2Vy',
+  'LnRpbWVyPXNldFRpbWVvdXQoKCk9PmZpbmlzaERlbGl2ZXJ5VHJhY2tpbmcobWVzc2FnZS5pZCx0cnVlKSxERUxJVkVSWV9USU1F',
+  'T1VUKTsKICB9CgogIGZ1bmN0aW9uIHJlY29yZFJlY2lwaWVudEFjayhtZXNzYWdlSWQscGVlcklkKSB7CiAgICBjb25zdCB0cmFj',
+  'a2VyPWRlbGl2ZXJ5VHJhY2tlcnMuZ2V0KG1lc3NhZ2VJZCk7CiAgICBpZighdHJhY2tlciB8fCAhdHJhY2tlci5leHBlY3RlZC5o',
+  'YXMocGVlcklkKSkgcmV0dXJuOwogICAgdHJhY2tlci5hY2tlZC5hZGQocGVlcklkKTsKICAgIGlmKHRyYWNrZXIuYWNrZWQuc2l6',
+  'ZT49dHJhY2tlci5leHBlY3RlZC5zaXplKSBmaW5pc2hEZWxpdmVyeVRyYWNraW5nKG1lc3NhZ2VJZCxmYWxzZSk7CiAgfQoKICBm',
+  'dW5jdGlvbiBmaW5pc2hEZWxpdmVyeVRyYWNraW5nKG1lc3NhZ2VJZCx0aW1lZE91dCkgewogICAgY29uc3QgdHJhY2tlcj1kZWxp',
+  'dmVyeVRyYWNrZXJzLmdldChtZXNzYWdlSWQpOyBpZighdHJhY2tlcilyZXR1cm47CiAgICBjbGVhclRpbWVvdXQodHJhY2tlci50',
+  'aW1lcik7IGRlbGl2ZXJ5VHJhY2tlcnMuZGVsZXRlKG1lc3NhZ2VJZCk7CiAgICBjb25zdCByZWNlaXB0PXt0eXBlOidkZWxpdmVy',
+  'eVJlY2VpcHQnLGlkOm1lc3NhZ2VJZCxkZWxpdmVyZWQ6dHJhY2tlci5hY2tlZC5zaXplLHRvdGFsOnRyYWNrZXIuZXhwZWN0ZWQu',
+  'c2l6ZSx0aW1lZE91dH07CiAgICBpZih0cmFja2VyLnNlbmRlckNvbm4gJiYgdHJhY2tlci5zZW5kZXJDb25uLm9wZW4peyB0cnl7',
+  'dHJhY2tlci5zZW5kZXJDb25uLnNlbmQocmVjZWlwdCk7fWNhdGNoKF8pe30gfQogICAgZWxzZSB1cGRhdGVEZWxpdmVyeVJlY2Vp',
+  'cHQocmVjZWlwdCk7CiAgfQoKICBmdW5jdGlvbiB1cGRhdGVEZWxpdmVyeVJlY2VpcHQocmVjZWlwdCkgewogICAgY29uc3QgdG90',
+  'YWw9TnVtYmVyKHJlY2VpcHQudG90YWx8fDApLCBkZWxpdmVyZWQ9TnVtYmVyKHJlY2VpcHQuZGVsaXZlcmVkfHwwKTsKICAgIGlm',
+  'KHJlY2VpcHQudGltZWRPdXQgJiYgZGVsaXZlcmVkPHRvdGFsKSB1cGRhdGVNZXNzYWdlU3RhdHVzKHJlY2VpcHQuaWQsJ+S4gOmD',
+  'qOacqueiuuiqjSAnK2RlbGl2ZXJlZCsnLycrdG90YWwsJ2ZhaWxlZCcpOwogICAgZWxzZSBpZih0b3RhbD09PTApIHVwZGF0ZU1l',
+  'c3NhZ2VTdGF0dXMocmVjZWlwdC5pZCwn44Ob44K544OI5Y+X5L+h5riI44G/JywnJyk7CiAgICBlbHNlIHVwZGF0ZU1lc3NhZ2VT',
+  'dGF0dXMocmVjZWlwdC5pZCwn5YWo5ZOh44Gr6YWN5L+h5riI44G/ICcrZGVsaXZlcmVkKycvJyt0b3RhbCwnJyk7CiAgfQoKICBm',
+  'dW5jdGlvbiBzZW5kQ2hhdFBhY2tldChkYXRhKSB7CiAgICBpZiAoaXNIb3N0KSB7IGJyb2FkY2FzdChkYXRhKTsgYmVnaW5EZWxp',
+  'dmVyeVRyYWNraW5nKGRhdGEsbnVsbCk7IHJldHVybiB0cnVlOyB9CiAgICBpZiAoIWNoYXRSZWFkeSB8fCAhaG9zdENvbm5lY3Rp',
+  'b24gfHwgIWhvc3RDb25uZWN0aW9uLm9wZW4pIHJldHVybiBmYWxzZTsKICAgIHRyeSB7IGhvc3RDb25uZWN0aW9uLnNlbmQoZGF0',
+  'YSk7IHJldHVybiB0cnVlOyB9IGNhdGNoIChfKSB7IHJldHVybiBmYWxzZTsgfQogIH0KCiAgZnVuY3Rpb24gY2FuU2VuZE5vdygp',
+  'IHsKICAgIHJldHVybiBCb29sZWFuKHBlZXIgJiYgcGVlci5vcGVuICYmIChpc0hvc3QgfHwgKGNoYXRSZWFkeSAmJiBob3N0Q29u',
+  'bmVjdGlvbiAmJiBob3N0Q29ubmVjdGlvbi5vcGVuKSkpOwogIH0KCiAgZnVuY3Rpb24gc2VuZCgpIHsKICAgIGNvbnN0IGlucHV0',
+  'ID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ21zZy1pbnB1dCcpLCB0ZXh0ID0gaW5wdXQudmFsdWUudHJpbSgpOwogICAgaWYg',
+  'KCF0ZXh0KSByZXR1cm47CiAgICBjb25zdCBkYXRhID0geyB0eXBlOidjaGF0JywgaWQ6Y2xpZW50SWQrJy0nK0RhdGUubm93KCkr',
+  'Jy0nK01hdGgucmFuZG9tKCkudG9TdHJpbmcoMzYpLnNsaWNlKDIpLAogICAgICBuYW1lOm15TmFtZS5zbGljZSgwLDQwKSwgc2Vu',
+  'ZGVySWQ6Y2xpZW50SWQsIG1zZzp0ZXh0LnNsaWNlKDAsMjAwMCksIHRpbWU6RGF0ZS5ub3coKSB9OwogICAgaWYoaXNIb3N0KXtk',
+  'YXRhLmhvc3RTZXE9Kytob3N0U2VxdWVuY2U7ZGF0YS5yZWNlaXZlZEF0PURhdGUubm93KCk7fQogICAgYWRkTWVzc2FnZVRvU3Rh',
+  'dGUoZGF0YSk7CiAgICBhZGRMb2coJ1lPVScsIGRhdGEubXNnLCBkYXRhLnRpbWUsIGRhdGEuaWQsIHRydWUsIGNhblNlbmROb3co',
+  'KSA/ICdzZW5kaW5nJyA6ICdxdWV1ZWQnKTsKICAgIHBlbmRpbmdNZXNzYWdlcy5zZXQoZGF0YS5pZCwge2RhdGEsIGF0dGVtcHRz',
+  'OjAsIGxhc3RTZW50OjAsIHF1ZXVlZEF0OkRhdGUubm93KCl9KTsKICAgIHBlcnNpc3RPdXRib3goKTsKICAgIGlmIChjYW5TZW5k',
+  'Tm93KCkpIHRyYW5zbWl0UGVuZGluZyhkYXRhLmlkKTsgZWxzZSBzZW5kUXVldWUucHVzaChkYXRhLmlkKTsKICAgIGlucHV0LnZh',
+  'bHVlID0gJyc7CiAgfQoKICBmdW5jdGlvbiB0cmFuc21pdFBlbmRpbmcoaWQpIHsKICAgIGNvbnN0IGl0ZW09cGVuZGluZ01lc3Nh',
+  'Z2VzLmdldChpZCk7IGlmKCFpdGVtIHx8ICFjYW5TZW5kTm93KCkpIHJldHVybjsKICAgIGl0ZW0uYXR0ZW1wdHMrKzsgaXRlbS5s',
+  'YXN0U2VudD1EYXRlLm5vdygpOwogICAgcGVyc2lzdE91dGJveCgpOwogICAgaWYoIXNlbmRDaGF0UGFja2V0KGl0ZW0uZGF0YSkp',
+  'e3NlbmRRdWV1ZS5wdXNoKGlkKTt1cGRhdGVNZXNzYWdlU3RhdHVzKGlkLCfmjqXntprlvoXjgaHjg7vlvqnml6flvozjgavoh6rl',
+  'i5XpgIHkv6EnLCdwZW5kaW5nJyk7cmV0dXJuO30KICAgIHVwZGF0ZU1lc3NhZ2VTdGF0dXMoaWQsIGl0ZW0uYXR0ZW1wdHMgPiAx',
+  'ID8gJ+WGjemAgeS4rScgOiAn6YCB5L+h5LitJywgJ3BlbmRpbmcnKTsKICAgIGlmIChpc0hvc3QpIHsgcGVuZGluZ01lc3NhZ2Vz',
+  'LmRlbGV0ZShpZCk7IHBlcnNpc3RPdXRib3goKTsgdXBkYXRlTWVzc2FnZVN0YXR1cyhpZCwn6YWN5L+h56K66KqN5LitJywncGVu',
+  'ZGluZycpOyB9CiAgfQoKICBmdW5jdGlvbiBmbHVzaFF1ZXVlKCkgewogICAgY29uc3QgaWRzPVsuLi5uZXcgU2V0KFsuLi5zZW5k',
+  'UXVldWUsIC4uLnBlbmRpbmdNZXNzYWdlcy5rZXlzKCldKV07IHNlbmRRdWV1ZT1bXTsKICAgIGlkcy5mb3JFYWNoKHRyYW5zbWl0',
+  'UGVuZGluZyk7CiAgfQoKICBmdW5jdGlvbiBtYXJrSG9zdEFjY2VwdGVkKGlkKSB7CiAgICBpZiAoIXBlbmRpbmdNZXNzYWdlcy5o',
+  'YXMoaWQpKSByZXR1cm47CiAgICBwZW5kaW5nTWVzc2FnZXMuZGVsZXRlKGlkKTsKICAgIHBlcnNpc3RPdXRib3goKTsKICAgIHVw',
+  'ZGF0ZU1lc3NhZ2VTdGF0dXMoaWQsICfjg5vjgrnjg4jlj5fkv6HmuIjjgb/jg7vphY3kv6Hnorroqo3kuK0nLCAncGVuZGluZycp',
+  'OwogIH0KCiAgZnVuY3Rpb24gcmV0cnlQZW5kaW5nKCkgewogICAgY29uc3Qgbm93PURhdGUubm93KCk7CiAgICBwZW5kaW5nTWVz',
+  'c2FnZXMuZm9yRWFjaCgoaXRlbSxpZCkgPT4gewogICAgICBpZiAobm93LWl0ZW0ubGFzdFNlbnQgPCA0MDAwKSByZXR1cm47CiAg',
+  'ICAgIGlmIChpdGVtLmF0dGVtcHRzID49IDQgJiYgIWNhblNlbmROb3coKSkgewogICAgICAgIHVwZGF0ZU1lc3NhZ2VTdGF0dXMo',
+  'aWQsICfmjqXntprlvoXjgaHjg7vlvqnml6flvozjgavoh6rli5XpgIHkv6EnLCAncGVuZGluZycpOwogICAgICB9IGVsc2UgaWYg',
+  'KGl0ZW0uYXR0ZW1wdHMgPj0gOCkgewogICAgICAgIHVwZGF0ZU1lc3NhZ2VTdGF0dXMoaWQsICfoh6rli5Xlho3pgIHlvoXjgaHj',
+  'g7vjgr/jg4Pjg5fjgafjgoLlho3pgIHlj68nLCAnZmFpbGVkJyk7CiAgICAgICAgaXRlbS5hdHRlbXB0cyA9IDA7IGl0ZW0ubGFz',
+  'dFNlbnQgPSBub3c7CiAgICAgICAgcGVyc2lzdE91dGJveCgpOwogICAgICB9IGVsc2UgaWYgKGNhblNlbmROb3coKSkgdHJhbnNt',
+  'aXRQZW5kaW5nKGlkKTsKICAgIH0pOwogIH0KCiAgZnVuY3Rpb24gcmV0cnlNZXNzYWdlKGlkKSB7CiAgICBjb25zdCBpdGVtPXBl',
+  'bmRpbmdNZXNzYWdlcy5nZXQoaWQpOyBpZighaXRlbSkgcmV0dXJuOwogICAgaXRlbS5hdHRlbXB0cz0wOyBpdGVtLmxhc3RTZW50',
+  'PTA7IHRyYW5zbWl0UGVuZGluZyhpZCk7CiAgfQoKICBmdW5jdGlvbiByZW5kZXJIaXN0b3J5KCkgewogICAgY29uc3QgYm94PWRv',
+  'Y3VtZW50LmdldEVsZW1lbnRCeUlkKCdjaGF0LWJveCcpOwogICAgY2FuY2VsQW5pbWF0aW9uRnJhbWUoc2Nyb2xsRnJhbWUpOwog',
+  'ICAgY29uc3Qgd2FzTmVhckxhdGVzdD1pc05lYXJMYXRlc3QoKTsKICAgIGJveC50ZXh0Q29udGVudD0nJzsKICAgIHJvb21TdGF0',
+  'ZS5tZXNzYWdlcy5mb3JFYWNoKG0gPT4gYWRkTG9nKG0ubmFtZSxtLm1zZyxtLnRpbWUsbS5pZCwobS5zZW5kZXJJZCA/IG0uc2Vu',
+  'ZGVySWQ9PT1jbGllbnRJZCA6IG0ubmFtZT09PW15TmFtZSksJ2RlbGl2ZXJlZCcsZmFsc2UpKTsKICAgIGxhc3RSZW5kZXJlZFNp',
+  'Z25hdHVyZT1yb29tU3RhdGUubWVzc2FnZXMubWFwKG09Pm0uaWQpLmpvaW4oJ3wnKTsKICAgIGlmKHdhc05lYXJMYXRlc3QpIHNj',
+  'cm9sbFRvTGF0ZXN0KGZhbHNlKTsKICB9CgogIGZ1bmN0aW9uIGFkZExvZyhuYW1lLHRleHQsdGltZSxpZD0nJyxvd249ZmFsc2Us',
+  'c3RhdHVzPScnLGF1dG9TY3JvbGw9dHJ1ZSkgewogICAgY29uc3QgYm94PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjaGF0LWJv',
+  'eCcpLCBkaXY9ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7CiAgICBkaXYuY2xhc3NOYW1lPSdtc2cnKyhvd24/JyBvd24n',
+  'OicnKSsoc3RhdHVzPT09J3F1ZXVlZCd8fHN0YXR1cz09PSdzZW5kaW5nJz8nIHBlbmRpbmcnOicnKTsKICAgIGlmKGlkKSB7IGRp',
+  'di5kYXRhc2V0Lm1lc3NhZ2VJZD1pZDsgZGl2Lm9uY2xpY2s9KCk9PmRpdi5jbGFzc0xpc3QuY29udGFpbnMoJ2ZhaWxlZCcpJiZy',
+  'ZXRyeU1lc3NhZ2UoaWQpOyB9CiAgICBjb25zdCBuPWRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ3NwYW4nKTsgbi5jbGFzc05hbWU9',
+  'J21zZy1uYW1lJzsgbi50ZXh0Q29udGVudD1uYW1lOwogICAgY29uc3QgdD1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzcGFuJyk7',
+  'IHQuY2xhc3NOYW1lPSdtc2ctdGV4dCc7IHQudGV4dENvbnRlbnQ9dGV4dDsKICAgIGNvbnN0IG1ldGE9ZG9jdW1lbnQuY3JlYXRl',
+  'RWxlbWVudCgnc3BhbicpOyBtZXRhLmNsYXNzTmFtZT0nbXNnLW1ldGEnOwogICAgbWV0YS50ZXh0Q29udGVudD0odGltZT9uZXcg',
+  'RGF0ZSh0aW1lKS50b0xvY2FsZVRpbWVTdHJpbmcoW10sIHtob3VyOicyLWRpZ2l0JyxtaW51dGU6JzItZGlnaXQnfSk6JycpKyhv',
+  'd24mJnN0YXR1cz8nIMK3ICcrc3RhdHVzTGFiZWwoc3RhdHVzKTonJyk7CiAgICBkaXYuYXBwZW5kKG4sdCxtZXRhKTsgYm94LmFw',
+  'cGVuZENoaWxkKGRpdik7CiAgICBpZihpZCAmJiAhbGFzdFJlbmRlcmVkU2lnbmF0dXJlLnNwbGl0KCd8JykuaW5jbHVkZXMoaWQp',
+  'KSBsYXN0UmVuZGVyZWRTaWduYXR1cmUrPShsYXN0UmVuZGVyZWRTaWduYXR1cmU/J3wnOicnKStpZDsKICAgIGlmKGF1dG9TY3Jv',
+  'bGwpIHNjcm9sbFRvTGF0ZXN0KGZhbHNlKTsKICB9CgogIGZ1bmN0aW9uIHN0YXR1c0xhYmVsKHMpIHsgcmV0dXJuICh7cXVldWVk',
+  'OifpgIHkv6HlvoXjgaEnLHNlbmRpbmc6J+mAgeS/oeS4rScsZGVsaXZlcmVkOifphY3kv6HmuIjjgb8nfVtzXXx8cyk7IH0KICBm',
+  'dW5jdGlvbiB1cGRhdGVNZXNzYWdlU3RhdHVzKGlkLGxhYmVsLGNscykgewogICAgY29uc3QgZGl2PWRvY3VtZW50LnF1ZXJ5U2Vs',
+  'ZWN0b3IoJ1tkYXRhLW1lc3NhZ2UtaWQ9IicrQ1NTLmVzY2FwZShpZCkrJyJdJyk7IGlmKCFkaXYpcmV0dXJuOwogICAgZGl2LmNs',
+  'YXNzTGlzdC5yZW1vdmUoJ3BlbmRpbmcnLCdmYWlsZWQnKTsgaWYoY2xzKWRpdi5jbGFzc0xpc3QuYWRkKGNscyk7CiAgICBjb25z',
+  'dCBtZXRhPWRpdi5xdWVyeVNlbGVjdG9yKCcubXNnLW1ldGEnKTsgaWYobWV0YSkgbWV0YS50ZXh0Q29udGVudD1tZXRhLnRleHRD',
+  'b250ZW50LnNwbGl0KCcgwrcgJylbMF0rJyDCtyAnK2xhYmVsOwogIH0KCiAgZnVuY3Rpb24gYWRkU3lzdGVtTG9nKHRleHQpIHsK',
+  'ICAgIGNvbnN0IGJveD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY2hhdC1ib3gnKSwgZGl2PWRvY3VtZW50LmNyZWF0ZUVsZW1l',
+  'bnQoJ2RpdicpOwogICAgY29uc3QgZm9sbG93PWlzTmVhckxhdGVzdCgpOyBkaXYuY2xhc3NOYW1lPSdzeXMtbXNnJzsgZGl2LnRl',
+  'eHRDb250ZW50PXRleHQ7IGJveC5hcHBlbmRDaGlsZChkaXYpOyBpZihmb2xsb3cpIHNjcm9sbFRvTGF0ZXN0KGZhbHNlKTsKICB9',
+  'CgogIGZ1bmN0aW9uIHNldENvbm5lY3Rpb25TdGF0ZShzdGF0ZSxsYWJlbCkgewogICAgY29ubmVjdGlvblN0YXRlPXN0YXRlOyBj',
+  'b25zdCBiYWRnZT1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY29ubmVjdGlvbi1iYWRnZScpOyBpZighYmFkZ2UpcmV0dXJuOwog',
+  'ICAgYmFkZ2UuY2xhc3NOYW1lPXN0YXRlOyBiYWRnZS50ZXh0Q29udGVudD1sYWJlbDsKICAgIGNvbnN0IGlucHV0PWRvY3VtZW50',
+  'LmdldEVsZW1lbnRCeUlkKCdtc2ctaW5wdXQnKTsKICAgIGNvbnN0IGJ1dHRvbj1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnc2Vu',
+  'ZC1idG4nKTsKICAgIGlucHV0LmRpc2FibGVkPWZhbHNlOyBidXR0b24uZGlzYWJsZWQ9ZmFsc2U7CiAgICBpbnB1dC5wbGFjZWhv',
+  'bGRlcj1zdGF0ZT09PSdvbmxpbmUnID8gJ01lc3NhZ2UnIDogJ+WGjeaOpee2muS4reOBp+OCgumAgeS/oeOBp+OBjeOBvuOBmSc7',
+  'CiAgfQoKICBmdW5jdGlvbiB1cGRhdGVTdGF0dXMoKSB7CiAgICBjb25zdCB1c2Vycz1PYmplY3QudmFsdWVzKHJvb21TdGF0ZS51',
+  'c2VycykuZmlsdGVyKHZhbGlkVXNlcik7CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnb25saW5lLWNvdW50JykudGV4dENv',
+  'bnRlbnQ9U3RyaW5nKE1hdGgubWF4KDEsdXNlcnMubGVuZ3RoKSk7CiAgICBjb25zdCBsaXN0PWRvY3VtZW50LmdldEVsZW1lbnRC',
+  'eUlkKCd1c2Vycy1saXN0Jyk7IGlmKGxpc3QpeyBsaXN0LnRleHRDb250ZW50PScnOwogICAgICB1c2Vycy5zb3J0KChhLGIpPT5h',
+  'Lm5hbWUubG9jYWxlQ29tcGFyZShiLm5hbWUsJ2phJykpLmZvckVhY2godT0+e2NvbnN0IHJvdz1kb2N1bWVudC5jcmVhdGVFbGVt',
+  'ZW50KCdkaXYnKTtyb3cuY2xhc3NOYW1lPSd1c2VyLXJvdyc7CiAgICAgICAgY29uc3QgZG90PWRvY3VtZW50LmNyZWF0ZUVsZW1l',
+  'bnQoJ3NwYW4nKTtkb3QuY2xhc3NOYW1lPSd1c2VyLWRvdCc7Y29uc3QgbmFtZT1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzcGFu',
+  'Jyk7CiAgICAgICAgbmFtZS50ZXh0Q29udGVudD11Lm5hbWUrKHUuaG9zdD8nICjjg5vjgrnjg4gpJzonJykrKHUuY2xpZW50SWQ9',
+  'PT1jbGllbnRJZD8nICjoh6rliIYpJzonJyk7cm93LmFwcGVuZChkb3QsbmFtZSk7bGlzdC5hcHBlbmRDaGlsZChyb3cpO30pOyB9',
+  'CiAgICBjb25zdCBzdGF0dXM9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb20tc3RhdHVzJyk7IHN0YXR1cy50aXRsZT1pc0hv',
+  'c3Q/J+OBk+OBruerr+acq+OBjOODm+OCueODiOOBp+OBmSc6J+WPguWKoOiAhSc7CiAgfQoKICBmdW5jdGlvbiBpc05lYXJMYXRl',
+  'c3QoKSB7CiAgICBjb25zdCBib3g9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NoYXQtYm94Jyk7CiAgICByZXR1cm4gYm94LnNj',
+  'cm9sbEhlaWdodCAtIGJveC5zY3JvbGxUb3AgLSBib3guY2xpZW50SGVpZ2h0IDwgNzA7CiAgfQoKICBmdW5jdGlvbiBzY3JvbGxU',
+  'b0xhdGVzdChzbW9vdGg9ZmFsc2UpIHsKICAgIGNvbnN0IGJveD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY2hhdC1ib3gnKTsK',
+  'ICAgIGlmKCFib3gpIHJldHVybjsKICAgIGNhbmNlbEFuaW1hdGlvbkZyYW1lKHNjcm9sbEZyYW1lKTsKICAgIHNjcm9sbEZyYW1l',
+  'PXJlcXVlc3RBbmltYXRpb25GcmFtZSgoKSA9PiB7CiAgICAgIGJveC5zY3JvbGxUb3A9Ym94LnNjcm9sbEhlaWdodDsKICAgIH0p',
+  'OwogIH0KCiAgZnVuY3Rpb24gaGFuZGxlVW5yZWFkKCkgewogICAgaWYocGFnZVZpc2libGUpIHJldHVybjsKICAgIGlmKHVucmVh',
+  'ZENvdW50PT09MCkgdW5yZWFkQ291bnQ9MTsKICAgIGRvY3VtZW50LnRpdGxlPScoJyt1bnJlYWRDb3VudCsnKSDmlrDnnYDjg6Hj',
+  'g4Pjgrvjg7zjgrgnOwogICAgY29uc3QgYj1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndW5yZWFkLWJhZGdlJyk7IGIuc3R5bGUu',
+  'ZGlzcGxheT0nYmxvY2snOyBiLnRleHRDb250ZW50PSfmlrDnnYAgJyt1bnJlYWRDb3VudCsn5Lu2JzsKICB9CiAgZnVuY3Rpb24g',
+  'c2hvd1VucmVhZEluc2lkZUNoYXQoKSB7CiAgICB1bnJlYWRDb3VudCsrOwogICAgY29uc3QgYj1kb2N1bWVudC5nZXRFbGVtZW50',
+  'QnlJZCgndW5yZWFkLWJhZGdlJyk7CiAgICBiLnN0eWxlLmRpc3BsYXk9J2Jsb2NrJzsgYi50ZXh0Q29udGVudD0n5paw552AICcr',
+  'dW5yZWFkQ291bnQrJ+S7tic7CiAgfQogIGZ1bmN0aW9uIHNob3dMYXRlc3QoKXsgdW5yZWFkQ291bnQ9MDsgZG9jdW1lbnQudGl0',
+  'bGU9J01pbmltYWwgUDJQIENoYXQnOyBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndW5yZWFkLWJhZGdlJykuc3R5bGUuZGlzcGxh',
+  'eT0nbm9uZSc7IHNjcm9sbFRvTGF0ZXN0KGZhbHNlKTsgfQogIGZ1bmN0aW9uIGNsZWFySGlzdG9yeSgpeyBpZighY29uZmlybSgn',
+  '44GT44Gu6YOo5bGL44Gu56uv5pyr5YaF5bGl5q2044KS5YmK6Zmk44GX44G+44GZ44GL77yfJykpcmV0dXJuOyByb29tU3RhdGUu',
+  'bWVzc2FnZXM9W107bWVzc2FnZUpvdXJuYWw9W107c2Vlbk1lc3NhZ2VJZHMuY2xlYXIoKTtzYXZlSGlzdG9yeSgpO3JlbmRlckhp',
+  'c3RvcnkoKTthZGRTeXN0ZW1Mb2coJ+err+acq+WGheOBruWxpeattOOCkuWJiumZpOOBl+OBvuOBl+OBn+OAgicpOyB9CgogIGRv',
+  'Y3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ3Zpc2liaWxpdHljaGFuZ2UnLCgpPT57CiAgICBwYWdlVmlzaWJsZT0hZG9jdW1lbnQu',
+  'aGlkZGVuOwogICAgaWYoIXBhZ2VWaXNpYmxlKXsgc2F2ZUhpc3RvcnkoKTsgcGVyc2lzdE91dGJveCgpOyByZXR1cm47IH0KICAg',
+  'IC8vIOOCv+ODluW+qeW4sOaZguOBr+ihqOekuuODu+acquiqreODu+OCueOCr+ODreODvOODq+S9jee9ruOCkuWLneaJi+OBq+Wk',
+  'ieabtOOBl+OBquOBhOOAggogICAgLy8g54++5Zyo44Gu5Zue57ea44Gg44GR44KS5qSc5p+744GZ44KL44CCCiAgICBjb25zdCBo',
+  'ZWFsdGh5PWlzSG9zdCA/IEJvb2xlYW4ocGVlciAmJiBwZWVyLm9wZW4pIDogQm9vbGVhbihwZWVyICYmIHBlZXIub3BlbiAmJiBo',
+  'b3N0Q29ubmVjdGlvbiAmJiBob3N0Q29ubmVjdGlvbi5vcGVuKTsKICAgIGlmKCFoZWFsdGh5ICYmIG5hdmlnYXRvci5vbkxpbmUp',
+  'ewogICAgICBzZXRDb25uZWN0aW9uU3RhdGUoJ2Nvbm5lY3RpbmcnLCfjgr/jg5blvqnluLDjg7vmjqXntprnorroqo3kuK0nKTsK',
+  'ICAgICAgaWYoIWlzSG9zdCl7IHNhZmVseURlc3Ryb3lQZWVyKGZhbHNlKTsgY3JlYXRlUmVjb3ZlcnlQZWVyKCk7IHN0YXJ0UmVj',
+  'b3ZlcnlXYXRjaGRvZygpOyB9CiAgICB9IGVsc2UgeyBmbHVzaFF1ZXVlKCk7IH0KICB9KTsKICB3aW5kb3cuYWRkRXZlbnRMaXN0',
+  'ZW5lcignb25saW5lJywoKT0+ewogICAgc2V0Q29ubmVjdGlvblN0YXRlKCdjb25uZWN0aW5nJywn6YCa5L+h5b6p5pen5LitJyk7',
+  'CiAgICBpZighaXNIb3N0KXsgc2FmZWx5RGVzdHJveVBlZXIoZmFsc2UpOyBjcmVhdGVSZWNvdmVyeVBlZXIoKTsgc3RhcnRSZWNv',
+  'dmVyeVdhdGNoZG9nKCk7IH0KICB9KTsKICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcignb2ZmbGluZScsKCk9PnsKICAgIHNldENv',
+  'bm5lY3Rpb25TdGF0ZSgnb2ZmbGluZScsJ+OCquODleODqeOCpOODs+ODu+mAgeS/oeOBr+S/neeVmeOBleOCjOOBvuOBmScpOwog',
+  'ICAgcGVyc2lzdE91dGJveCgpOwogIH0pOwogIHJldHJ5VGltZXI9c2V0SW50ZXJ2YWwocmV0cnlQZW5kaW5nLDUwMCk7CiAgd2lu',
+  'ZG93LmFkZEV2ZW50TGlzdGVuZXIoJ0RPTUNvbnRlbnRMb2FkZWQnLCgpPT57CiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgn',
+  'cm9vbS1udW0nKS52YWx1ZT1sb2NhbFN0b3JhZ2UuZ2V0SXRlbSgncHJhY3RpY2FsLWNoYXQtcm9vbScpfHwnJzsKICAgIGRvY3Vt',
+  'ZW50LmdldEVsZW1lbnRCeUlkKCd1c2VyLW5hbWUnKS52YWx1ZT1sb2NhbFN0b3JhZ2UuZ2V0SXRlbSgncHJhY3RpY2FsLWNoYXQt',
+  'bmFtZScpfHwnJzsKICB9KTsKCiAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2JlZm9yZXVubG9hZCcsICgpID0+IHsKICAgIHBl',
+  'cnNpc3RPdXRib3goKTsKICAgIGNsZWFySW50ZXJ2YWwocmV0cnlUaW1lcik7CiAgICBjbGVhckludGVydmFsKHJlY292ZXJ5V2F0',
+  'Y2hkb2cpOwogICAgY2xlYXJUaW1lb3V0KG1pZ3JhdGlvblRpbWVyKTsKICAgIHNhZmVseURlc3Ryb3lQZWVyKCk7CiAgfSk7Cgov',
+  'LyDjg5Hjg4vjg4Pjgq/jgq3jg7w6IOWPs+efouWNsOOCreODvOOBp+eUu+mdouOCkueZveOBj+OBl+OAgeOCguOBhuS4gOW6puaK',
+  'vOOBmeOBqOW+qeW4sAogIGxldCBwYW5pY01vZGUgPSBmYWxzZTsKICBsZXQgcGFuaWNBdWRpb1N0YXRlcyA9IFtdOwoKICBmdW5j',
+  'dGlvbiB0b2dnbGVQYW5pY01vZGUoKSB7CiAgICBwYW5pY01vZGUgPSAhcGFuaWNNb2RlOwogICAgZG9jdW1lbnQuYm9keS5jbGFz',
+  'c0xpc3QudG9nZ2xlKCdwYW5pYy1tb2RlJywgcGFuaWNNb2RlKTsKICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdwYW5pYy1z',
+  'Y3JlZW4nKS5zZXRBdHRyaWJ1dGUoJ2FyaWEtaGlkZGVuJywgU3RyaW5nKCFwYW5pY01vZGUpKTsKCiAgICBpZiAocGFuaWNNb2Rl',
+  'KSB7CiAgICAgIHBhbmljQXVkaW9TdGF0ZXMgPSBbXTsKICAgICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnYXVkaW8sIHZp',
+  'ZGVvJykuZm9yRWFjaChtZWRpYSA9PiB7CiAgICAgICAgcGFuaWNBdWRpb1N0YXRlcy5wdXNoKHsgbWVkaWEsIHdhc1BhdXNlZDog',
+  'bWVkaWEucGF1c2VkIH0pOwogICAgICAgIHRyeSB7IG1lZGlhLnBhdXNlKCk7IH0gY2F0Y2ggKF8pIHt9CiAgICAgIH0pOwogICAg',
+  'ICBkb2N1bWVudC50aXRsZSA9ICdOZXcgVGFiJzsKICAgIH0gZWxzZSB7CiAgICAgIHBhbmljQXVkaW9TdGF0ZXMuZm9yRWFjaChp',
+  'dGVtID0+IHsKICAgICAgICBpZiAoIWl0ZW0ud2FzUGF1c2VkKSBpdGVtLm1lZGlhLnBsYXkoKS5jYXRjaCgoKSA9PiB7fSk7CiAg',
+  'ICAgIH0pOwogICAgICBwYW5pY0F1ZGlvU3RhdGVzID0gW107CiAgICAgIGRvY3VtZW50LnRpdGxlID0gJ01pbmltYWwgUDJQIENo',
+  'YXQnOwogICAgICBjb25zdCBpbnB1dCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdtc2ctaW5wdXQnKTsKICAgICAgaWYgKGlu',
+  'cHV0ICYmIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjaGF0LXVpJykuc3R5bGUuZGlzcGxheSAhPT0gJ25vbmUnKSBpbnB1dC5m',
+  'b2N1cygpOwogICAgfQogIH0KCiAgd2luZG93LmFkZEV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBldmVudCA9PiB7CiAgICBpZiAo',
+  'ZXZlbnQua2V5ICE9PSAnQXJyb3dSaWdodCcgfHwgZXZlbnQucmVwZWF0IHx8IGV2ZW50LmFsdEtleSB8fCBldmVudC5jdHJsS2V5',
+  'IHx8IGV2ZW50Lm1ldGFLZXkpIHJldHVybjsKICAgIGV2ZW50LnByZXZlbnREZWZhdWx0KCk7CiAgICBldmVudC5zdG9wUHJvcGFn',
+  'YXRpb24oKTsKICAgIHRvZ2dsZVBhbmljTW9kZSgpOwogIH0sIHRydWUpOwo8L3NjcmlwdD4KPC9ib2R5Pgo8L2h0bWw+',
+].join('');
+let fails=0,loaded=false;
+async function hash(v) {
+  let d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));
+  return[...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('')
+}$('#adminOpen').onclick=()=> {
+  $('#err').textContent='';
+  $('#pw').value='';
+  $('#gate').showModal()
+};
+$('#close').onclick=()=>$('#gate').close();
+$('#gateForm').onsubmit=async e=> {
+  e.preventDefault();
+  if(await hash($('#pw').value)===HASH) {
+    if(!loaded) {
+      let bytes=Uint8Array.from(atob(DATA),c=>c.charCodeAt(0));
+      $('#chatFrame').srcdoc=new TextDecoder().decode(bytes);
+      loaded=true
+    }$('#gate').close();
+    $('#chatShell').classList.add('on');
+    document.documentElement.style.overflow='hidden'
+  }else {
+    fails++;
+    $('#err').textContent=fails>=5?'入力回数が多すぎます。30秒後に再試行してください。':'パスワードが違います。';
+    $('#pw').value='';
+    if(fails>=5) {
+      $('#pw').disabled=true;
+      setTimeout(()=> {
+        $('#pw').disabled=false;
+        fails=0;
+        $('#err').textContent=''
+      },30000)
     }
-
-    [textSearch, timeSearch, ...materialBoxes].forEach(el => el.addEventListener('input', filterRecipes));
-    $('#clearSearch').addEventListener('click', () => {
-      textSearch.value = '';
-      timeSearch.value = '999';
-      materialBoxes.forEach(box => box.checked = false);
-      $$('.tag').forEach(tag => tag.classList.remove('active'));
-      filterRecipes();
-    });
-    $$('.tag').forEach(tag => tag.addEventListener('click', () => {
-      $$('.tag').forEach(t => t.classList.remove('active'));
-      tag.classList.add('active');
-      textSearch.value = tag.dataset.keyword;
-      filterRecipes();
-      $('#search').scrollIntoView({behavior:'smooth'});
-    }));
-
-    $('#registerForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const name = $('#nickname').value.trim();
-      localStorage.setItem('recipeDemoMember', JSON.stringify({ nickname: name, savedAt: Date.now() }));
-      $('#registerMessage').textContent = `${name}さん、デモ会員登録が完了しました。`;
-      event.currentTarget.reset();
-    });
-
-    $('#recipeForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const posts = JSON.parse(localStorage.getItem('recipeDemoPosts') || '[]');
-      posts.unshift({ title: $('#recipeTitle').value.trim(), materials: $('#recipeMaterials').value.trim(), steps: $('#recipeSteps').value.trim(), savedAt: Date.now() });
-      localStorage.setItem('recipeDemoPosts', JSON.stringify(posts.slice(0, 20)));
-      $('#recipeMessage').textContent = 'レシピを端末内に保存しました。';
-      event.currentTarget.reset();
-    });
-
-    function addComment(comment, prepend = true) {
-      const article = document.createElement('article');
-      article.className = 'comment';
-      article.innerHTML = `<div class="comment-head"><strong>${escapeHTML(comment.name)}｜${escapeHTML(comment.recipe)}</strong><time>${escapeHTML(comment.date)}</time></div><div>${escapeHTML(comment.text)}</div>`;
-      prepend ? $('#commentList').prepend(article) : $('#commentList').append(article);
-    }
-
-    JSON.parse(localStorage.getItem('recipeDemoComments') || '[]').slice().reverse().forEach(c => addComment(c, true));
-    $('#commentForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const now = new Date();
-      const comment = {
-        name: $('#commentName').value.trim(),
-        recipe: $('#commentRecipe').value,
-        text: $('#commentText').value.trim(),
-        date: `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}`
-      };
-      const comments = JSON.parse(localStorage.getItem('recipeDemoComments') || '[]');
-      comments.unshift(comment);
-      localStorage.setItem('recipeDemoComments', JSON.stringify(comments.slice(0, 30)));
-      addComment(comment, true);
-      event.currentTarget.reset();
-    });
-
-    $$('[data-dialog]').forEach(link => link.addEventListener('click', event => {
-      event.preventDefault();
-      $('#' + link.dataset.dialog).showModal();
-    }));
-    $$('.close-dialog').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
-    $$('dialog').forEach(dialog => dialog.addEventListener('click', event => {
-      if (event.target === dialog) dialog.close();
-    }));
-
-    filterRecipes();
+  }
+};
+$('#backBtn').onclick=()=> {
+  $('#chatShell').classList.remove('on');
+  document.documentElement.style.overflow=''
+};
   </script>
-</body>
+ </body>
 </html>
