@@ -337,7 +337,7 @@
 &lt;meta charset="utf-8"&gt;
 &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
 &lt;title&gt;Minimal P2P Chat&lt;/title&gt;
-&lt;script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js" crossorigin="anonymous"&gt;&lt;/script&gt;
 &lt;style&gt;
 /* ==========================================================================
    E01-C | CHAT STYLES
@@ -414,6 +414,7 @@
     border: none; border-radius: 8px; background: rgba(255,255,255,0.06); color: white; outline: none;
   }
   input::placeholder { color: rgba(255,255,255,0.3); }
+  #chat-error { display:none; width:min(330px,85vw); margin:14px auto 0; color:#ff9aa6; font-size:12px; line-height:1.6; }
   #login-screen button { padding: 10px 25px; background: rgba(255,255,255,0.12); color: white; border: none; border-radius: 8px; cursor: pointer; }
 
   #chat-ui {
@@ -487,6 +488,7 @@
   #users-title { font-size:11px; color:rgba(255,255,255,.48); margin-bottom:7px; }
   .user-row { display:flex; align-items:center; gap:7px; padding:5px 3px; font-size:12px; color:rgba(255,255,255,.8); }
   .user-dot { width:7px; height:7px; border-radius:50%; background:#35dd88; flex:none; }
+  #room-menu-btn { border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:6px 9px; color:#fff; background:rgba(0,0,0,.35); cursor:pointer; }
   #chat-toolbar { pointer-events:auto; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
   #room-label { font-size:11px; color:rgba(255,255,255,.45); }
   .tool-btn { border:0; border-radius:7px; padding:5px 8px; color:rgba(255,255,255,.55); background:rgba(255,255,255,.06); cursor:pointer; }
@@ -540,21 +542,22 @@
     &lt;h1 style="font-weight: lighter; letter-spacing: 8px; color: rgba(255,255,255,0.5); margin-bottom: 40px;"&gt;CHAT&lt;/h1&gt;
     &lt;input type="text" id="room-num" placeholder="ROOM ID"&gt;
     &lt;input type="text" id="user-name" placeholder="NAME"&gt;
-    &lt;button onclick="initP2P()"&gt;CONNECT&lt;/button&gt;
+    &lt;button id="connect-btn" type="button"&gt;CONNECT&lt;/button&gt;
+    &lt;div id="chat-error" role="alert"&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
 &lt;div id="top-panel"&gt;&lt;div id="connection-badge"&gt;接続準備中&lt;/div&gt;&lt;div id="users-panel"&gt;&lt;div id="users-title"&gt;オンライン&lt;/div&gt;&lt;div id="users-list"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div id="room-status" style="display:none"&gt;&lt;strong id="online-count"&gt;1&lt;/strong&gt; online · 履歴20件&lt;/div&gt;
 &lt;div id="chat-ui"&gt;
-  &lt;div id="chat-toolbar"&gt;&lt;span id="room-label"&gt;&lt;/span&gt;&lt;button class="tool-btn" onclick="clearHistory()"&gt;履歴削除&lt;/button&gt;&lt;/div&gt;
+  &lt;div id="chat-toolbar"&gt;&lt;button id="room-menu-btn" type="button"&gt;← ルーム選択へ&lt;/button&gt;&lt;span id="room-label"&gt;&lt;/span&gt;&lt;button class="tool-btn" id="clear-history-btn" type="button"&gt;履歴削除&lt;/button&gt;&lt;/div&gt;
   &lt;div id="chat-box"&gt;&lt;/div&gt;
-  &lt;button id="unread-badge" onclick="showLatest()"&gt;新着 0件&lt;/button&gt;
+  &lt;button id="unread-badge" type="button"&gt;新着 0件&lt;/button&gt;
   &lt;div id="input-area"&gt;
     &lt;input type="file" id="image-input" accept="image/jpeg,image/png,image/webp,image/gif"&gt;
     &lt;button id="image-btn" type="button" title="画像を送る" aria-label="画像を送る"&gt;画像&lt;/button&gt;
     &lt;input type="text" id="msg-input" placeholder="Message"&gt;
-    &lt;button id="send-btn" onclick="send()"&gt;SEND&lt;/button&gt;
+    &lt;button id="send-btn" type="button"&gt;SEND&lt;/button&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
@@ -571,10 +574,10 @@
 &lt;/div&gt;
 
 &lt;div id="bg-switcher"&gt;
-    &lt;div id="switch-space" class="switch-btn active" onclick="setBg('space')"&gt;&lt;/div&gt;
-    &lt;div id="switch-water" class="switch-btn" onclick="setBg('water')"&gt;&lt;/div&gt;
-    &lt;div id="switch-matrix" class="switch-btn" onclick="setBg('matrix')"&gt;&lt;/div&gt;
-    &lt;div id="switch-ocean" class="switch-btn" onclick="setBg('ocean')"&gt;&lt;/div&gt;
+    &lt;button id="switch-space" class="switch-btn active" type="button" aria-label="宇宙背景"&gt;&lt;/button&gt;
+    &lt;button id="switch-water" class="switch-btn" type="button" aria-label="水中背景"&gt;&lt;/button&gt;
+    &lt;button id="switch-matrix" class="switch-btn" type="button" aria-label="マトリックス背景"&gt;&lt;/button&gt;
+    &lt;button id="switch-ocean" class="switch-btn" type="button" aria-label="深海背景"&gt;&lt;/button&gt;
 &lt;/div&gt;
 
 &lt;script&gt;
@@ -710,6 +713,23 @@
   let recoveryStartedAt = 0;
   let consecutiveRecoveryFailures = 0;
   let recoveryBackoffIndex = 0;
+  let chatSessionActive = false;
+  let sessionGeneration = 0;
+  const scheduledTimeouts = new Set();
+  function scheduleForSession(fn, delay) {
+    const generation = sessionGeneration;
+    const id = setTimeout(() =&gt; {
+      scheduledTimeouts.delete(id);
+      if (!chatSessionActive || generation !== sessionGeneration) return;
+      fn();
+    }, delay);
+    scheduledTimeouts.add(id);
+    return id;
+  }
+  function clearSessionTimeouts() {
+    scheduledTimeouts.forEach(clearTimeout);
+    scheduledTimeouts.clear();
+  }
   const MAX_PENDING_AGE = 24 * 60 * 60 * 1000;
   const clientId = sessionStorage.getItem('p2p-client-id') ||
     (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
@@ -827,6 +847,7 @@
      CONNECTION RECOVERY
      ========================================================================== */
   function startRecoveryWatchdog() {
+    if (!chatSessionActive || !roomID || !myName) return;
     clearInterval(recoveryWatchdog);
     recoveryStartedAt = Date.now();
     recoveryWatchdog = setInterval(() =&gt; {
@@ -854,6 +875,7 @@
   }
 
   function createRecoveryPeer() {
+    if (!chatSessionActive || !roomID || !myName) return;
     if (!navigator.onLine || isHost) return;
     peer = new Peer();
     bindPeerBaseEvents(peer);
@@ -871,7 +893,7 @@
     peer.on('error', () =&gt; {
       clearTimeout(openTimeout);
       safelyDestroyPeer(false);
-      setTimeout(() =&gt; beginHostMigration(true), 250 + Math.random() * 250);
+      scheduleForSession(() =&gt; beginHostMigration(true), 250 + Math.random() * 250);
     });
   }
 
@@ -886,6 +908,16 @@
     localStorage.setItem('practical-chat-room', roomID);
     localStorage.setItem('practical-chat-name', myName);
     if (!roomID || !myName) return;
+    if (typeof Peer !== 'function') {
+      const error=document.getElementById('chat-error');
+      error.textContent='通信ライブラリを読み込めませんでした。ネットワークを確認して再読み込みしてください。';
+      error.style.display='block';
+      return;
+    }
+    document.getElementById('chat-error').style.display='none';
+    sessionGeneration++;
+    chatSessionActive = true;
+    startRetryTimer();
     hostID = 'SPACE-ROOM-' + roomID;
     roomState.messages = safeLoadHistory();
     seenMessageIds = new Set(roomState.messages.map(m =&gt; m.id));
@@ -894,6 +926,7 @@
   }
 
   function createInitialPeer() {
+    if (!chatSessionActive || !roomID || !myName) return;
     peer = new Peer(hostID);
     bindPeerBaseEvents(peer);
     peer.on('open', () =&gt; becomeHost(false));
@@ -908,6 +941,7 @@
   }
 
   function createClientPeer() {
+    if (!chatSessionActive || !roomID || !myName) return;
     peer = new Peer();
     bindPeerBaseEvents(peer);
     peer.on('open', () =&gt; {
@@ -927,6 +961,7 @@
   }
 
   function connectToHost(attempt = 0) {
+    if (!chatSessionActive || !roomID || !myName) return;
     clearTimeout(reconnectTimer);
     if (!recoveryWatchdog) startRecoveryWatchdog();
     if (!peer || peer.destroyed || isHost) return;
@@ -964,7 +999,40 @@
     addSystemLog(migrated ? 'ホストを引き継ぎました。' : 'この端末がホストです。');
   }
 
+  function stopRetryTimer() { if (retryTimer) { clearInterval(retryTimer); retryTimer=null; } }
+  function startRetryTimer() { stopRetryTimer(); retryTimer=setInterval(retryPending,500); }
+  function returnToRoomMenu() {
+    const hadPending=pendingMessages.size&gt;0;
+    if(hadPending){
+      const discard=confirm('未配信の文章があります。OKで送信待ちを破棄、キャンセルで端末内に残してルーム選択へ戻ります。');
+      if(discard){ pendingMessages.clear(); sendQueue=[]; localStorage.removeItem(outboxKey()); }
+      else persistOutbox();
+    }
+    chatSessionActive=false;
+    sessionGeneration++;
+    clearSessionTimeouts();
+    stopRetryTimer();
+    clearInterval(recoveryWatchdog); recoveryWatchdog=null;
+    clearTimeout(reconnectTimer); reconnectTimer=null;
+    clearTimeout(migrationTimer); migrationTimer=null;
+    departureTimers.forEach(clearTimeout); departureTimers.clear();
+    safelyDestroyPeer();
+    hostConnection=null; isHost=false; migrationRunning=false; chatReady=false;
+    roomState={messages:[],users:{}}; messageJournal=[]; seenMessageIds.clear();
+    unreadCount=0; pendingImage=null;
+    document.getElementById('chat-box').replaceChildren();
+    document.getElementById('chat-ui').style.display='none';
+    document.getElementById('room-status').style.display='none';
+    document.getElementById('top-panel').style.display='none';
+    document.getElementById('unread-badge').style.display='none';
+    document.getElementById('image-preview').classList.remove('open');
+    document.getElementById('login-screen').style.display='flex';
+    roomID=''; hostID='';
+    setTimeout(()=&gt;document.getElementById('room-num').focus(),0);
+  }
+
   function startChat() {
+    if (!chatSessionActive || !roomID || !myName) return;
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('chat-ui').style.display = 'flex';
     document.getElementById('room-status').style.display = 'block';
@@ -1129,6 +1197,7 @@
   }
 
   function beginHostMigration(force = false) {
+    if (!chatSessionActive || !roomID || !myName) return;
     if ((migrationRunning &amp;&amp; !force) || isHost) return;
     migrationRunning = true;
     if (!recoveryWatchdog) startRecoveryWatchdog();
@@ -1157,6 +1226,7 @@
   }
 
   function claimHostId(round) {
+    if (!chatSessionActive || !roomID || !myName) return;
     if (isHost || round !== migrationRound) return;
     setConnectionState('connecting', 'ホスト引き継ぎ試行中');
     safelyDestroyPeer(false);
@@ -1186,6 +1256,7 @@
   }
 
   function becomeClientAfterElection(round) {
+    if (!chatSessionActive || !roomID || !myName) return;
     if (isHost || round !== migrationRound) return;
     safelyDestroyPeer(false);
     peer = new Peer();
@@ -1199,7 +1270,7 @@
     peer.on('error', () =&gt; {
       if (round !== migrationRound || isHost) return;
       migrationRunning = false;
-      migrationTimer = setTimeout(() =&gt; beginHostMigration(true), 350 + Math.random() * 250);
+      migrationTimer = scheduleForSession(() =&gt; beginHostMigration(true), 350 + Math.random() * 250);
     });
   }
 
@@ -1470,6 +1541,13 @@
     closeImagePreview();
   }
 
+  document.getElementById('connect-btn').addEventListener('click',initP2P);
+  document.getElementById('login-screen').addEventListener('keydown',e=&gt;{if(e.key==='Enter')initP2P();});
+  document.getElementById('room-menu-btn').addEventListener('click',returnToRoomMenu);
+  document.getElementById('clear-history-btn').addEventListener('click',clearHistory);
+  document.getElementById('unread-badge').addEventListener('click',showLatest);
+  document.getElementById('send-btn').addEventListener('click',send);
+  ['space','water','matrix','ocean'].forEach(type=&gt;document.getElementById('switch-'+type).addEventListener('click',()=&gt;setBg(type)));
   document.getElementById('image-btn').addEventListener('click',()=&gt;document.getElementById('image-input').click());
   document.getElementById('image-input').addEventListener('change',event=&gt;chooseImage(event.target.files[0]));
   document.getElementById('cancel-image').addEventListener('click',closeImagePreview);
@@ -1582,7 +1660,8 @@
      ========================================================================== */
   document.addEventListener('visibilitychange',()=&gt;{
     pageVisible=!document.hidden;
-    if(!pageVisible){ saveHistory(); persistOutbox(); return; }
+    if(!pageVisible){ if(chatSessionActive){ saveHistory(); persistOutbox(); } return; }
+    if(!chatSessionActive || !roomID || !myName) return;
     // タブ復帰時は表示・未読・スクロール位置を勝手に変更しない。
     // 現在の回線だけを検査する。
     const healthy=isHost ? Boolean(peer &amp;&amp; peer.open) : Boolean(peer &amp;&amp; peer.open &amp;&amp; hostConnection &amp;&amp; hostConnection.open);
@@ -1592,21 +1671,25 @@
     } else { flushQueue(); }
   });
   window.addEventListener('online',()=&gt;{
+    if(!chatSessionActive || !roomID || !myName) return;
     setConnectionState('connecting','通信復旧中');
     if(!isHost){ safelyDestroyPeer(false); createRecoveryPeer(); startRecoveryWatchdog(); }
   });
   window.addEventListener('offline',()=&gt;{
+    if(!chatSessionActive || !roomID || !myName) return;
     setConnectionState('offline','オフライン・送信は保留されます');
     persistOutbox();
   });
-  retryTimer=setInterval(retryPending,500);
+  // 再送タイマーは接続開始時だけ起動し、退出時に停止する。
   window.addEventListener('DOMContentLoaded',()=&gt;{
+    if(typeof Peer!=='function'){const error=document.getElementById('chat-error');error.textContent='通信ライブラリを読み込めませんでした。ネットワークを確認して再読み込みしてください。';error.style.display='block';document.getElementById('connect-btn').disabled=true;}
     document.getElementById('room-num').value=localStorage.getItem('practical-chat-room')||'';
     document.getElementById('user-name').value=localStorage.getItem('practical-chat-name')||'';
   });
 
   window.addEventListener('beforeunload', () =&gt; {
-    persistOutbox();
+    if(chatSessionActive) persistOutbox();
+    chatSessionActive=false; sessionGeneration++; clearSessionTimeouts();
     clearInterval(retryTimer);
     clearInterval(recoveryWatchdog);
     clearTimeout(migrationTimer);
@@ -2263,7 +2346,7 @@
       $('#pw').value='';$('#gateError').textContent='';
     });
     $('#gateForm').onsubmit=async e=>{e.preventDefault();if(accessTransitionRunning)return;if($('#pw').value.trim()===currentJapanMmdd()){fails=0;$('#gateError').textContent='';if(!loaded){$('#chatFrame').srcdoc=getNekoChatDocument();loaded=true}await runCyberDoorTransition()}else{fails++;$('#gateError').textContent=fails>=5?'入力を30秒停止します。':'パスワードが違います。';$('#pw').value='';if(fails>=5){$('#pw').disabled=true;setTimeout(()=>{$('#pw').disabled=false;fails=0;$('#gateError').textContent=''},30000)}}};
-    $('#backBtn').onclick=()=>{const chat=$('#chatShell');chat.classList.remove('reveal');setTimeout(()=>{chat.classList.remove('on');chat.setAttribute('aria-hidden','true');document.documentElement.style.overflow=''},420)};
+    $('#backBtn').onclick=()=>{const chat=$('#chatShell');chat.classList.remove('reveal');setTimeout(()=>{chat.classList.remove('on');chat.setAttribute('aria-hidden','true');$('#chatFrame').srcdoc='about:blank';loaded=false;document.documentElement.style.overflow=''},420)};
 
 
   /* ==========================================================================
