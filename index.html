@@ -222,7 +222,7 @@
     /* ========================================================================
        C05 | HIDDEN CHAT SHELL
        ======================================================================== */
-    #chatShell{position:fixed;inset:0;z-index:99999;display:none;background:#000}#chatShell.on{display:block}#chatFrame{width:100%;height:100%;border:0}#backBtn{position:fixed;left:10px;top:10px;z-index:100001;border:1px solid #ffffff22;padding:7px 10px;color:#ffffff77;background:#0008;border-radius:9px}
+    #chatShell{position:fixed;inset:0;z-index:99999;display:none;background:#000}#chatShell.on{display:block}#chatFrame{width:100%;height:100%;border:0}#backBtn{display:none!important}
     @media(max-width:900px){.hero{grid-template-columns:1fr}.g4{grid-template-columns:repeat(2,1fr)}.quick-grid{grid-template-columns:repeat(3,1fr)}.search-row{grid-template-columns:1fr 1fr}.filter-more{grid-template-columns:1fr 1fr}.footer-inner{grid-template-columns:1fr 1fr}.mast{grid-template-columns:1fr}.mast-side{display:none}.member-box{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}}
     @media(max-width:600px){.g3,.g4{grid-template-columns:1fr}.quick-grid{grid-template-columns:repeat(2,1fr)}.search-row,.filter-more{grid-template-columns:1fr}.trustbar{grid-template-columns:repeat(2,1fr)}.hero-feature{padding:28px;min-height:360px}.member-form{flex-direction:column}.member-form input{min-width:0}.footer-inner{grid-template-columns:1fr 1fr}.notice-row{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}}
   
@@ -617,10 +617,32 @@
 
 /* COMPACT CHAT CARDS AND COLLAPSIBLE MESSAGE ACTIONS */
 .msg{max-width:76%;margin:3px 0;padding:6px 8px;border-radius:10px;line-height:1.3}.msg-name{font-size:11px;margin-right:6px}.msg-text{font-size:14px}.msg-meta{margin-top:2px;font-size:9px;line-height:1.2}.msg-image{margin-top:5px}.admin-verified-icon{display:inline-block;width:17px;height:17px;margin-left:4px;object-fit:contain;vertical-align:-4px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}.message-action-row{display:flex;justify-content:flex-end;margin-top:3px}.action-toggle{width:30px;height:25px;min-height:25px;padding:0;border:1px solid rgba(255,255,255,.11);border-radius:99px;color:rgba(255,255,255,.65);background:rgba(0,0,0,.18);cursor:pointer;font-size:17px;line-height:1}.action-toggle:hover,.action-toggle[aria-expanded="true"]{color:#fff;background:rgba(59,130,246,.28);border-color:rgba(147,197,253,.45)}.msg-actions{display:none;margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.08);opacity:1}.msg-actions.open{display:flex}.msg-action,.reaction-chip{min-height:25px;padding:2px 7px;font-size:11px}.reaction-picker{flex-wrap:wrap}@media(max-width:600px){.msg{max-width:86%;padding:6px 8px}.msg-text{font-size:13px}.action-toggle{width:32px;height:28px;min-height:28px}.msg-action,.reaction-chip{min-height:28px;padding:3px 8px}}
+
+/* MENTION SYSTEM */
+#mention-picker{display:none;position:absolute;left:0;right:0;bottom:55px;z-index:60;max-height:220px;overflow:auto;padding:6px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(10,12,18,.96);box-shadow:0 14px 45px rgba(0,0,0,.55);backdrop-filter:blur(12px);pointer-events:auto}
+#mention-picker.open{display:block}.mention-option{display:flex;width:100%;align-items:center;gap:8px;min-height:42px;padding:8px 10px;border:0;border-radius:9px;color:#fff;background:transparent;text-align:left;cursor:pointer}.mention-option:hover,.mention-option.active{background:rgba(59,130,246,.28)}.mention-option small{margin-left:auto;color:rgba(255,255,255,.4)}
+.msg.mentioned-me{border-left:4px solid #60a5fa;background:rgba(37,99,235,.22);box-shadow:0 0 0 1px rgba(96,165,250,.25)}.mention-mark{display:inline-flex;margin:0 2px;padding:1px 5px;border-radius:6px;color:#bfdbfe;background:rgba(37,99,235,.35);font-weight:800}.mention-label{display:block;margin-bottom:5px;color:#93c5fd;font-size:10px;font-weight:900}.mention-label[hidden]{display:none}
+#mention-jump{display:none;position:absolute;right:5px;bottom:92px;z-index:6;border:0;border-radius:20px;padding:7px 11px;color:#fff;background:#7c3aed;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.3);pointer-events:auto}#mention-jump.show{display:block}
+#input-area{position:relative}
+#chat-return-to-site{position:fixed;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));z-index:360;display:none;min-height:44px;padding:9px 14px;border:1px solid rgba(255,255,255,.28);border-radius:11px;color:#fff;background:rgba(0,0,0,.68);font-weight:800;cursor:pointer}body.chat-active #chat-return-to-site{display:inline-flex;align-items:center}body.chat-active #top-panel{top:max(68px,calc(env(safe-area-inset-top) + 56px))}
+@media(max-width:600px){#mention-picker{bottom:58px}.mention-option{min-height:46px}#mention-jump{bottom:100px}}
+
+/* MENTION NOTIFICATIONS, QUICK PICKER AND ADMIN ALL */
+#mention-open{flex:0 0 auto;min-width:42px;border:0;border-radius:8px;color:#bfdbfe;background:rgba(37,99,235,.2);font-weight:900;cursor:pointer}#mention-open:hover{background:rgba(37,99,235,.38)}
+#mention-settings-open{min-height:32px}.mention-settings{display:none;position:fixed;inset:0;z-index:500;place-items:center;padding:18px;background:rgba(0,0,0,.72)}.mention-settings.open{display:grid}.mention-settings-card{width:min(420px,94vw);padding:18px;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:#111827;box-shadow:0 24px 80px #000}.mention-settings-card h2{margin:0 0 12px;font-size:18px}.mention-setting-row{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:46px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px}.mention-setting-row input{width:20px;height:20px;margin:0}.mention-settings-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.mention-settings-actions button{border:0;border-radius:8px;padding:9px 13px;color:#fff;background:rgba(255,255,255,.12);cursor:pointer}
+.mention-option.admin-all{color:#fde68a;background:rgba(120,53,15,.2)}.mention-option.admin-all small{color:#fcd34d}.mention-option.recent::before{content:'最近';padding:1px 4px;border-radius:4px;color:#bfdbfe;background:rgba(37,99,235,.3);font-size:9px}
+#mention-toast{position:fixed;left:50%;top:max(72px,calc(env(safe-area-inset-top) + 60px));z-index:420;display:none;max-width:min(520px,90vw);transform:translateX(-50%);padding:10px 14px;border:1px solid rgba(147,197,253,.45);border-radius:12px;color:#fff;background:rgba(30,64,175,.92);box-shadow:0 12px 35px #0008;font-size:12px;pointer-events:none}#mention-toast.show{display:block;animation:mentionToast 3.4s both}@keyframes mentionToast{0%{opacity:0;transform:translate(-50%,-8px)}8%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+
+/* ADMIN AUDIT PANEL */
+#admin-audit{position:fixed;right:18px;top:92px;z-index:85;display:none;width:min(360px,calc(100vw - 36px));color:#fff;font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}
+body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;min-height:42px;padding:9px 12px;border:1px solid #333;border-radius:11px;color:#fff;background:#050505;box-shadow:0 10px 30px #0008;cursor:pointer;text-align:left}#admin-audit-toggle strong{font-size:12px;letter-spacing:.08em}#admin-audit-count{min-width:22px;padding:1px 6px;border-radius:999px;color:#000;background:#fff;text-align:center;font-weight:900}#admin-audit-chevron{transition:transform .18s ease}#admin-audit.expanded #admin-audit-chevron{transform:rotate(180deg)}
+#admin-audit-body{display:none;height:min(52vh,460px);margin-top:6px;border:1px solid #333;border-radius:11px;background:#050505;box-shadow:0 16px 42px #000b;overflow:hidden}#admin-audit.expanded #admin-audit-body{display:flex;flex-direction:column}#admin-audit-tools{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;border-bottom:1px solid #222;color:#aaa}#admin-audit-clear{border:1px solid #444;border-radius:7px;padding:4px 8px;color:#fff;background:#111;cursor:pointer}#admin-audit-list{flex:1;overflow:auto;padding:7px;scrollbar-color:#666 #111}.audit-row{display:grid;grid-template-columns:60px 62px 1fr;gap:7px;padding:7px 5px;border-bottom:1px solid #1d1d1d}.audit-time{color:#9ca3af}.audit-kind{color:#fff;font-weight:900}.audit-text{min-width:0;color:#f5f5f5;overflow-wrap:anywhere}.audit-row[data-kind="緊急脱出"] .audit-kind{color:#fb7185}.audit-row[data-kind="入室"] .audit-kind{color:#86efac}.audit-row[data-kind="退出"] .audit-kind{color:#fcd34d}.audit-empty{padding:28px 12px;color:#777;text-align:center}
+@media(max-width:820px){#admin-audit{right:10px;top:118px;width:min(340px,calc(100vw - 20px))}#admin-audit-body{height:min(48vh,390px)}}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;!-- E01-H | CHAT INTERFACE, PANELS AND DIALOGS --&gt;
+&lt;button id="chat-return-to-site" type="button"&gt;← 料理サイトへ戻る&lt;/button&gt;
 &lt;button id="emergency-exit" type="button" aria-label="緊急脱出してGoogleを開く" title="緊急脱出"&gt;緊急脱出&lt;/button&gt;
 &lt;div id="panic-screen" aria-hidden="true"&gt;&lt;/div&gt;
 
@@ -645,12 +667,22 @@
 
 &lt;div id="top-panel"&gt;&lt;div id="connection-badge"&gt;接続準備中&lt;/div&gt;&lt;div id="users-panel"&gt;&lt;div id="users-title"&gt;オンライン&lt;/div&gt;&lt;div id="users-list"&gt;&lt;/div&gt;&lt;div id="replication-status"&gt;分散同期準備中&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;div id="room-status" style="display:none"&gt;&lt;strong id="online-count"&gt;1&lt;/strong&gt; online · 履歴20件&lt;/div&gt;
+&lt;aside id="admin-audit" aria-label="管理者ログ"&gt;
+ &lt;button id="admin-audit-toggle" type="button" aria-expanded="false"&gt;&lt;strong&gt;ADMIN LOG&lt;/strong&gt;&lt;span&gt;&lt;span id="admin-audit-count"&gt;0&lt;/span&gt; &lt;span id="admin-audit-chevron"&gt;⌄&lt;/span&gt;&lt;/span&gt;&lt;/button&gt;
+ &lt;section id="admin-audit-body" aria-hidden="true"&gt;
+  &lt;div id="admin-audit-tools"&gt;&lt;span&gt;入室・退出・緊急脱出・接続ログ&lt;/span&gt;&lt;button id="admin-audit-clear" type="button"&gt;表示を消去&lt;/button&gt;&lt;/div&gt;
+  &lt;div id="admin-audit-list" role="log" aria-live="polite"&gt;&lt;div class="audit-empty"&gt;ログはまだありません&lt;/div&gt;&lt;/div&gt;
+ &lt;/section&gt;
+&lt;/aside&gt;
 &lt;div id="chat-ui"&gt;
-  &lt;div id="chat-toolbar"&gt;&lt;span id="room-label"&gt;&lt;/span&gt;&lt;button class="tool-btn" onclick="clearHistory()"&gt;履歴削除&lt;/button&gt;&lt;/div&gt;
+  &lt;div id="chat-toolbar"&gt;&lt;span id="room-label"&gt;&lt;/span&gt;&lt;span&gt;&lt;button class="tool-btn" id="mention-settings-open" type="button"&gt;通知設定&lt;/button&gt; &lt;button class="tool-btn" onclick="clearHistory()"&gt;履歴削除&lt;/button&gt;&lt;/span&gt;&lt;/div&gt;
   &lt;div id="chat-box"&gt;&lt;/div&gt;
   &lt;button id="unread-badge" onclick="showLatest()"&gt;新着 0件&lt;/button&gt;
+  &lt;button id="mention-jump" type="button"&gt;あなた宛て 0件&lt;/button&gt;
   &lt;div id="reply-composer" aria-live="polite"&gt;&lt;div id="reply-composer-text"&gt;&lt;/div&gt;&lt;button id="cancel-reply" type="button" aria-label="返信を取り消す"&gt;×&lt;/button&gt;&lt;/div&gt;
   &lt;div id="input-area"&gt;
+    &lt;div id="mention-picker" role="listbox" aria-label="メンションする参加者"&gt;&lt;/div&gt;
+    &lt;button id="mention-open" type="button" aria-label="メンション候補を開く"&gt;@&lt;/button&gt;
     &lt;input type="file" id="image-input" accept="image/jpeg,image/png,image/webp,image/gif"&gt;
     &lt;button id="image-btn" type="button" title="画像を送る" aria-label="画像を送る"&gt;画像&lt;/button&gt;
     &lt;input type="text" id="msg-input" placeholder="メッセージを入力" maxlength="2000" autocomplete="off" enterkeyhint="send" aria-label="メッセージ入力"&gt;
@@ -670,6 +702,16 @@
   &lt;/div&gt;
 &lt;/div&gt;
 
+&lt;div id="mention-toast" role="status" aria-live="polite"&gt;&lt;/div&gt;
+&lt;div id="mention-settings" class="mention-settings" role="dialog" aria-modal="true" aria-labelledby="mention-settings-title"&gt;
+ &lt;div class="mention-settings-card"&gt;&lt;h2 id="mention-settings-title"&gt;メンション通知設定&lt;/h2&gt;
+  &lt;label class="mention-setting-row"&gt;&lt;span&gt;画面内通知を表示&lt;/span&gt;&lt;input id="setting-mention-toast" type="checkbox"&gt;&lt;/label&gt;
+  &lt;label class="mention-setting-row"&gt;&lt;span&gt;通知音を鳴らす&lt;/span&gt;&lt;input id="setting-mention-sound" type="checkbox"&gt;&lt;/label&gt;
+  &lt;label class="mention-setting-row"&gt;&lt;span&gt;ページタイトルへ件数を表示&lt;/span&gt;&lt;input id="setting-mention-title" type="checkbox"&gt;&lt;/label&gt;
+  &lt;label class="mention-setting-row"&gt;&lt;span&gt;管理者の @all 通知を受け取る&lt;/span&gt;&lt;input id="setting-mention-all" type="checkbox"&gt;&lt;/label&gt;
+  &lt;div class="mention-settings-actions"&gt;&lt;button id="mention-sound-test" type="button"&gt;音を確認&lt;/button&gt;&lt;button id="mention-settings-close" type="button"&gt;閉じる&lt;/button&gt;&lt;/div&gt;
+ &lt;/div&gt;
+&lt;/div&gt;
 &lt;div id="bg-switcher"&gt;
     &lt;div id="switch-space" class="switch-btn active" onclick="setBg('space')"&gt;&lt;/div&gt;
     &lt;div id="switch-water" class="switch-btn" onclick="setBg('water')"&gt;&lt;/div&gt;
@@ -824,6 +866,8 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   const MAX_BACKUP_HOSTS = 2;
   const OPERATION_LOG_LIMIT = 120;
   let activeReply = null;
+  let activeMentionIds=[];let mentionMatches=[];let mentionActiveIndex=0;let unreadMentionIds=[];let currentMentionIndex=0;
+  const MENTION_SETTINGS_KEY='neko-chat-mention-settings-v1';let mentionSettings={toast:true,sound:true,title:true,all:true};let recentMentionIds=[];let lastAllMentionAt=0;let mentionAudioContext=null;let mentionToastTimer=null;
   const REACTION_OPTIONS = ['👍','✅','👀','🎉'];
   const MAX_PENDING_AGE = 24 * 60 * 60 * 1000;
   const clientId = sessionStorage.getItem('p2p-client-id') ||
@@ -1053,6 +1097,8 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
        typeof reply.text === 'string' &amp;&amp; reply.text.length &lt;= 160 &amp;&amp;
        (reply.admin === undefined || typeof reply.admin === 'boolean'));
   }
+  function validMentions(mentions){return mentions===undefined||Array.isArray(mentions)&amp;&amp;mentions.length&lt;=20&amp;&amp;mentions.every(item=&gt;item&amp;&amp;typeof item.clientId==='string'&amp;&amp;item.clientId.length&lt;=160&amp;&amp;typeof item.name==='string'&amp;&amp;item.name.length&lt;=40);
+  }
 
   function validReactions(reactions) {
     if (reactions === undefined) return true;
@@ -1070,7 +1116,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
       typeof data.name === 'string' &amp;&amp; data.name.length &lt;= 40 &amp;&amp; typeof data.msg === 'string' &amp;&amp;
       data.msg.length &lt;= 2000 &amp;&amp; Number.isFinite(data.time) &amp;&amp; validImage &amp;&amp;
       (data.admin === undefined || typeof data.admin === 'boolean') &amp;&amp;
-      validReply(data.reply) &amp;&amp; validReactions(data.reactions);
+      validReply(data.reply) &amp;&amp; validMentions(data.mentions) &amp;&amp; validReactions(data.reactions);
   }
 
   function addMessageToState(data) {
@@ -1085,6 +1131,23 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   }
 
 
+
+
+  function mentionCandidates(){const users=Object.values(roomState.users).filter(validUser).filter(u=&gt;u.clientId!==clientId).sort((a,b)=&gt;(recentMentionIds.includes(b.clientId)?1:0)-(recentMentionIds.includes(a.clientId)?1:0)||a.name.localeCompare(b.name,'ja'));if(isAdmin)users.unshift({clientId:'__all__',name:'all',adminAll:true});return users;}
+  function mentionQueryAtCursor(input){const pos=input.selectionStart??input.value.length;const left=input.value.slice(0,pos);const match=left.match(/(?:^|\s)@([^\s@]*)$/u);return match?{query:match[1].toLowerCase(),start:pos-match[1].length-1,end:pos}:null;}
+  function closeMentionPicker(){const picker=document.getElementById('mention-picker');picker.classList.remove('open');picker.replaceChildren();mentionMatches=[];mentionActiveIndex=0;}
+  function openMentionPicker(){const input=document.getElementById('msg-input'),scope=mentionQueryAtCursor(input);if(!scope){closeMentionPicker();return;}mentionMatches=mentionCandidates().filter(u=&gt;u.name.toLowerCase().includes(scope.query)).slice(0,12);const picker=document.getElementById('mention-picker');picker.replaceChildren();if(!mentionMatches.length){closeMentionPicker();return;}mentionMatches.forEach((u,index)=&gt;{const button=document.createElement('button');button.type='button';button.className='mention-option'+(index===mentionActiveIndex?' active':'')+(u.adminAll?' admin-all':'')+(recentMentionIds.includes(u.clientId)?' recent':'');button.setAttribute('role','option');const name=document.createElement('span');name.textContent=u.adminAll?'@all（全員）':u.name;const suffix=document.createElement('small');suffix.textContent=u.adminAll?'管理者限定':'#'+u.clientId.replace(/[^a-zA-Z0-9]/g,'').slice(-4);button.append(name,suffix);button.onmousedown=e=&gt;e.preventDefault();button.onclick=()=&gt;selectMention(u);picker.appendChild(button);});picker.classList.add('open');}
+  function selectMention(user){const input=document.getElementById('msg-input'),scope=mentionQueryAtCursor(input);if(!scope)return;if(user.clientId==='__all__'){if(!isAdmin){closeMentionPicker();return;}const remain=30000-(Date.now()-lastAllMentionAt);if(remain&gt;0){showMentionToast('@all はあと'+Math.ceil(remain/1000)+'秒待ってください。');closeMentionPicker();return;}if(!confirm('オンライン参加者全員へ @all 通知を送りますか？')){closeMentionPicker();return;}lastAllMentionAt=Date.now();}const token='@'+user.name+' ';input.setRangeText(token,scope.start,scope.end,'end');if(!activeMentionIds.includes(user.clientId))activeMentionIds.push(user.clientId);if(user.clientId!=='__all__')recentMentionIds=[user.clientId,...recentMentionIds.filter(id=&gt;id!==user.clientId)].slice(0,5);closeMentionPicker();input.focus();}
+  function mentionsForOutgoing(text){const users=mentionCandidates();return activeMentionIds.map(id=&gt;users.find(u=&gt;u.clientId===id)).filter(Boolean).filter(u=&gt;text.includes('@'+u.name)).filter(u=&gt;u.clientId!=='__all__'||isAdmin).map(u=&gt;({clientId:u.clientId,name:u.name}));}
+  function isMentionedMe(message){return Array.isArray(message.mentions)&amp;&amp;message.mentions.some(item=&gt;item.clientId===clientId||(item.clientId==='__all__'&amp;&amp;mentionSettings.all));}
+  function refreshMentionJump(){const button=document.getElementById('mention-jump');button.textContent='あなた宛て '+unreadMentionIds.length+'件';button.classList.toggle('show',unreadMentionIds.length&gt;0);}
+  function loadMentionSettings(){try{mentionSettings={...mentionSettings,...JSON.parse(localStorage.getItem(MENTION_SETTINGS_KEY)||'{}')}}catch(_){}const map={toast:'setting-mention-toast',sound:'setting-mention-sound',title:'setting-mention-title',all:'setting-mention-all'};Object.entries(map).forEach(([key,id])=&gt;document.getElementById(id).checked=Boolean(mentionSettings[key]));}
+  function saveMentionSettings(){mentionSettings={toast:document.getElementById('setting-mention-toast').checked,sound:document.getElementById('setting-mention-sound').checked,title:document.getElementById('setting-mention-title').checked,all:document.getElementById('setting-mention-all').checked};localStorage.setItem(MENTION_SETTINGS_KEY,JSON.stringify(mentionSettings));}
+  function showMentionToast(text){if(!mentionSettings.toast)return;const el=document.getElementById('mention-toast');clearTimeout(mentionToastTimer);el.textContent=text;el.classList.remove('show');void el.offsetWidth;el.classList.add('show');mentionToastTimer=setTimeout(()=&gt;el.classList.remove('show'),3500);}
+  function playMentionSound(force=false){if(!force&amp;&amp;!mentionSettings.sound)return;try{mentionAudioContext=mentionAudioContext||new (window.AudioContext||window.webkitAudioContext)();const osc=mentionAudioContext.createOscillator(),gain=mentionAudioContext.createGain();osc.type='sine';osc.frequency.setValueAtTime(740,mentionAudioContext.currentTime);osc.frequency.exponentialRampToValueAtTime(980,mentionAudioContext.currentTime+.12);gain.gain.setValueAtTime(.0001,mentionAudioContext.currentTime);gain.gain.exponentialRampToValueAtTime(.12,mentionAudioContext.currentTime+.015);gain.gain.exponentialRampToValueAtTime(.0001,mentionAudioContext.currentTime+.2);osc.connect(gain).connect(mentionAudioContext.destination);osc.start();osc.stop(mentionAudioContext.currentTime+.21)}catch(_){}}
+  function registerMention(message){if(!isMentionedMe(message)||message.senderId===clientId)return;if(!unreadMentionIds.includes(message.id))unreadMentionIds.push(message.id);refreshMentionJump();const from=visibleName(message.name,message.senderId||'');showMentionToast(from+' さんからメンションが届きました');playMentionSound();if(mentionSettings.title)document.title='あなた宛ての新着 '+unreadMentionIds.length+'件';}
+  function jumpToNextMention(){if(!unreadMentionIds.length)return;currentMentionIndex%=unreadMentionIds.length;const id=unreadMentionIds[currentMentionIndex++],target=document.querySelector('[data-message-id="'+CSS.escape(id)+'"]');if(target){target.scrollIntoView({block:'center',behavior:'smooth'});target.animate([{outline:'3px solid #93c5fd'},{outline:'3px solid transparent'}],{duration:1200});unreadMentionIds=unreadMentionIds.filter(x=&gt;x!==id);currentMentionIndex=0;refreshMentionJump();}}
+  function appendMentionedText(container,text,mentions=[]){if(!mentions.length){container.textContent=text;return;}const names=[...new Set(mentions.map(x=&gt;x.name))].sort((a,b)=&gt;b.length-a.length);let cursor=0;const regex=new RegExp('@('+names.map(name=&gt;name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&amp;')).join('|')+')','gu');for(const match of text.matchAll(regex)){container.append(document.createTextNode(text.slice(cursor,match.index)));const mark=document.createElement('span');mark.className='mention-mark';mark.textContent=match[0];container.append(mark);cursor=match.index+match[0].length;}container.append(document.createTextNode(text.slice(cursor)));}
 
   /* ==========================================================================
      REPLY AND REACTION STATE
@@ -1338,6 +1401,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   }
 
   function startChat() {
+    setAdminAuditVisible();
     const draftInput=document.getElementById('msg-input');
     try{if(draftInput&amp;&amp;!draftInput.value)draftInput.value=localStorage.getItem('practical-chat-draft:'+roomID)||'';}catch(_){}
 
@@ -1347,7 +1411,6 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     document.getElementById('room-status').style.display = 'block';
     document.getElementById('top-panel').style.display = 'flex';
     document.getElementById('room-label').textContent = 'ROOM ' + roomID;
-    document.getElementById('msg-input').onkeydown = e =&gt; { if (e.key === 'Enter') send(); };
   }
 
 
@@ -1355,6 +1418,12 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   /* ==========================================================================
      PEER CONNECTION EVENTS
      ========================================================================== */
+  function applyEmergencyDeparture(leavingId,link) {
+    const leaving=roomState.users[leavingId];
+    if(leaving){recordAdminAudit(leaving.name+' が緊急脱出しました。','緊急脱出');delete roomState.users[leavingId];addSystemLog(leaving.name+' が退出しました。',false);broadcastPresence();selectBackupHosts();updateStatus();}
+    try{link.close();}catch(_){}
+  }
+
   function setupConn(c, isHostLink = false) {
     if (!c || c.__configured) return;
     c.__configured = true;
@@ -1376,10 +1445,15 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
 
     c.on('data', data =&gt; {
       if (isHostLink &amp;&amp; !isHost &amp;&amp; (c !== hostConnection || c.__hostLinkToken !== activeHostLinkToken)) return;
+      if(Array.isArray(data)&amp;&amp;data[0]===0&amp;&amp;typeof data[1]==='string'){
+        if(isHost){applyEmergencyDeparture(data[1],c);}else if(c===hostConnection){chatReady=false;hostConnection=null;beginHostMigration(true);}
+        return;
+      }
       if (!data || typeof data.type !== 'string') return;
       if (data.type === 'hello' &amp;&amp; isHost &amp;&amp; validUser(data.user)) {
         c.__clientId = data.user.clientId;
         c.__admin = Boolean(data.user.admin);
+        if(c.__admin){for(const entry of adminAuditEntries){try{c.send({type:'adminAudit',entry})}catch(_){break;}}}
         c.__presenceToken = data.user.clientId + ':' + Date.now() + ':' + Math.random().toString(36).slice(2);
         const pendingDeparture = departureTimers.get(data.user.clientId);
         if (pendingDeparture) {
@@ -1416,6 +1490,8 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
         try{c.send({type:'opSyncResponse',operations:operationLog.filter(op=&gt;Number(op.version||0)&gt;Number(data.afterVersion||0)),hostEpoch,stateVersion});}catch(_){}
       } else if (data.type === 'opSyncResponse') {
         if(Number(data.hostEpoch||0)&gt;=hostEpoch){hostEpoch=Number(data.hostEpoch)||hostEpoch;mergeOperationLog(data.operations||[]);renderHistory();updateStatus();}
+      } else if (data.type === 'adminAudit' &amp;&amp; !isHost &amp;&amp; validAuditEntry(data.entry)) {
+        receiveAdminAudit(data.entry);
       } else if (data.type === 'state' &amp;&amp; !isHost) {
         applyState(data.state);
       } else if (data.type === 'presence' &amp;&amp; !isHost &amp;&amp; data.users &amp;&amp; typeof data.users === 'object') {
@@ -1426,7 +1502,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
         roomState.users = data.users;roomState.users[clientId] = myUserRecord(false);
         updateStatus();
       } else if (data.type === 'chat' &amp;&amp; isValidMessage(data)) {
-        if (isHost) data.admin=Boolean(c.__admin);
+        if (isHost){data.admin=Boolean(c.__admin);if(!data.admin&amp;&amp;Array.isArray(data.mentions))data.mentions=data.mentions.filter(item=&gt;item.clientId!=='__all__');}
         if (isHost &amp;&amp; !Number.isFinite(data.hostSeq)) {
           data.hostSeq=++hostSequence; data.receivedAt=Date.now();
         }
@@ -1434,7 +1510,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
           recordOperation({id:operationId('message',data.id),type:'message',payload:data,time:Date.now(),version:stateVersion+1,epoch:hostEpoch});
           if(isHost)replicateToBackups('message');
           const followLatest=isNearLatest();
-          addLog(data.name, data.msg, data.time, data.id, false, 'delivered', followLatest, data.image || '', data.senderId || '', data.reply || null, data.reactions || {}, Boolean(data.admin));
+          addLog(data.name, data.msg, data.time, data.id, false, 'delivered', followLatest, data.image || '', data.senderId || '', data.reply || null, data.reactions || {}, Boolean(data.admin), data.mentions || []);registerMention(data);
           if(!followLatest) showUnreadInsideChat();
           handleUnread();
         }
@@ -1616,22 +1692,46 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   /* ==========================================================================
      PEER LIFECYCLE AND STATE SYNC
      ========================================================================== */
-  function emergencyExitToGoogle() {
-    chatReady=false;
-    migrationRunning=false;
-    clearInterval(retryTimer); retryTimer=null;
-    clearInterval(recoveryWatchdog); recoveryWatchdog=null;
-    clearTimeout(reconnectTimer); reconnectTimer=null;
-    clearTimeout(migrationTimer); migrationTimer=null;
-    departureTimers.forEach(clearTimeout); departureTimers.clear();
-    try { persistOutbox(); } catch (_) {}
-    safelyDestroyPeer();
-    try {
-      window.parent.postMessage({ type: 'neko-emergency-exit' }, '*');
-    } catch (_) {
-      window.top.location.replace('https://www.google.com/');
-    }
+  function sendEmergencyDeparture(packet) {
+    if(isHost){for(const link of connections){if(link&amp;&amp;link.open){try{link.send(packet)}catch(_){}}}return;}
+    if(hostConnection&amp;&amp;hostConnection.open)hostConnection.send(packet);
   }
+
+  function emergencyExitToGoogle() {
+    if(emergencyEscapeActive)return;
+    emergencyEscapeActive=true;
+    // First priority: ask the parent page to replace itself immediately.
+    try { window.parent.postMessage({ type: 'neko-emergency-exit' }, '*'); } catch (_) {}
+    // Best effort only: send one tiny departure signal through already-open links.
+    if(isAdmin)recordAdminAudit((myName||'管理者')+' が緊急脱出しました。','緊急脱出',false);
+    const signal=[0,clientId];
+    try { sendEmergencyDeparture(signal); } catch (_) {}
+    // Fallback when the chat is opened without its parent shell.
+    try { window.top.location.replace('https://www.google.com/'); } catch (_) { location.replace('https://www.google.com/'); }
+  }
+
+  function classifyAudit(text,forced='') {
+    if(forced)return forced;
+    if(/緊急脱出/.test(text))return '緊急脱出';
+    if(/入室/.test(text))return '入室';
+    if(/退出|切断/.test(text))return '退出';
+    if(/接続|同期|ホスト|通信|オフライン|復旧|再選出/.test(text))return '接続';
+    return '情報';
+  }
+  function validAuditEntry(entry){return entry&amp;&amp;typeof entry.id==='string'&amp;&amp;entry.id.length&lt;=180&amp;&amp;Number.isFinite(entry.at)&amp;&amp;typeof entry.kind==='string'&amp;&amp;entry.kind.length&lt;=20&amp;&amp;typeof entry.text==='string'&amp;&amp;entry.text.length&lt;=240;}
+  function renderAdminAudit() {
+    if(!isAdmin)return;
+    const list=document.getElementById('admin-audit-list'),count=document.getElementById('admin-audit-count');
+    count.textContent=String(adminAuditEntries.length);
+    list.replaceChildren();
+    if(!adminAuditEntries.length){const empty=document.createElement('div');empty.className='audit-empty';empty.textContent='ログはまだありません';list.appendChild(empty);return;}
+    for(const entry of adminAuditEntries){const row=document.createElement('div');row.className='audit-row';row.dataset.kind=entry.kind;const time=document.createElement('time');time.className='audit-time';time.dateTime=new Date(entry.at).toISOString();time.textContent=new Date(entry.at).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'});const kind=document.createElement('span');kind.className='audit-kind';kind.textContent=entry.kind;const text=document.createElement('span');text.className='audit-text';text.textContent=entry.text;row.append(time,kind,text);list.appendChild(row);}
+    list.scrollTop=list.scrollHeight;
+  }
+  function receiveAdminAudit(entry){if(!isAdmin||!validAuditEntry(entry)||adminAuditEntries.some(item=&gt;item.id===entry.id))return;adminAuditEntries.push(entry);adminAuditEntries=adminAuditEntries.slice(-ADMIN_AUDIT_LIMIT);renderAdminAudit();}
+  function sendAuditToAdmins(entry){if(!isHost)return;for(const link of connections){if(link&amp;&amp;link.open&amp;&amp;link.__admin){try{link.send({type:'adminAudit',entry})}catch(_){}}}}
+  function recordAdminAudit(text,kind='',broadcastEntry=true){const entry={id:clientId+':audit:'+(++auditSequence)+':'+Date.now(),at:Date.now(),kind:classifyAudit(text,kind),text:String(text).slice(0,240)};receiveAdminAudit(entry);if(broadcastEntry)sendAuditToAdmins(entry);return entry;}
+  function setAdminAuditVisible(){document.body.classList.toggle('admin-active',Boolean(isAdmin));if(isAdmin)renderAdminAudit();}
 
   function safelyDestroyPeer(clearElection = true) {
     deliveryTrackers.forEach(t=&gt;clearTimeout(t.timer)); deliveryTrackers.clear();
@@ -1756,12 +1856,12 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     if (!text) return;
     const data = { type:'chat', id:clientId+'-'+Date.now()+'-'+Math.random().toString(36).slice(2),
       name:myName.slice(0,40), senderId:clientId, msg:text.slice(0,2000), time:Date.now(), admin:isAdmin,
-      reply:activeReply ? {...activeReply} : null, reactions:{} };
+      reply:activeReply ? {...activeReply} : null, mentions:mentionsForOutgoing(text), reactions:{} };
     if(isHost){data.hostSeq=++hostSequence;data.receivedAt=Date.now();}
     addMessageToState(data);
     if(isHost){recordOperation({id:operationId('message',data.id),type:'message',payload:data,time:Date.now(),version:stateVersion+1,epoch:hostEpoch});replicateToBackups('message');}
-    addLog('YOU', data.msg, data.time, data.id, true, canSendNow() ? 'sending' : 'queued', true, '', clientId, data.reply, data.reactions, isAdmin);
-    cancelReply();
+    addLog('YOU', data.msg, data.time, data.id, true, canSendNow() ? 'sending' : 'queued', true, '', clientId, data.reply, data.reactions, isAdmin, data.mentions || []);
+    cancelReply();activeMentionIds=[];closeMentionPicker();
     pendingMessages.set(data.id, {data, attempts:0, lastSent:0, queuedAt:Date.now()});
     persistOutbox();
     if (canSendNow()) transmitPending(data.id); else if(!sendQueue.includes(data.id)) sendQueue.push(data.id);
@@ -1896,17 +1996,18 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     if (!pendingImage) return;
     if (!canSendNow() &amp;&amp; !confirm('現在は再接続中です。画像は一時的に送信待ちになりますが、ページを更新・閉じると画像を再送できません。このまま送信待ちに追加しますか？')) return;
     const data={type:'chat',id:clientId+'-'+Date.now()+'-'+Math.random().toString(36).slice(2),
-      name:myName.slice(0,40),senderId:clientId,msg:'画像を送信しました（履歴には保存されません）',image:pendingImage.dataUrl,time:Date.now(),admin:isAdmin,reply:activeReply?{...activeReply}:null,reactions:{}};
+      name:myName.slice(0,40),senderId:clientId,msg:'画像を送信しました（履歴には保存されません）',image:pendingImage.dataUrl,time:Date.now(),admin:isAdmin,reply:activeReply?{...activeReply}:null,mentions:mentionsForOutgoing(''),reactions:{}};
     if(isHost){data.hostSeq=++hostSequence;data.receivedAt=Date.now();}
     addMessageToState(data);
     if(isHost){recordOperation({id:operationId('message',data.id),type:'message',payload:data,time:Date.now(),version:stateVersion+1,epoch:hostEpoch});replicateToBackups('message');}
-    addLog('YOU',data.msg,data.time,data.id,true,canSendNow()?'sending':'queued',true,data.image,clientId,data.reply,data.reactions,isAdmin);cancelReply();
+    addLog('YOU',data.msg,data.time,data.id,true,canSendNow()?'sending':'queued',true,data.image,clientId,data.reply,data.reactions,isAdmin,data.mentions || []);cancelReply();
     pendingMessages.set(data.id,{data,attempts:0,lastSent:0,queuedAt:Date.now()});
     persistOutbox();
     if(canSendNow()) transmitPending(data.id); else if(!sendQueue.includes(data.id)) sendQueue.push(data.id);
     closeImagePreview();
   }
 
+  document.getElementById('chat-return-to-site').addEventListener('click',()=&gt;window.parent.postMessage({type:'neko-return-to-site'},'*'));
   document.getElementById('emergency-exit').addEventListener('click',emergencyExitToGoogle);
   document.getElementById('cancel-reply').addEventListener('click',cancelReply);
   document.getElementById('chat-box').addEventListener('click',event=&gt;{
@@ -1915,11 +2016,21 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     document.querySelectorAll('.action-toggle[aria-expanded="true"]').forEach(button=&gt;button.setAttribute('aria-expanded','false'));
   });
   const messageInput=document.getElementById('msg-input');
+  document.getElementById('admin-audit-toggle').addEventListener('click',()=&gt;{const panel=document.getElementById('admin-audit'),expanded=panel.classList.toggle('expanded');document.getElementById('admin-audit-toggle').setAttribute('aria-expanded',String(expanded));document.getElementById('admin-audit-body').setAttribute('aria-hidden',String(!expanded));if(expanded)renderAdminAudit();});
+  document.getElementById('admin-audit-clear').addEventListener('click',()=&gt;{adminAuditEntries=[];renderAdminAudit();});
+  document.getElementById('mention-jump').addEventListener('click',jumpToNextMention);
+  document.getElementById('mention-open').addEventListener('click',()=&gt;{const input=document.getElementById('msg-input');const pos=input.selectionStart??input.value.length;if(!mentionQueryAtCursor(input))input.setRangeText((pos&amp;&amp; !/\s$/.test(input.value.slice(0,pos))?' ':'')+'@',pos,pos,'end');openMentionPicker();input.focus();});
+  document.getElementById('mention-settings-open').addEventListener('click',()=&gt;document.getElementById('mention-settings').classList.add('open'));
+  document.getElementById('mention-settings-close').addEventListener('click',()=&gt;{saveMentionSettings();document.getElementById('mention-settings').classList.remove('open');});
+  document.getElementById('mention-sound-test').addEventListener('click',()=&gt;playMentionSound(true));
+  document.getElementById('mention-settings').addEventListener('click',event=&gt;{if(event.target.id==='mention-settings'){saveMentionSettings();event.currentTarget.classList.remove('open');}});
+  loadMentionSettings();
   messageInput.addEventListener('keydown',event=&gt;{
+    if(document.getElementById('mention-picker').classList.contains('open')){if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();mentionActiveIndex=(mentionActiveIndex+(event.key==='ArrowDown'?1:-1)+mentionMatches.length)%mentionMatches.length;openMentionPicker();return;}if(event.key==='Enter'&amp;&amp;mentionMatches.length){event.preventDefault();selectMention(mentionMatches[mentionActiveIndex]);return;}if(event.key==='Escape'){event.preventDefault();closeMentionPicker();return;}}
     if(event.key==='Escape'){cancelReply();return;}
     if(event.key==='Enter'&amp;&amp;!event.shiftKey&amp;&amp;!event.isComposing&amp;&amp;event.keyCode!==229){event.preventDefault();send();}
   });
-  messageInput.addEventListener('input',()=&gt;{
+  messageInput.addEventListener('input',()=&gt;{openMentionPicker();
     try{localStorage.setItem('practical-chat-draft:'+roomID,messageInput.value.slice(0,2000));}catch(_){}
   });
   document.getElementById('chat-box').addEventListener('scroll',()=&gt;{
@@ -1942,7 +2053,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     const wasNearLatest=isNearLatest();
     const distanceFromBottom=Math.max(0,box.scrollHeight-box.scrollTop-box.clientHeight);
     box.textContent='';
-    roomState.messages.forEach(m =&gt; addLog(m.name,m.msg,m.time,m.id,(m.senderId ? m.senderId===clientId : m.name===myName),'delivered',false,m.image || '',m.senderId || '',m.reply || null,m.reactions || {},Boolean(m.admin)));
+    roomState.messages.forEach(m =&gt; addLog(m.name,m.msg,m.time,m.id,(m.senderId ? m.senderId===clientId : m.name===myName),'delivered',false,m.image || '',m.senderId || '',m.reply || null,m.reactions || {},Boolean(m.admin),m.mentions || []));
     lastRenderedSignature=roomState.messages.map(m=&gt;m.id).join('|');
     requestAnimationFrame(()=&gt;{
       if(wasNearLatest) scrollToLatest(false);
@@ -1950,9 +2061,9 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     });
   }
 
-  function addLog(name,text,time,id='',own=false,status='',autoScroll=true,image='',senderId='',reply=null,reactions={},admin=false) {
+  function addLog(name,text,time,id='',own=false,status='',autoScroll=true,image='',senderId='',reply=null,reactions={},admin=false,mentions=[]) {
     const box=document.getElementById('chat-box'), followLatest=isNearLatest(), div=document.createElement('div');
-    div.className='msg'+(own?' own':'')+(status==='queued'||status==='sending'?' pending':'');
+    div.className='msg'+(own?' own':'')+(status==='queued'||status==='sending'?' pending':'')+(mentions.some(item=&gt;item.clientId===clientId)?' mentioned-me':'');
     if(id) div.dataset.messageId=id;
     if(reply){
       const quote=document.createElement('button');quote.type='button';quote.className='reply-quote';
@@ -1962,10 +2073,10 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
       div.appendChild(quote);
     }
     const n=document.createElement('span'); n.className='msg-name'; n.textContent=visibleName(name,senderId); appendAdminBadge(n,admin); appendAdminVerifiedIcon(n,admin);
-    const t=document.createElement('span'); t.className='msg-text'; t.textContent=text;
+    const mentionLabel=document.createElement('span');mentionLabel.className='mention-label';mentionLabel.hidden=!mentions.some(item=&gt;item.clientId===clientId);mentionLabel.textContent='あなたへのメンション';const t=document.createElement('span');t.className='msg-text';appendMentionedText(t,text,mentions);
     const meta=document.createElement('span'); meta.className='msg-meta';
     meta.textContent=(time?new Date(time).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}):'')+(own&amp;&amp;status?' · '+statusLabel(status):'');
-    div.append(n,t);
+    div.append(n,mentionLabel,t);
     if (image) {
       const img=document.createElement('img');img.className='msg-image';img.src=image;img.alt='送信された画像';img.loading='lazy';
       img.onclick=event=&gt;{event.stopPropagation();openImageViewer(image);};div.appendChild(img);
@@ -1993,9 +2104,10 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     const meta=div.querySelector('.msg-meta'); if(meta) meta.textContent=meta.textContent.split(' · ')[0]+' · '+label;
   }
 
-  function addSystemLog(text) {
-    const box=document.getElementById('chat-box'), div=document.createElement('div');
-    const follow=isNearLatest(); div.className='sys-msg'; div.textContent=text; box.appendChild(div); if(follow) scrollToLatest(false);
+  function addSystemLog(text,audit=true) {
+    const box=document.getElementById('chat-box'),div=document.createElement('div');
+    const follow=isNearLatest();div.className='sys-msg';div.textContent=text;box.appendChild(div);if(follow)scrollToLatest(false);
+    if(audit)recordAdminAudit(text);
   }
 
 
@@ -2081,6 +2193,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   });
 
   window.addEventListener('beforeunload', () =&gt; {
+    if(emergencyEscapeActive)return;
     persistOutbox();
     clearInterval(retryTimer);
     clearInterval(recoveryWatchdog);
@@ -2094,6 +2207,8 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   /* ==========================================================================
      PANIC SCREEN
      ========================================================================== */
+  const ADMIN_AUDIT_LIMIT=250;let adminAuditEntries=[];let auditSequence=0;
+  let emergencyEscapeActive = false;
   let panicMode = false;
   let panicAudioStates = [];
 
@@ -2700,11 +2815,33 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     /* ========================================================================
        J09 | RANDOMIZED LOADING AND CROSSFADE TRANSITION
        ======================================================================== */
+    let chatHistoryArmed=false;
+    function armChatBackGuard(){
+      if(chatHistoryArmed)return;
+      history.pushState({nekoChat:true},'',location.href);
+      chatHistoryArmed=true;
+    }
+    function closeChatShell({fromPopState=false}={}){
+      const chat=$('#chatShell');
+      const wasOpen=chat.classList.contains('on');
+      chat.classList.remove('reveal');
+      chat.classList.remove('on');
+      chat.setAttribute('aria-hidden','true');
+      document.documentElement.style.overflow='';
+      if(!wasOpen)return;
+      if(fromPopState){chatHistoryArmed=false;return;}
+      if(chatHistoryArmed){chatHistoryArmed=false;history.back();}
+    }
+    window.addEventListener('popstate',()=>{
+      if(chatHistoryArmed&&$('#chatShell').classList.contains('on'))closeChatShell({fromPopState:true});
+      else chatHistoryArmed=false;
+    });
+
     function runCyberDoorTransition(){
       if(accessTransitionRunning)return Promise.resolve();accessTransitionRunning=true;
       const overlay=$('#cyberDoorTransition'),value=$('#cyberProgressValue'),stage=$('#cyberStage'),sub=$('#minimalSub'),code=$('#minimalCode'),time=$('#minimalTime'),track=$('#minimalTrack'),bar=track.querySelector('span'),steps=[...overlay.querySelectorAll('.minimal-step')];let progressRaf=0,timers=[];
-      const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches,entryDelay=reduced?40:90;
-      const baseDuration=reduced?260:720,willHold=false,holdDuration=0,holdPoint=2,totalDuration=baseDuration,handoffDelay=reduced?40:100;
+      const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches,entryDelay=reduced?100:620;
+      const baseDuration=reduced?850:Math.round(6500+Math.random()*4000),willHold=!reduced&&Math.random()<.10,holdDuration=willHold?Math.round(1000+Math.random()*1000):0,holdPoint=willHold?.38+Math.random()*.24:2,totalDuration=baseDuration+holdDuration,handoffDelay=reduced?120:1000;
       const later=(fn,ms)=>{const id=setTimeout(fn,ms);timers.push(id);return id};
       const phases=[
         {at:0,n:0,stage:'PREPARING SESSION',sub:'Allocating protected workspace',code:'SYS.01'},
@@ -2716,7 +2853,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
         {at:1,n:100,stage:'READY',sub:'Workspace initialization complete',code:'OK.100'}
       ];
       function render(start){function frame(now){const raw=Math.max(0,now-start),holdStart=baseDuration*holdPoint,holdEnd=holdStart+holdDuration,isHolding=willHold&&raw>=holdStart&&raw<holdEnd;let effective=raw;if(willHold&&raw>=holdStart)effective=raw<holdEnd?holdStart:raw-holdDuration;const t=Math.min(effective/baseDuration,1);let a=phases[0],b=phases.at(-1);for(let i=1;i<phases.length;i++){if(t<=phases[i].at){a=phases[i-1];b=phases[i];break}}const local=(t-a.at)/Math.max(b.at-a.at,.001),n=Math.round(a.n+(b.n-a.n)*local);value.textContent=String(n).padStart(2,'0');track.style.setProperty('--progress',n+'%');bar.style.setProperty('--bar-progress',n+'%');overlay.classList.toggle('holding',isHolding);if(isHolding){stage.textContent='SYNC CHECK';sub.textContent='Confirming workspace consistency';code.textContent='WAIT.'+String(Math.max(1,Math.ceil((holdEnd-raw)/100))).padStart(2,'0')}else{stage.textContent=a.stage;sub.textContent=a.sub;code.textContent=a.code}time.textContent='00:'+String(Math.max(0,Math.ceil((totalDuration-raw)/1000))).padStart(2,'0');const active=Math.min(4,Math.floor(t*5));steps.forEach((el,i)=>{el.classList.toggle('active',i===active&&t<.99);el.classList.toggle('done',i<active||t>=.99)});if(raw<totalDuration)progressRaf=requestAnimationFrame(frame)}progressRaf=requestAnimationFrame(frame)}
-      return new Promise(resolve=>{const gate=$('#gate'),chat=$('#chatShell');value.textContent='00';stage.textContent=phases[0].stage;sub.textContent=phases[0].sub;code.textContent=phases[0].code;time.textContent='00:'+String(Math.ceil(totalDuration/1000)).padStart(2,'0');track.style.setProperty('--progress','0%');bar.style.setProperty('--bar-progress','0%');steps.forEach(el=>el.classList.remove('active','done'));overlay.classList.remove('finishing','complete','holding');void overlay.offsetWidth;overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';gate.classList.add('gate-leaving');later(()=>{if(gate.open)gate.close();gate.classList.remove('gate-leaving');render(performance.now());later(()=>overlay.classList.add('complete'),Math.max(0,totalDuration-(reduced?180:850)));later(()=>{stage.textContent='READY';sub.textContent='Workspace initialization complete';code.textContent='OK.100';value.textContent='100';track.style.setProperty('--progress','100%');bar.style.setProperty('--bar-progress','100%');later(()=>{chat.classList.add('on');chat.setAttribute('aria-hidden','false');requestAnimationFrame(()=>requestAnimationFrame(()=>{chat.classList.add('reveal');overlay.classList.add('finishing')}));later(()=>{cancelAnimationFrame(progressRaf);timers.forEach(clearTimeout);overlay.classList.remove('active','finishing','complete','holding');overlay.setAttribute('aria-hidden','true');accessTransitionRunning=false;resolve()},reduced?120:760)},handoffDelay)},totalDuration)},entryDelay)});
+      return new Promise(resolve=>{const gate=$('#gate'),chat=$('#chatShell');value.textContent='00';stage.textContent=phases[0].stage;sub.textContent=phases[0].sub;code.textContent=phases[0].code;time.textContent='00:'+String(Math.ceil(totalDuration/1000)).padStart(2,'0');track.style.setProperty('--progress','0%');bar.style.setProperty('--bar-progress','0%');steps.forEach(el=>el.classList.remove('active','done'));overlay.classList.remove('finishing','complete','holding');void overlay.offsetWidth;overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';gate.classList.add('gate-leaving');later(()=>{if(gate.open)gate.close();gate.classList.remove('gate-leaving');render(performance.now());later(()=>overlay.classList.add('complete'),Math.max(0,totalDuration-(reduced?180:850)));later(()=>{stage.textContent='READY';sub.textContent='Workspace initialization complete';code.textContent='OK.100';value.textContent='100';track.style.setProperty('--progress','100%');bar.style.setProperty('--bar-progress','100%');later(()=>{armChatBackGuard();chat.classList.add('on');chat.setAttribute('aria-hidden','false');requestAnimationFrame(()=>requestAnimationFrame(()=>{chat.classList.add('reveal');overlay.classList.add('finishing')}));later(()=>{cancelAnimationFrame(progressRaf);timers.forEach(clearTimeout);overlay.classList.remove('active','finishing','complete','holding');overlay.setAttribute('aria-hidden','true');accessTransitionRunning=false;resolve()},reduced?120:760)},handoffDelay)},totalDuration)},entryDelay)});
     }
     function openHiddenGate(){
       const gate=$('#gate');
@@ -2748,11 +2885,12 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     $('#gateForm').onsubmit=async e=>{e.preventDefault();if(accessTransitionRunning)return;if($('#pw').value.trim()===currentJapanReverseMmdd()){fails=0;$('#gateError').textContent='';if(!loaded){$('#chatFrame').srcdoc=getNekoChatDocument();loaded=true}await runCyberDoorTransition()}else{fails++;$('#gateError').textContent=fails>=5?'入力を30秒停止します。':'パスワードが違います。';$('#pw').value='';if(fails>=5){$('#pw').disabled=true;setTimeout(()=>{$('#pw').disabled=false;fails=0;$('#gateError').textContent=''},30000)}}};
     window.addEventListener('message',event=>{
       if(event.source!==$('#chatFrame').contentWindow)return;
+      if(event.data&&event.data.type==='neko-return-to-site'){closeChatShell();return;}
       if(!event.data||event.data.type!=='neko-emergency-exit')return;
-      try{$('#chatFrame').srcdoc='about:blank';loaded=false}catch(_){}
+      chatHistoryArmed=false;
       window.location.replace('https://www.google.com/');
     });
-    $('#backBtn').onclick=()=>{const chat=$('#chatShell');chat.classList.remove('reveal');setTimeout(()=>{chat.classList.remove('on');chat.setAttribute('aria-hidden','true');document.documentElement.style.overflow=''},420)};
+    $('#backBtn').onclick=closeChatShell;
 
 
   /* ==========================================================================
