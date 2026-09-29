@@ -638,6 +638,9 @@
 body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;min-height:42px;padding:9px 12px;border:1px solid #333;border-radius:11px;color:#fff;background:#050505;box-shadow:0 10px 30px #0008;cursor:pointer;text-align:left}#admin-audit-toggle strong{font-size:12px;letter-spacing:.08em}#admin-audit-count{min-width:22px;padding:1px 6px;border-radius:999px;color:#000;background:#fff;text-align:center;font-weight:900}#admin-audit-chevron{transition:transform .18s ease}#admin-audit.expanded #admin-audit-chevron{transform:rotate(180deg)}
 #admin-audit-body{display:none;height:min(52vh,460px);margin-top:6px;border:1px solid #333;border-radius:11px;background:#050505;box-shadow:0 16px 42px #000b;overflow:hidden}#admin-audit.expanded #admin-audit-body{display:flex;flex-direction:column}#admin-audit-tools{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;border-bottom:1px solid #222;color:#aaa}#admin-audit-clear{border:1px solid #444;border-radius:7px;padding:4px 8px;color:#fff;background:#111;cursor:pointer}#admin-audit-list{flex:1;overflow:auto;padding:7px;scrollbar-color:#666 #111}.audit-row{display:grid;grid-template-columns:60px 62px 1fr;gap:7px;padding:7px 5px;border-bottom:1px solid #1d1d1d}.audit-time{color:#9ca3af}.audit-kind{color:#fff;font-weight:900}.audit-text{min-width:0;color:#f5f5f5;overflow-wrap:anywhere}.audit-row[data-kind="緊急脱出"] .audit-kind{color:#fb7185}.audit-row[data-kind="入室"] .audit-kind{color:#86efac}.audit-row[data-kind="退出"] .audit-kind{color:#fcd34d}.audit-empty{padding:28px 12px;color:#777;text-align:center}
 @media(max-width:820px){#admin-audit{right:10px;top:118px;width:min(340px,calc(100vw - 20px))}#admin-audit-body{height:min(48vh,390px)}}
+
+/* QUIET ROOM JOINING INDICATOR */
+#room-joining{position:absolute;inset:0;z-index:4;display:none;place-items:center;padding:22px;border-radius:15px;background:rgba(3,7,12,.91);backdrop-filter:blur(6px)}#room-joining.open{display:grid}.room-joining-card{width:min(270px,82vw);text-align:center;color:#fff}.room-joining-title{font-size:14px;font-weight:700;letter-spacing:.04em}.room-joining-status{min-height:2.8em;margin-top:8px;color:rgba(255,255,255,.58);font-size:11px;line-height:1.4}.room-joining-track{height:2px;margin:17px 0 12px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.08)}.room-joining-track span{display:block;width:34%;height:100%;border-radius:inherit;background:rgba(191,219,254,.82);animation:quietJoin 1.55s ease-in-out infinite}.room-joining-dots{display:flex;justify-content:center;gap:6px}.room-joining-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);animation:quietDot 1.2s ease-in-out infinite}.room-joining-dots i:nth-child(2){animation-delay:.16s}.room-joining-dots i:nth-child(3){animation-delay:.32s}#room-joining-cancel{margin-top:18px;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:7px 12px;color:rgba(255,255,255,.62);background:transparent;cursor:pointer}#room-joining-cancel:hover{color:#fff;background:rgba(255,255,255,.06)}@keyframes quietJoin{0%{transform:translateX(-110%);opacity:.25}50%{opacity:1}100%{transform:translateX(310%);opacity:.25}}@keyframes quietDot{0%,100%{background:rgba(255,255,255,.18)}50%{background:rgba(191,219,254,.9)}}@media(prefers-reduced-motion:reduce){.room-joining-track span,.room-joining-dots i{animation:none}.room-joining-track span{width:65%}}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -662,6 +665,15 @@ body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{dis
     &lt;input type="password" id="admin-password" placeholder="ADMIN PASSWORD（任意）" autocomplete="off" aria-label="管理者パスワード、空欄なら通常参加"&gt;
     &lt;div id="admin-help"&gt;空欄または不一致なら通常参加します。正しい管理者パスワードの場合のみ名前に管理者バッジが付きます。&lt;/div&gt;
     &lt;button onclick="initP2P()"&gt;CONNECT&lt;/button&gt;
+    &lt;div id="room-joining" aria-hidden="true" aria-live="polite"&gt;
+      &lt;div class="room-joining-card"&gt;
+        &lt;div class="room-joining-title"&gt;ルームへ接続しています&lt;/div&gt;
+        &lt;div id="room-joining-status" class="room-joining-status"&gt;接続先を確認しています&lt;/div&gt;
+        &lt;div class="room-joining-track"&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;
+        &lt;div class="room-joining-dots" aria-hidden="true"&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;
+        &lt;button id="room-joining-cancel" type="button"&gt;キャンセル&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
@@ -685,7 +697,7 @@ body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{dis
     &lt;button id="mention-open" type="button" aria-label="メンション候補を開く"&gt;@&lt;/button&gt;
     &lt;input type="file" id="image-input" accept="image/jpeg,image/png,image/webp,image/gif"&gt;
     &lt;button id="image-btn" type="button" title="画像を送る" aria-label="画像を送る"&gt;画像&lt;/button&gt;
-    &lt;input type="text" id="msg-input" placeholder="メッセージを入力" maxlength="2000" autocomplete="off" enterkeyhint="send" aria-label="メッセージ入力"&gt;
+    &lt;input type="text" id="msg-input" placeholder="メッセージを入力" maxlength="5000" autocomplete="off" enterkeyhint="send" aria-label="メッセージ入力"&gt;
     &lt;button id="send-btn" type="button" onclick="send()" aria-label="メッセージを送信"&gt;送信&lt;/button&gt;
   &lt;/div&gt;
 &lt;/div&gt;
@@ -818,17 +830,18 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   /* ==========================================================================
      CHAT STATE AND CONSTANTS
      ========================================================================== */
-  let peer, connections = [], myName, roomID, isHost = false, isAdmin = false;
+  let peer, connections = [], myName, roomID, isHost = false, isAdmin = false, joiningCancelled = false;
   let roomState = { messages: [], users: {} };
-  const HISTORY_LIMIT = 20;
-  const JOURNAL_LIMIT = 20;
+  const HISTORY_LIMIT = 100;
+  const JOURNAL_LIMIT = 150;
   let messageJournal = [];
   let hostSequence = 0;
   let activeHostLinkToken = 0;
   let chatReady = false;
   const deliveryTrackers = new Map();
-  const DELIVERY_TIMEOUT = 12000;
-  const CONNECT_RETRY_DELAYS = [1500, 2500, 4000];
+  const DELIVERY_TIMEOUT = 30000;
+  const CONNECT_RETRY_DELAYS = [800, 1400, 2400];
+  const ROOM_HINT_TTL=6*60*60*1000;
   const RECOVERY_BACKOFF_DELAYS = [10000, 15000, 20000];
   const MESSAGE_RETRY_DELAYS = [4000, 6000, 10000, 15000];
   const HOST_CANDIDATE_FRESH_MS = 15000;
@@ -864,7 +877,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   let fastFailoverInProgress = false;
   let localHostRole = 'participant';
   const MAX_BACKUP_HOSTS = 2;
-  const OPERATION_LOG_LIMIT = 120;
+  const OPERATION_LOG_LIMIT = 500;
   let activeReply = null;
   let activeMentionIds=[];let mentionMatches=[];let mentionActiveIndex=0;let unreadMentionIds=[];let currentMentionIndex=0;
   const MENTION_SETTINGS_KEY='neko-chat-mention-settings-v1';let mentionSettings={toast:true,sound:true,title:true,all:true};let recentMentionIds=[];let lastAllMentionAt=0;let mentionAudioContext=null;let mentionToastTimer=null;
@@ -1097,24 +1110,24 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
        typeof reply.text === 'string' &amp;&amp; reply.text.length &lt;= 160 &amp;&amp;
        (reply.admin === undefined || typeof reply.admin === 'boolean'));
   }
-  function validMentions(mentions){return mentions===undefined||Array.isArray(mentions)&amp;&amp;mentions.length&lt;=20&amp;&amp;mentions.every(item=&gt;item&amp;&amp;typeof item.clientId==='string'&amp;&amp;item.clientId.length&lt;=160&amp;&amp;typeof item.name==='string'&amp;&amp;item.name.length&lt;=40);
+  function validMentions(mentions){return mentions===undefined||Array.isArray(mentions)&amp;&amp;mentions.length&lt;=50&amp;&amp;mentions.every(item=&gt;item&amp;&amp;typeof item.clientId==='string'&amp;&amp;item.clientId.length&lt;=160&amp;&amp;typeof item.name==='string'&amp;&amp;item.name.length&lt;=40);
   }
 
   function validReactions(reactions) {
     if (reactions === undefined) return true;
     if (!reactions || typeof reactions !== 'object' || Array.isArray(reactions)) return false;
     return Object.entries(reactions).every(([emoji, ids]) =&gt;
-      REACTION_OPTIONS.includes(emoji) &amp;&amp; Array.isArray(ids) &amp;&amp; ids.length &lt;= 100 &amp;&amp;
+      REACTION_OPTIONS.includes(emoji) &amp;&amp; Array.isArray(ids) &amp;&amp; ids.length &lt;= 250 &amp;&amp;
       ids.every(id =&gt; typeof id === 'string' &amp;&amp; id.length &lt;= 160)
     );
   }
 
   function isValidMessage(data) {
     const validImage = data &amp;&amp; (data.image === undefined ||
-      (typeof data.image === 'string' &amp;&amp; /^data:image\/(jpeg|png|webp|gif);base64,/.test(data.image) &amp;&amp; data.image.length &lt;= 350000));
+      (typeof data.image === 'string' &amp;&amp; /^data:image\/(jpeg|png|webp|gif);base64,/.test(data.image) &amp;&amp; data.image.length &lt;= 1600000));
     return data &amp;&amp; data.type === 'chat' &amp;&amp; typeof data.id === 'string' &amp;&amp; data.id.length &lt;= 160 &amp;&amp;
       typeof data.name === 'string' &amp;&amp; data.name.length &lt;= 40 &amp;&amp; typeof data.msg === 'string' &amp;&amp;
-      data.msg.length &lt;= 2000 &amp;&amp; Number.isFinite(data.time) &amp;&amp; validImage &amp;&amp;
+      data.msg.length &lt;= 5000 &amp;&amp; Number.isFinite(data.time) &amp;&amp; validImage &amp;&amp;
       (data.admin === undefined || typeof data.admin === 'boolean') &amp;&amp;
       validReply(data.reply) &amp;&amp; validMentions(data.mentions) &amp;&amp; validReactions(data.reactions);
   }
@@ -1308,8 +1321,19 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
 
 
 
+  function setRoomJoining(open,status='接続先を確認しています') {
+    const panel=document.getElementById('room-joining');
+    panel.classList.toggle('open',open);panel.setAttribute('aria-hidden',String(!open));
+    document.getElementById('room-joining-status').textContent=status;
+  }
+  function cancelRoomJoining(){joiningCancelled=true;setRoomJoining(false);try{safelyDestroyPeer();}catch(_){}document.getElementById('room-num').focus();}
+  document.getElementById('room-joining-cancel').addEventListener('click',cancelRoomJoining);
+
   /* ==========================================================================
-     INITIAL CONNECTION STARTUP
+     OPTIMIZED ROOM STARTUP
+     - Known rooms: connect as participant immediately.
+     - Unknown rooms: safely claim host alias first.
+     - Local state hydration overlaps PeerJS signaling startup.
      ========================================================================== */
   function initP2P() {
     roomID = document.getElementById('room-num').value.trim();
@@ -1317,24 +1341,38 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     localStorage.setItem('practical-chat-room', roomID);
     localStorage.setItem('practical-chat-name', myName);
     if (!roomID || !myName) return;
+    joiningCancelled=false;setRoomJoining(true,'接続先を確認しています');
     isAdmin = readAdminAccess();
     hostID = 'SPACE-ROOM-' + roomID;
+    const hinted=hasFreshRoomHint();
+    setRoomJoining(true,hinted?'前回のルームへ再接続しています':'ルームを準備しています');
+    if(hinted)createClientPeer();else createInitialPeer();
+    hydrateRoomLocalState();
+  }
+
+  function roomHintKey(){return 'neko-chat-room-hint:'+roomID;}
+  function hasFreshRoomHint(){try{const at=Number(localStorage.getItem(roomHintKey())||0);if(at&amp;&amp;Date.now()-at&lt;ROOM_HINT_TTL)return true;if(at)localStorage.removeItem(roomHintKey());}catch(_){}return false;}
+  function rememberExistingHost(){try{localStorage.setItem(roomHintKey(),String(Date.now()));}catch(_){}}
+  function forgetExistingHost(){try{localStorage.removeItem(roomHintKey());}catch(_){}}
+  function hydrateRoomLocalState(){
     try{const d=JSON.parse(localStorage.getItem(storageKey()+':distributed')||'{}');hostEpoch=Number(d.hostEpoch)||0;stateVersion=Number(d.stateVersion)||0;backupHostIds=Array.isArray(d.backupHostIds)?d.backupHostIds.slice(0,MAX_BACKUP_HOSTS):[];operationLog=Array.isArray(d.operations)?d.operations.slice(-OPERATION_LOG_LIMIT):[];appliedOperationIds=new Set(operationLog.map(op=&gt;op.id));}catch(_){hostEpoch=0;stateVersion=0;backupHostIds=[];operationLog=[];appliedOperationIds.clear();}
-    roomState.messages = safeLoadHistory();
-    seenMessageIds = new Set(roomState.messages.map(m =&gt; m.id));
+    roomState.messages=safeLoadHistory();
+    seenMessageIds=new Set(roomState.messages.map(message=&gt;message.id));
     restoreOutbox();
-    createInitialPeer();
   }
 
   function createInitialPeer() {
     peer = new Peer(hostID);
     bindPeerBaseEvents(peer);
-    peer.on('open', () =&gt; becomeHost(false));
+    peer.on('open', () =&gt; {if(joiningCancelled){safelyDestroyPeer();return;}becomeHost(false);});
     peer.on('error', err =&gt; {
       if (err.type === 'unavailable-id') {
+        if(joiningCancelled)return;
+        setRoomJoining(true,'既存のルームへ参加しています');
         safelyDestroyPeer();
         createClientPeer();
       } else if (!migrationRunning) {
+        setRoomJoining(false);
         addSystemLog('接続エラー: ' + (err.type || 'unknown'));
       }
     });
@@ -1344,14 +1382,17 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     peer = new Peer();
     bindPeerBaseEvents(peer);
     peer.on('open', () =&gt; {
+      if(joiningCancelled){safelyDestroyPeer();return;}
       isHost = false;
       startChat();
       renderHistory();
       connectToHost();
     });
     peer.on('error', err =&gt; {
-      if (err.type !== 'peer-unavailable' &amp;&amp; err.type !== 'network')
+      if (err.type !== 'peer-unavailable' &amp;&amp; err.type !== 'network'){
+        setRoomJoining(false);
         addSystemLog('接続エラー: ' + (err.type || 'unknown'));
+      }
     });
   }
 
@@ -1364,6 +1405,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     if (!recoveryWatchdog) startRecoveryWatchdog();
     if (!peer || peer.destroyed || isHost) return;
     if (attempt &gt;= CONNECT_RETRY_DELAYS.length) {
+      forgetExistingHost();
       beginHostMigration(true);
       return;
     }
@@ -1381,6 +1423,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   }
 
   function becomeHost(migrated) {
+    forgetExistingHost();
     isHost = true;
     hostEpoch = Math.max(hostEpoch + 1, 1);
     localHostRole='primary';backupHostIds=[];
@@ -1401,6 +1444,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   }
 
   function startChat() {
+    setRoomJoining(false);
     setAdminAuditVisible();
     const draftInput=document.getElementById('msg-input');
     try{if(draftInput&amp;&amp;!draftInput.value)draftInput.value=localStorage.getItem('practical-chat-draft:'+roomID)||'';}catch(_){}
@@ -1437,7 +1481,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
         clearTimeout(migrationTimer);
         clearInterval(recoveryWatchdog); recoveryWatchdog = null; recoveryStartedAt = 0; consecutiveRecoveryFailures = 0; recoveryBackoffIndex = 0;
       }
-      if (isHostLink) hostConnection = c;
+      if (isHostLink) {hostConnection=c;if(!isHost)rememberExistingHost();}
       c.send({ type: 'hello', user: myUserRecord(isHost) });
       if(isHostLink&amp;&amp;!isHost)maintainWarmStandby();
       updateStatus();
@@ -1521,7 +1565,10 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
           broadcast(data,c.peer);
           beginDeliveryTracking(data,c);
         } else {
-          try{c.send({type:'recipientAck',id:data.id});}catch(_){}
+          // Delivery acknowledgements are idempotent. Repeat briefly so one lost packet
+          // does not incorrectly display "一部未確認" while the message is visible.
+          const sendAck=()=&gt;{if(c&amp;&amp;c.open){try{c.send({type:'recipientAck',id:data.id});}catch(_){}}};
+          sendAck();setTimeout(sendAck,1200);setTimeout(sendAck,3500);
         }
       } else if (data.type === 'reaction') {
         if(isHost){
@@ -1832,7 +1879,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     else if(delivered&gt;=total) updateMessageStatus(receipt.id,'全端末へ到着済み '+delivered+'/'+total,'');
     else {
       const note=disconnected ? '・切断 '+disconnected+'端末' : '';
-      updateMessageStatus(receipt.id,'一部未確認 '+delivered+'/'+total+note,'failed');
+      updateMessageStatus(receipt.id,'受信確認待ち '+delivered+'/'+total+note,'pending');
     }
   }
 
@@ -1855,7 +1902,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     const input = document.getElementById('msg-input'), text = input.value.trim();
     if (!text) return;
     const data = { type:'chat', id:clientId+'-'+Date.now()+'-'+Math.random().toString(36).slice(2),
-      name:myName.slice(0,40), senderId:clientId, msg:text.slice(0,2000), time:Date.now(), admin:isAdmin,
+      name:myName.slice(0,40), senderId:clientId, msg:text.slice(0,5000), time:Date.now(), admin:isAdmin,
       reply:activeReply ? {...activeReply} : null, mentions:mentionsForOutgoing(text), reactions:{} };
     if(isHost){data.hostSeq=++hostSequence;data.receivedAt=Date.now();}
     addMessageToState(data);
@@ -1920,7 +1967,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
      IMAGE PROCESSING AND SENDING
      ========================================================================== */
   let pendingImage = null;
-  const MAX_IMAGE_BYTES = 180 * 1024;
+  const MAX_IMAGE_BYTES = 900 * 1024;
   const MAX_IMAGE_EDGE = 1280;
 
   function dataUrlBytes(dataUrl) {
@@ -2207,7 +2254,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   /* ==========================================================================
      PANIC SCREEN
      ========================================================================== */
-  const ADMIN_AUDIT_LIMIT=250;let adminAuditEntries=[];let auditSequence=0;
+  const ADMIN_AUDIT_LIMIT=500;let adminAuditEntries=[];let auditSequence=0;
   let emergencyEscapeActive = false;
   let panicMode = false;
   let panicAudioStates = [];
