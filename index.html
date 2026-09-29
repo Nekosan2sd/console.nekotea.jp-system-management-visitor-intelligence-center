@@ -437,7 +437,7 @@
   }
   #chat-box::-webkit-scrollbar { width: 0; }
 
-  .msg { margin: 5px 0; animation: slideIn 0.3s ease-out; line-height: 1.4; word-wrap: break-word; text-shadow: 0 0 3px rgba(0,0,0,0.5); }
+  .msg { margin: 5px 0; animation: none; line-height: 1.4; word-wrap: break-word; text-shadow: 0 0 3px rgba(0,0,0,0.5); }
   .msg-name { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-right: 8px; }
   .msg-text { color: white; font-size: 0.95rem; }
   
@@ -641,6 +641,14 @@ body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{dis
 
 /* QUIET ROOM JOINING INDICATOR */
 #room-joining{position:absolute;inset:0;z-index:4;display:none;place-items:center;padding:22px;border-radius:15px;background:rgba(3,7,12,.91);backdrop-filter:blur(6px)}#room-joining.open{display:grid}.room-joining-card{width:min(270px,82vw);text-align:center;color:#fff}.room-joining-title{font-size:14px;font-weight:700;letter-spacing:.04em}.room-joining-status{min-height:2.8em;margin-top:8px;color:rgba(255,255,255,.58);font-size:11px;line-height:1.4}.room-joining-track{height:2px;margin:17px 0 12px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.08)}.room-joining-track span{display:block;width:34%;height:100%;border-radius:inherit;background:rgba(191,219,254,.82);animation:quietJoin 1.55s ease-in-out infinite}.room-joining-dots{display:flex;justify-content:center;gap:6px}.room-joining-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);animation:quietDot 1.2s ease-in-out infinite}.room-joining-dots i:nth-child(2){animation-delay:.16s}.room-joining-dots i:nth-child(3){animation-delay:.32s}#room-joining-cancel{margin-top:18px;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:7px 12px;color:rgba(255,255,255,.62);background:transparent;cursor:pointer}#room-joining-cancel:hover{color:#fff;background:rgba(255,255,255,.06)}@keyframes quietJoin{0%{transform:translateX(-110%);opacity:.25}50%{opacity:1}100%{transform:translateX(310%);opacity:.25}}@keyframes quietDot{0%,100%{background:rgba(255,255,255,.18)}50%{background:rgba(191,219,254,.9)}}@media(prefers-reduced-motion:reduce){.room-joining-track span,.room-joining-dots i{animation:none}.room-joining-track span{width:65%}}
+
+/* STABILITY PATCH: prevent chat cards from shaking during sync/status updates */
+#chat-box{overflow-anchor:none!important;contain:layout paint;transform:translateZ(0);}
+#chat-box .msg{animation:none!important;transition:opacity .12s ease,outline-color .12s ease!important;contain:layout style paint;will-change:auto;}
+#chat-box.history-rendering{visibility:visible;}
+#chat-box.history-rendering .msg,#chat-box.history-rendering .sys-msg{animation:none!important;transition:none!important;}
+.msg-actions{contain:layout style;}
+@media (prefers-reduced-motion:reduce){#chat-box *,#chat-box *::before,#chat-box *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -847,6 +855,9 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   const HOST_CANDIDATE_FRESH_MS = 15000;
   let scrollFrame = 0;
   let lastRenderedSignature = '';
+  let historyRenderQueued=false;
+  let historyRenderRunning=false;
+  let suppressSignatureRefresh=false;
   let seenMessageIds = new Set();
   let hostID = '';
   let hostConnection = null;
@@ -908,14 +919,14 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     return true;
   }
   function mergeOperationLog(remote=[]){
-    if(!Array.isArray(remote))return false;let changed=false;
+    if(!Array.isArray(remote))return false;let changed=false,messageChanged=false;
     remote.filter(op=&gt;op&amp;&amp;typeof op.id==='string').sort((a,b)=&gt;Number(a.version||0)-Number(b.version||0)||Number(a.time||0)-Number(b.time||0)||a.id.localeCompare(b.id)).forEach(op=&gt;{
       if(appliedOperationIds.has(op.id))return;
       appliedOperationIds.add(op.id);operationLog.push(op);stateVersion=Math.max(stateVersion,Number(op.version)||0);changed=true;
       if(op.type==='reaction'&amp;&amp;op.payload)applyReactionUpdate(op.payload,false);
-      if(op.type==='message'&amp;&amp;op.payload&amp;&amp;isValidMessage(op.payload))addMessageToState(op.payload);
+      if(op.type==='message'&amp;&amp;op.payload&amp;&amp;isValidMessage(op.payload)){messageChanged=addMessageToState(op.payload)||messageChanged;}
     });
-    operationLog=operationLog.slice(-OPERATION_LOG_LIMIT);return changed;
+    operationLog=operationLog.slice(-OPERATION_LOG_LIMIT);return messageChanged;
   }
   function selectBackupHosts(){
     if(!isHost)return;
@@ -1100,7 +1111,14 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
       messageJournal = mergeMessages(messageJournal, roomState.messages).slice(-JOURNAL_LIMIT);
       const textHistory = messageJournal.filter(message =&gt; !message.image).slice(-HISTORY_LIMIT);
       localStorage.setItem(storageKey(), JSON.stringify(textHistory));localStorage.setItem(storageKey()+':distributed',JSON.stringify({hostEpoch,stateVersion,backupHostIds,operations:operationLog.slice(-OPERATION_LOG_LIMIT)}));
-    } catch (e) { console.warn('履歴の保存に失敗:', e); }
+    } catch (e) {
+      console.warn('履歴の保存に失敗:', e);
+      try{
+        const fallback=messageJournal.filter(message=&gt;!message.image).slice(-30);
+        localStorage.setItem(storageKey(),JSON.stringify(fallback));
+        localStorage.removeItem(storageKey()+':distributed');
+      }catch(_){}
+    }
   }
 
   function validReply(reply) {
@@ -1125,9 +1143,10 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   function isValidMessage(data) {
     const validImage = data &amp;&amp; (data.image === undefined ||
       (typeof data.image === 'string' &amp;&amp; /^data:image\/(jpeg|png|webp|gif);base64,/.test(data.image) &amp;&amp; data.image.length &lt;= 1600000));
-    return data &amp;&amp; data.type === 'chat' &amp;&amp; typeof data.id === 'string' &amp;&amp; data.id.length &lt;= 160 &amp;&amp;
-      typeof data.name === 'string' &amp;&amp; data.name.length &lt;= 40 &amp;&amp; typeof data.msg === 'string' &amp;&amp;
-      data.msg.length &lt;= 5000 &amp;&amp; Number.isFinite(data.time) &amp;&amp; validImage &amp;&amp;
+    return data &amp;&amp; data.type==='chat' &amp;&amp; typeof data.id==='string' &amp;&amp; data.id.length&gt;0 &amp;&amp; data.id.length&lt;=160 &amp;&amp;
+      typeof data.name==='string' &amp;&amp; data.name.length&gt;0 &amp;&amp; data.name.length&lt;=40 &amp;&amp; typeof data.msg==='string' &amp;&amp;
+      data.msg.length&lt;=5000 &amp;&amp; Number.isFinite(data.time) &amp;&amp; data.time&gt;0 &amp;&amp; data.time&lt;Date.now()+300000 &amp;&amp; validImage &amp;&amp;
+      (data.senderId===undefined || typeof data.senderId==='string'&amp;&amp;data.senderId.length&lt;=160) &amp;&amp;
       (data.admin === undefined || typeof data.admin === 'boolean') &amp;&amp;
       validReply(data.reply) &amp;&amp; validMentions(data.mentions) &amp;&amp; validReactions(data.reactions);
   }
@@ -1199,7 +1218,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     message.reactions=normalizeReactionMap(message.reactions);
     const ids=new Set(message.reactions[data.emoji]||[]);
     data.active ? ids.add(data.actorId) : ids.delete(data.actorId);
-    if(ids.size)message.reactions[data.emoji]=[...ids].slice(0,100); else delete message.reactions[data.emoji];
+    if(ids.size)message.reactions[data.emoji]=[...ids].slice(0,250); else delete message.reactions[data.emoji];
     saveHistory();
     renderReactionsForMessage(message.id,message.reactions);
     return true;
@@ -1533,7 +1552,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
       } else if (data.type === 'opSyncRequest' &amp;&amp; isHost) {
         try{c.send({type:'opSyncResponse',operations:operationLog.filter(op=&gt;Number(op.version||0)&gt;Number(data.afterVersion||0)),hostEpoch,stateVersion});}catch(_){}
       } else if (data.type === 'opSyncResponse') {
-        if(Number(data.hostEpoch||0)&gt;=hostEpoch){hostEpoch=Number(data.hostEpoch)||hostEpoch;mergeOperationLog(data.operations||[]);renderHistory();updateStatus();}
+        if(Number(data.hostEpoch||0)&gt;=hostEpoch){hostEpoch=Number(data.hostEpoch)||hostEpoch;const changed=mergeOperationLog(data.operations||[]);if(changed)queueHistoryRender();updateStatus();}
       } else if (data.type === 'adminAudit' &amp;&amp; !isHost &amp;&amp; validAuditEntry(data.entry)) {
         receiveAdminAudit(data.entry);
       } else if (data.type === 'state' &amp;&amp; !isHost) {
@@ -1601,7 +1620,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
      PARTICIPANT IDENTITY HELPERS
      ========================================================================== */
   function validUser(u) {
-    return u &amp;&amp; typeof u.clientId === 'string' &amp;&amp; typeof u.name === 'string' &amp;&amp; Number.isFinite(u.score) &amp;&amp; (u.admin===undefined || typeof u.admin==='boolean');
+    return u &amp;&amp; typeof u.clientId==='string' &amp;&amp; u.clientId.length&gt;0 &amp;&amp; u.clientId.length&lt;=160 &amp;&amp; typeof u.name==='string' &amp;&amp; u.name.length&gt;0 &amp;&amp; u.name.length&lt;=40 &amp;&amp; Number.isFinite(u.score) &amp;&amp; (u.admin===undefined || typeof u.admin==='boolean') &amp;&amp; (!u.updatedAt||Number.isFinite(u.updatedAt));
   }
 
   function duplicateNameCount(name) {
@@ -1625,8 +1644,11 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     c.__closedHandled = true;
     connections = connections.filter(x =&gt; x !== c);
     if(isHost){
-      deliveryTrackers.forEach(tracker=&gt;{
-        if(tracker.expected.has(c.peer) &amp;&amp; !tracker.acked.has(c.peer)) tracker.disconnected.add(c.peer);
+      deliveryTrackers.forEach((tracker,messageId)=&gt;{
+        if(tracker.expected.has(c.peer)&amp;&amp;!tracker.acked.has(c.peer)){
+          tracker.disconnected.add(c.peer);
+          if(tracker.acked.size+tracker.disconnected.size&gt;=tracker.expected.size)finishDeliveryTracking(messageId,false);
+        }
       });
     }
     if (isHostLink &amp;&amp; !isHost) {
@@ -1803,15 +1825,18 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     messageJournal=mergeMessages(messageJournal,roomState.messages,state.messages,pending).slice(-JOURNAL_LIMIT);
     roomState.messages=messageJournal.slice(-HISTORY_LIMIT);
     hostEpoch=Math.max(hostEpoch,Number(state.hostEpoch)||0);stateVersion=Math.max(stateVersion,Number(state.stateVersion)||0);
-    backupHostIds=Array.isArray(state.backupHostIds)?state.backupHostIds.slice(0,MAX_BACKUP_HOSTS):[];
+    backupHostIds=Array.isArray(state.backupHostIds)?state.backupHostIds.filter(id=&gt;typeof id==='string'&amp;&amp;id.length&lt;=160).slice(0,MAX_BACKUP_HOSTS):[];
     mergeOperationLog(state.operations||[]);
-    roomState.users=state.users &amp;&amp; typeof state.users==='object' ? state.users : {};
+    roomState.users={};
+    if(state.users&amp;&amp;typeof state.users==='object'&amp;&amp;!Array.isArray(state.users)){
+      for(const [id,user] of Object.entries(state.users)){if(typeof id==='string'&amp;&amp;id.length&lt;=160&amp;&amp;validUser(user))roomState.users[id]={...user,admin:Boolean(user.admin)};}
+    }
     roomState.users[clientId]=myUserRecord(false);localHostRole=backupHostIds.includes(clientId)?'backup':'participant';maintainWarmStandby();
     seenMessageIds=new Set(roomState.messages.map(m=&gt;m.id));
     hostSequence=Math.max(hostSequence,...messageJournal.map(m=&gt;Number(m.hostSeq)||0));
     saveHistory();
-    const nextSignature=roomState.messages.map(m=&gt;m.id).join('|');
-    if(nextSignature!==lastRenderedSignature) renderHistory();
+    const nextSignature=currentHistorySignature();
+    if(nextSignature!==lastRenderedSignature) queueHistoryRender();
     updateStatus();
     chatReady=true; setConnectionState('online','接続済み'); updateReplicationStatus(); if(hostConnection&amp;&amp;hostConnection.open){try{hostConnection.send({type:'opSyncRequest',afterVersion:stateVersion})}catch(_){}} flushQueue();
   }
@@ -2094,17 +2119,47 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   /* ==========================================================================
      MESSAGE RENDERING, QUOTES AND ACTIONS
      ========================================================================== */
+  function messageRenderSignature(message){
+    const reactions=message&amp;&amp;message.reactions?Object.entries(message.reactions).map(([emoji,ids])=&gt;emoji+":"+(Array.isArray(ids)?ids.join(","):"")).sort().join(";"):"";
+    return [message.id,message.msg,message.time,message.image?message.image.length:0,message.admin?1:0,JSON.stringify(message.reply||null),JSON.stringify(message.mentions||[]),reactions].join("~");
+  }
+
+  function currentHistorySignature(){
+    return roomState.messages.map(messageRenderSignature).join("|");
+  }
+
+  function queueHistoryRender(){
+    if(historyRenderQueued)return;
+    historyRenderQueued=true;
+    requestAnimationFrame(()=&gt;{historyRenderQueued=false;renderHistory();});
+  }
+
   function renderHistory() {
-    const box=document.getElementById('chat-box');
+    if(historyRenderRunning){queueHistoryRender();return;}
+    const box=document.getElementById('chat-box');if(!box)return;
+    const nextSignature=currentHistorySignature();
+    if(nextSignature===lastRenderedSignature &amp;&amp; box.querySelectorAll('.msg').length===roomState.messages.length)return;
+    historyRenderRunning=true;
     cancelAnimationFrame(scrollFrame);
     const wasNearLatest=isNearLatest();
     const distanceFromBottom=Math.max(0,box.scrollHeight-box.scrollTop-box.clientHeight);
-    box.textContent='';
-    roomState.messages.forEach(m =&gt; addLog(m.name,m.msg,m.time,m.id,(m.senderId ? m.senderId===clientId : m.name===myName),'delivered',false,m.image || '',m.senderId || '',m.reply || null,m.reactions || {},Boolean(m.admin),m.mentions || []));
-    lastRenderedSignature=roomState.messages.map(m=&gt;m.id).join('|');
+    const openActionIds=new Set([...box.querySelectorAll('.msg')].filter(node=&gt;node.querySelector('.msg-actions.open')).map(node=&gt;node.dataset.messageId));
+    box.classList.add('history-rendering');
+    suppressSignatureRefresh=true;
+    box.replaceChildren();
+    try{
+      roomState.messages.forEach(m=&gt;addLog(m.name,m.msg,m.time,m.id,(m.senderId?m.senderId===clientId:m.name===myName),'delivered',false,m.image||'',m.senderId||'',m.reply||null,m.reactions||{},Boolean(m.admin),m.mentions||[]));
+    }catch(error){
+      console.warn('履歴描画に失敗:',error);suppressSignatureRefresh=false;historyRenderRunning=false;box.classList.remove('history-rendering');return;
+    }
+    for(const id of openActionIds){const node=box.querySelector('[data-message-id="'+CSS.escape(id)+'"]');if(node){const actions=node.querySelector('.msg-actions'),toggle=node.querySelector('.action-toggle');if(actions)actions.classList.add('open');if(toggle)toggle.setAttribute('aria-expanded','true');}}
+    lastRenderedSignature=nextSignature;
+    suppressSignatureRefresh=false;
     requestAnimationFrame(()=&gt;{
-      if(wasNearLatest) scrollToLatest(false);
+      if(wasNearLatest) box.scrollTop=box.scrollHeight;
       else box.scrollTop=Math.max(0,box.scrollHeight-box.clientHeight-distanceFromBottom);
+      box.classList.remove('history-rendering');
+      historyRenderRunning=false;
     });
   }
 
@@ -2139,7 +2194,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     }
     box.appendChild(div);
     if(id)renderReactionsForMessage(id,reactions);
-    if(id &amp;&amp; !lastRenderedSignature.split('|').includes(id)) lastRenderedSignature+=(lastRenderedSignature?'|':'')+id;
+    if(id&amp;&amp;!suppressSignatureRefresh){lastRenderedSignature=currentHistorySignature();}
     if(autoScroll &amp;&amp; (own || followLatest)) scrollToLatest(false);
     else if(autoScroll &amp;&amp; !own) showUnreadInsideChat();
   }
@@ -2207,7 +2262,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     b.style.display='block'; b.textContent='新着 '+unreadCount+'件';
   }
   function showLatest(){ unreadCount=0; document.title='Minimal P2P Chat'; document.getElementById('unread-badge').style.display='none'; scrollToLatest(false); }
-  function clearHistory(){ cancelReply(); if(!confirm('この端末に保存された文章履歴だけを削除します。ほかの参加者やホスト側の履歴は消えず、再接続すると直近の履歴が再表示される場合があります。削除しますか？'))return; roomState.messages=[];messageJournal=[];seenMessageIds.clear();saveHistory();renderHistory();addSystemLog('この端末内の文章履歴を削除しました。部屋全体の履歴は削除されていません。'); }
+  function clearHistory(){ cancelReply(); if(!confirm('この端末に保存された文章履歴だけを削除します。ほかの参加者やホスト側の履歴は消えず、再接続すると直近の履歴が再表示される場合があります。削除しますか？'))return; roomState.messages=[];messageJournal=[];seenMessageIds.clear();lastRenderedSignature='';saveHistory();queueHistoryRender();addSystemLog('この端末内の文章履歴を削除しました。部屋全体の履歴は削除されていません。'); }
 
 
 
