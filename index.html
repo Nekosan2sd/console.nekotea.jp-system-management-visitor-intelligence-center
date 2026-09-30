@@ -52,7 +52,7 @@
 -->
 
 
-<!-- v3.05 MAINTENANCE MAP
+<!-- v3.09 MAINTENANCE MAP
  D01 Cooking site and responsive public UI
  D02 Hidden authentication and painted 100% loading
  D03 Chat shell and viewport-resize stability
@@ -282,6 +282,11 @@
     body.chat-shell-open{overflow:hidden!important}
     body.chat-shell-open #chatShell{display:block!important;opacity:1!important;visibility:visible!important}
     body.chat-shell-open #chatFrame{opacity:1!important;transform:scale(1)!important}
+
+    /* C05.2 | v3.09 RESIZE-PROOF CHAT SHELL */
+    body.chat-shell-open{overflow:hidden!important}
+    body.chat-shell-open #chatShell{display:block!important;position:fixed!important;inset:0!important;width:100dvw!important;height:100dvh!important;opacity:1!important;visibility:visible!important;z-index:99999!important}
+    body.chat-shell-open #chatFrame{display:block!important;width:100%!important;height:100%!important;opacity:1!important;visibility:visible!important}
 </style>
 </head>
 <body>
@@ -779,11 +784,9 @@ body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{dis
 .mountain-near{z-index:7;bottom:20%;height:32%;background:linear-gradient(180deg,#101f2c,#06131d 66%,#020a10);clip-path:polygon(0 100%,0 71%,9% 50%,18% 66%,31% 37%,43% 71%,58% 42%,68% 70%,82% 31%,91% 59%,100% 45%,100% 100%)}
 .sunset-mist{position:absolute;z-index:6;left:-10%;right:-10%;bottom:28%;height:25%;background:repeating-linear-gradient(174deg,transparent 0 13%,rgba(222,237,238,.12) 15%,transparent 21%);filter:blur(12px);animation:mistDrift 20s ease-in-out infinite alternate}
 .sunset-lake{position:absolute;z-index:8;left:0;right:0;bottom:0;height:34%;overflow:hidden;background:linear-gradient(180deg,rgba(239,132,93,.20),rgba(40,59,77,.34) 20%,#071522 100%)}
-.sunset-lake::before{content:"";position:absolute;left:56%;top:-6%;width:34%;height:115%;transform:perspective(240px) rotateX(68deg);background:repeating-linear-gradient(180deg,rgba(255,229,170,.36) 0 2px,transparent 3px 9px);filter:blur(1.2px);mask-image:linear-gradient(90deg,transparent,#000 28% 70%,transparent);animation:lakeShimmer 7s linear infinite}
 
-@keyframes sunsetRays{0%{transform:rotate(-5deg) scale(1);opacity:.60}100%{transform:rotate(7deg) scale(1.15);opacity:1}}@keyframes sunBreath{0%,100%{transform:translate(-50%,-50%) scale(.98);filter:brightness(.95)}50%{transform:translate(-50%,-50%) scale(1.04);filter:brightness(1.18)}}@keyframes cloudDrift{to{background-position:140% 0}}@keyframes mountainFloat{0%{transform:translateX(-.5%) scale(1.01)}100%{transform:translateX(.5%) scale(1.025)}}@keyframes mistDrift{0%{transform:translateX(-3%);opacity:.46}100%{transform:translateX(4%);opacity:.82}}@keyframes lakeShimmer{to{background-position:0 90px}}
 
-/* E01-C1 | METEORS, DISTANT GALAXIES AND BIOLUMINESCENT LIFE */
+@keyframes sunsetRays{0%{transform:rotate(-5deg) scale(1);opacity:.60}100%{transform:rotate(7deg) scale(1.15);opacity:1}}@keyframes sunBreath{0%,100%{transform:translate(-50%,-50%) scale(.98);filter:brightness(.95)}50%{transform:translate(-50%,-50%) scale(1.04);filter:brightness(1.18)}}@keyframes cloudDrift{to{background-position:140% 0}}@keyframes mountainFloat{0%{transform:translateX(-.5%) scale(1.01)}100%{transform:translateX(.5%) scale(1.025)}}@keyframes mistDrift{0%{transform:translateX(-3%);opacity:.46}100%{transform:translateX(4%);opacity:.82}}/* E01-C1 | METEORS, DISTANT GALAXIES AND BIOLUMINESCENT LIFE */
 .galaxy{position:absolute;z-index:1;border-radius:50%;pointer-events:none;mix-blend-mode:screen;will-change:transform,opacity,filter}
 .galaxy-a{width:min(46vw,760px);height:min(18vw,300px);left:9%;top:12%;transform:rotate(-18deg);background:radial-gradient(ellipse at center,rgba(255,252,230,.82) 0 1.2%,rgba(196,218,255,.44) 3%,rgba(120,108,255,.22) 12%,rgba(83,64,182,.11) 28%,transparent 61%),repeating-radial-gradient(ellipse at center,transparent 0 7%,rgba(162,174,255,.055) 8%,transparent 10% 15%);filter:blur(1.2px) drop-shadow(0 0 34px rgba(113,119,255,.24));animation:galaxyDriftA 45s ease-in-out infinite alternate}
 .galaxy-b{width:min(30vw,500px);height:min(12vw,210px);right:5%;bottom:13%;transform:rotate(24deg);background:radial-gradient(ellipse at center,rgba(255,232,211,.68) 0 1%,rgba(240,132,210,.31) 5%,rgba(96,99,226,.16) 18%,transparent 62%),repeating-radial-gradient(ellipse at center,transparent 0 8%,rgba(235,137,255,.045) 9%,transparent 12% 17%);filter:blur(1.5px) drop-shadow(0 0 28px rgba(224,91,255,.18));animation:galaxyDriftB 58s ease-in-out infinite alternate}
@@ -848,9 +851,7 @@ body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{dis
 .deep-creature-layer{animation:deepLayerFloat 14s ease-in-out infinite alternate}
 
 /* Sunset atmospheric refraction */
-.sunset-lake::after{background:
-  repeating-linear-gradient(178deg,transparent 0 12px,rgba(255,213,157,.075) 14px,transparent 17px 24px)!important;
-  animation:lakeSurfaceDrift 9s ease-in-out infinite alternate!important;transform-origin:50% 0}
+
 #bg-sunset{animation:sunsetAtmosphereBreath 12s ease-in-out infinite alternate;transform-origin:72% 35%}
 #bg-sunset .sunset-mist::before,#bg-sunset .sunset-mist::after{content:"";position:absolute;inset:-34% -15%;pointer-events:none;mix-blend-mode:screen}
 #bg-sunset .sunset-mist::before{background:
@@ -872,7 +873,7 @@ body.chat-active.admin-active #admin-audit{display:block}#admin-audit-toggle{dis
 @keyframes deepCurrentSway{0%{transform:translate3d(-4%,-2%,0) rotate(-5deg) scale(1.03)}50%{transform:translate3d(1%,3%,0) rotate(1deg) scale(1.12)}100%{transform:translate3d(5%,-1%,0) rotate(7deg) scale(1.05)}}
 @keyframes deepLightTravel{0%{background-position:center,0% 34%,center,center;opacity:.7}100%{background-position:center,100% 66%,center,center;opacity:1}}
 @keyframes deepLayerFloat{0%{transform:translate3d(-1.2%,1%,0)}100%{transform:translate3d(1.4%,-1.5%,0)}}
-@keyframes lakeSurfaceDrift{0%{background-position:0 0;transform:translateX(-1%) skewX(-1deg);opacity:.52}100%{background-position:0 42px;transform:translateX(1.5%) skewX(1.2deg);opacity:.82}}
+
 @keyframes sunsetAtmosphereBreath{0%{filter:saturate(1) brightness(.98)}100%{filter:saturate(1.07) brightness(1.025)}}
 @keyframes heatHazeHorizontal{0%{transform:translate3d(-2%,0,0) skewX(-1.8deg) scaleY(.98);opacity:.46}100%{transform:translate3d(2%,1%,0) skewX(2deg) scaleY(1.035);opacity:.8}}
 @keyframes heatHazeVertical{0%{transform:translate3d(0,2%,0) skewY(-1deg) scaleX(.985);opacity:.44}100%{transform:translate3d(1%,-2%,0) skewY(1.4deg) scaleX(1.025);opacity:.76}}
@@ -898,10 +899,7 @@ body.background-suspended .bg-container *::after{animation-play-state:paused!imp
 
 /* E01-C1 | FINAL BEAUTY CORRECTION: RINGLESS SUNSET AND SLOW METEORS */
 /* Lake surface light flow without circular geometry. */
-.sunset-lake::after{content:""!important;position:absolute!important;inset:-8%!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:
-  linear-gradient(176deg,transparent 0 16%,rgba(255,224,178,.055) 18%,transparent 21% 38%,rgba(255,188,141,.035) 41%,transparent 45%),
-  repeating-linear-gradient(179deg,transparent 0 16px,rgba(255,218,169,.052) 18px,transparent 21px 31px)!important;
-  background-size:160% 150%,100% 100%!important;animation:lakeSilkFlow 11s ease-in-out infinite alternate!important;filter:blur(1.1px);opacity:.82}
+
 
 /* Layered atmospheric refraction. It bends light, never draws rings. */
 #bg-sunset::before{filter:blur(14px) saturate(124%) brightness(1.08)!important;animation:sunsetRays 18s ease-in-out infinite alternate,sunsetLightBreathe 9s ease-in-out infinite!important}
@@ -928,7 +926,7 @@ body.background-suspended .bg-container *::after{animation-play-state:paused!imp
 .meteor{height:1.5px!important;filter:blur(.28px)!important;background:linear-gradient(90deg,transparent 0%,rgba(154,198,255,.025) 16%,rgba(192,222,255,.34) 62%,rgba(235,247,255,.91) 100%)!important;box-shadow:10px 0 15px rgba(167,208,255,.46),28px 0 38px rgba(109,129,255,.22)!important}
 .meteor::after{width:4px!important;height:4px!important;box-shadow:0 0 9px 3px #e9f8ff,0 0 25px 8px rgba(92,142,255,.42)!important}
 
-@keyframes lakeSilkFlow{0%{background-position:0 0,0 0;transform:translate3d(-1.5%,0,0) skewX(-.7deg);opacity:.57}50%{opacity:.86}100%{background-position:70% 28px,0 42px;transform:translate3d(1.8%,-1%,0) skewX(.9deg);opacity:.72}}
+
 @keyframes sunsetLightBreathe{0%,100%{opacity:.64}50%{opacity:1}}
 @keyframes sunsetAirColor{0%{opacity:.76;filter:saturate(.97) brightness(.98)}100%{opacity:1;filter:saturate(1.08) brightness(1.04)}}
 @keyframes atmosphereLift{0%,100%{transform:translate3d(0,1%,0) scaleY(.985)}50%{transform:translate3d(.6%,-1.2%,0) scaleY(1.025)}}
@@ -975,7 +973,7 @@ body.background-suspended .bg-container *::after{animation-play-state:paused!imp
 .sunset-clouds-far{filter:blur(.4px) saturate(115%)}
 .sunset-clouds-near{filter:blur(5px) saturate(108%)!important}
 .sunset-lake{background:linear-gradient(180deg,rgba(242,137,95,.22),rgba(45,64,82,.36) 20%,#071522 100%)!important}
-.sunset-lake::before{opacity:.88;filter:blur(1px) saturate(116%) brightness(1.08)!important}
+
 
 /* Glass remains soft and integrated instead of gaining a hard edge. */
 #chat-ui::before{filter:saturate(108%)}
@@ -989,10 +987,86 @@ body.background-suspended .bg-container *::after{animation-play-state:paused!imp
   radial-gradient(circle at 72% 22%,rgba(194,221,255,.17),transparent 9%),
   radial-gradient(circle at 50% 50%,transparent 0 46%,rgba(0,0,0,.62) 100%),
   linear-gradient(118deg,transparent 0 35%,rgba(145,181,255,.025) 45%,transparent 58%)!important}
-.sunset-lake::after{background:
-  linear-gradient(176deg,transparent 0 18%,rgba(255,224,178,.05) 20%,transparent 23% 42%,rgba(255,188,141,.03) 45%,transparent 49%),
-  repeating-linear-gradient(179deg,transparent 0 18px,rgba(255,218,169,.048) 20px,transparent 23px 34px)!important}
+
 #site-version{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));z-index:10020;padding:5px 9px;border:1px solid rgba(255,255,255,.17);border-radius:999px;color:rgba(255,255,255,.68);background:rgba(4,12,24,.42);box-shadow:0 5px 18px rgba(0,0,0,.24);backdrop-filter:blur(10px) saturate(135%);-webkit-backdrop-filter:blur(10px) saturate(135%);font:700 10px/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;pointer-events:none;user-select:none}
+
+/* E01-C2 | v3.12 UI AND SUNSET CONTRACT */
+.login-actions{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:4px}.login-actions .login-connect-btn{margin:0!important}
+#login-return-to-site.login-back-btn{position:static!important;inset:auto!important;min-width:150px;min-height:42px;padding:9px 18px;margin:0!important;border:1px solid rgba(255,255,255,.18);border-radius:12px;color:rgba(255,255,255,.82);background:rgba(255,255,255,.075);box-shadow:none;font-size:12px;font-weight:800;cursor:pointer}
+#login-return-to-site.login-back-btn:hover{background:rgba(255,255,255,.13);transform:translateY(-1px)}
+#top-panel,#connection-badge,#users-panel,#room-status{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#connection-badge,#users-panel,#room-status{background:rgba(3,12,28,.76)!important}
+#emergency-exit{top:max(12px,env(safe-area-inset-top))!important;right:max(12px,env(safe-area-inset-right))!important}
+#room-status{top:max(72px,calc(env(safe-area-inset-top) + 60px))!important;right:max(12px,env(safe-area-inset-right))!important;max-width:min(240px,calc(100vw - 24px));white-space:nowrap}
+
+
+
+/* E01-C1 | v3.12 ULTIMATE GRAPHICS MASTER
+   Visual-only grading. Sunset lake is contractually ripple-free. */
+.bg-container.active{filter:saturate(1.20) contrast(1.07) brightness(1.025)}
+
+/* SPACE: priority remaster, deep multi-layer nebula, stellar bloom and luminous galaxies */
+#bg-space{background:
+ radial-gradient(ellipse at 50% 118%,rgba(82,31,174,.88) 0%,transparent 50%),
+ radial-gradient(circle at 10% 13%,rgba(35,132,255,.56) 0%,transparent 27%),
+ radial-gradient(circle at 87% 19%,rgba(255,56,200,.42) 0%,transparent 29%),
+ radial-gradient(ellipse at 65% 72%,rgba(47,224,221,.16) 0%,transparent 33%),
+ linear-gradient(145deg,#000108 0%,#040218 31%,#10052d 66%,#01020a 100%)!important}
+#bg-space::before{background:
+ radial-gradient(ellipse at 20% 62%,rgba(46,150,255,.44),transparent 35%),
+ radial-gradient(ellipse at 70% 29%,rgba(229,57,255,.36),transparent 32%),
+ radial-gradient(ellipse at 57% 87%,rgba(55,255,224,.20),transparent 32%),
+ linear-gradient(118deg,transparent 14%,rgba(125,159,255,.085) 39%,rgba(246,119,255,.065) 49%,transparent 69%)!important;
+ filter:blur(36px) saturate(2.20) brightness(1.18)!important;mix-blend-mode:screen;animation:nebulaDrift 31s ease-in-out infinite alternate!important}
+#bg-space::after{background:
+ radial-gradient(circle at 73% 18%,rgba(226,240,255,.27),transparent 8%),
+ linear-gradient(122deg,transparent 25%,rgba(144,178,255,.045) 46%,transparent 67%),
+ radial-gradient(circle at 50% 50%,transparent 0 45%,rgba(0,0,0,.72) 100%)!important}
+.star{filter:brightness(1.28) saturate(1.18);box-shadow:0 0 5px currentColor,0 0 16px currentColor,0 0 34px color-mix(in srgb,currentColor 68%,transparent)!important}
+.star.giant{filter:brightness(1.52) saturate(1.22) drop-shadow(0 0 7px currentColor)!important;box-shadow:0 0 7px #fff,0 0 23px #9bc8ff,0 0 58px #6f67ff!important}
+.galaxy-a{filter:blur(.55px) saturate(1.72) brightness(1.31) drop-shadow(0 0 58px rgba(113,119,255,.44))!important}
+.galaxy-b{filter:blur(.8px) saturate(1.70) brightness(1.27) drop-shadow(0 0 54px rgba(224,91,255,.37))!important}
+.cosmic-dust{opacity:.94!important;filter:blur(17px) saturate(1.80) brightness(1.16)!important}
+.meteor{height:1.65px!important;filter:blur(.18px) saturate(1.18)!important;box-shadow:11px 0 19px rgba(181,224,255,.68),35px 0 52px rgba(105,137,255,.34)!important}
+.meteor::after{box-shadow:0 0 12px 4px #f2fbff,0 0 34px 10px rgba(92,142,255,.64)!important}
+
+/* WATER: enhanced refraction and shafts, no circular ripple elements */
+#bg-water{filter:saturate(1.27) contrast(1.07) brightness(1.02)}
+#bg-water::before{filter:blur(5px) saturate(2.20) brightness(1.37)!important;opacity:1!important}
+#bg-water::after{filter:blur(.45px) saturate(1.48) brightness(1.24)!important;opacity:.98!important}
+.bubble{filter:brightness(1.12);box-shadow:inset 0 0 6px rgba(255,255,255,.42),0 0 13px rgba(115,231,255,.42)!important}
+
+/* MATRIX: stronger depth and phosphor glow, unchanged frame rate */
+#bg-matrix{background:radial-gradient(ellipse at 50% 36%,#01713c 0%,#012d1b 25%,#000a05 62%,#000 100%)!important}
+#matrix-canvas{filter:saturate(2.15) contrast(1.45) brightness(1.13)!important}
+#bg-matrix::after{opacity:.96!important;filter:saturate(1.55) brightness(1.05)}
+
+/* DEEP OCEAN: volumetric shafts and bioluminescent depth */
+#bg-ocean{filter:saturate(1.27) contrast(1.09) brightness(1.025)}
+#bg-ocean::before{filter:blur(9px) saturate(2.18) brightness(1.34)!important;opacity:1!important}
+#bg-ocean::after{filter:saturate(1.38) contrast(1.08) brightness(1.04)}
+#bg-ocean .ray{opacity:1!important;filter:blur(7px) saturate(2.05) brightness(1.28)!important}
+#bg-ocean .snow{filter:brightness(1.14);box-shadow:0 0 11px rgba(135,235,255,.62),0 0 28px rgba(58,166,232,.23)!important}
+.deep-creature{mix-blend-mode:screen;filter:blur(var(--cb)) saturate(1.52) brightness(1.28) drop-shadow(0 0 14px var(--cc)) drop-shadow(0 0 39px var(--cc))!important}
+
+/* SUNSET: rich light and atmosphere, absolutely no lake ripple pseudo-layer */
+#bg-sunset{background:linear-gradient(180deg,#21134f 0%,#73407e 20%,#df646d 43%,#f8a665 59%,#29384f 61%,#06131f 100%)!important}
+#bg-sunset::before{filter:blur(12px) saturate(1.58) brightness(1.26)!important;opacity:1!important}
+#bg-sunset::after{filter:saturate(1.30) brightness(1.10)}
+.sunset-sun{filter:saturate(1.20) brightness(1.18);box-shadow:0 0 42px 21px rgba(255,243,204,.55),0 0 152px 67px rgba(255,142,91,.39),0 0 320px 126px rgba(238,79,124,.22)!important}
+.sunset-clouds-far{filter:blur(.25px) saturate(1.34) brightness(1.12)!important}.sunset-clouds-near{filter:blur(4.8px) saturate(1.27) brightness(1.06)!important}
+.mountain-mid::before{opacity:1!important;filter:brightness(1.19) saturate(1.32)!important}
+.sunset-mist{filter:blur(8px) saturate(1.30) brightness(1.14)!important}
+.sunset-lake{background:linear-gradient(180deg,rgba(249,146,101,.28),rgba(49,69,88,.42) 21%,#06131f 100%)!important}
+
+
+@keyframes lakeReflectionBreath{0%{opacity:.63;filter:blur(1.25px) brightness(.96)}100%{opacity:.96;filter:blur(.72px) brightness(1.22)}}
+.sunset-lake::before{content:"";position:absolute;left:57%;top:-8%;width:31%;height:122%;transform:perspective(250px) rotateX(68deg);background:linear-gradient(90deg,transparent 0%,rgba(255,229,175,.10) 20%,rgba(255,239,198,.46) 48%,rgba(255,229,175,.15) 72%,transparent 100%);filter:blur(8px) saturate(1.35) brightness(1.18);mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.72) 45%,transparent 100%);opacity:.82;animation:lakeReflectionBreath 9s ease-in-out infinite alternate;pointer-events:none}
+
+/* E01-C1.9 | ACTIVE BACKGROUND RUNTIME CONTRACT */
+.bg-container:not(.active),.bg-container:not(.active)::before,.bg-container:not(.active)::after,.bg-container:not(.active) *,.bg-container:not(.active) *::before,.bg-container:not(.active) *::after{animation-play-state:paused!important}
+body:not(.background-suspended) .bg-container.active,body:not(.background-suspended) .bg-container.active::before,body:not(.background-suspended) .bg-container.active::after,body:not(.background-suspended) .bg-container.active *,body:not(.background-suspended) .bg-container.active *::before,body:not(.background-suspended) .bg-container.active *::after{animation-play-state:running!important}
+body.background-suspended .bg-container,body.background-suspended .bg-container::before,body.background-suspended .bg-container::after,body.background-suspended .bg-container *,body.background-suspended .bg-container *::before,body.background-suspended .bg-container *::after{animation-play-state:paused!important}
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -1032,7 +1106,10 @@ body.background-suspended .bg-container *::after{animation-play-state:paused!imp
     &lt;input type="text" id="user-name" placeholder="NAME"&gt;
     &lt;input type="password" id="admin-password" placeholder="ADMIN PASSWORD（任意）" autocomplete="off" aria-label="管理者パスワード、空欄なら通常参加"&gt;
     &lt;div id="admin-help"&gt;空欄または不一致なら通常参加します。正しい管理者パスワードの場合のみ名前に管理者バッジが付きます。&lt;/div&gt;
-    &lt;button onclick="initP2P()"&gt;CONNECT&lt;/button&gt;
+    &lt;div class="login-actions"&gt;
+      &lt;button class="login-connect-btn" type="button" onclick="initP2P()"&gt;CONNECT&lt;/button&gt;
+      &lt;button id="login-return-to-site" class="login-back-btn" type="button" aria-label="前の画面へ戻る"&gt;← 戻る&lt;/button&gt;
+    &lt;/div&gt;
     &lt;div id="room-joining" aria-hidden="true" aria-live="polite"&gt;
       &lt;div class="room-joining-card"&gt;
         &lt;div class="room-joining-title"&gt;ルームへ接続しています&lt;/div&gt;
@@ -1049,7 +1126,7 @@ body.background-suspended .bg-container *::after{animation-play-state:paused!imp
 &lt;/div&gt;
 
 &lt;div id="top-panel"&gt;&lt;div id="connection-badge"&gt;接続準備中&lt;/div&gt;&lt;div id="users-panel"&gt;&lt;div id="users-title"&gt;オンライン&lt;/div&gt;&lt;div id="users-list"&gt;&lt;/div&gt;&lt;div id="replication-status"&gt;分散同期準備中&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div id="room-status" style="display:none"&gt;&lt;strong id="online-count"&gt;1&lt;/strong&gt; online · 履歴20件&lt;/div&gt;
+&lt;div id="room-status" style="display:none"&gt;&lt;strong id="online-count"&gt;1&lt;/strong&gt; online · 履歴100件&lt;/div&gt;
 &lt;aside id="admin-audit" aria-label="管理者ログ"&gt;
  &lt;button id="admin-audit-toggle" type="button" aria-expanded="false"&gt;&lt;strong&gt;ADMIN LOG&lt;/strong&gt;&lt;span&gt;&lt;span id="admin-audit-count"&gt;0&lt;/span&gt; &lt;span id="admin-audit-chevron"&gt;⌄&lt;/span&gt;&lt;/span&gt;&lt;/button&gt;
  &lt;section id="admin-audit-body" aria-hidden="true"&gt;
@@ -1210,31 +1287,31 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   function startMatrixRendering(){if(!document.hidden&amp;&amp;!matrixInterval)matrixInterval=setInterval(drawMatrix,28);}
   function stopMatrixRendering(){if(matrixInterval){clearInterval(matrixInterval);matrixInterval=null;}}
 
+  function syncBackgroundRuntime(){
+    const visible=!document.hidden;
+    document.body.classList.toggle('background-suspended',!visible);
+    document.querySelectorAll('.bg-container').forEach(scene=&gt;{
+      const active=visible&amp;&amp;scene.classList.contains('active');
+      scene.setAttribute('aria-hidden',active?'false':'true');
+      scene.style.pointerEvents=active?'auto':'none';
+    });
+    if(visible&amp;&amp;currentBackground==='matrix')startMatrixRendering();else stopMatrixRendering();
+  }
   function setBg(type) {
-    if(type===currentBackground&amp;&amp;document.getElementById('bg-'+type).classList.contains('active'))return;
-    currentBackground=type;
-    const containers = document.querySelectorAll('.bg-container');
-    containers.forEach(c =&gt; c.classList.remove('active'));
-    switcherBtns.forEach(b =&gt; b.classList.remove('active'));
     const activeBackground=document.getElementById('bg-'+type);
-    activeBackground.classList.add('active');
-    document.getElementById('switch-'+type).classList.add('active');
-    if(type==='space'){
-      const meteorLayer=activeBackground.querySelector('.meteor-layer');
-      if(meteorLayer){meteorLayer.style.animation='none';void meteorLayer.offsetWidth;meteorLayer.style.animation='';}
-    }
-    if(type==='matrix')startMatrixRendering();else stopMatrixRendering();
+    if(!activeBackground)return;
+    currentBackground=type;
+    document.querySelectorAll('.bg-container').forEach(scene=&gt;scene.classList.toggle('active',scene===activeBackground));
+    switcherBtns.forEach(button=&gt;button.classList.toggle('active',button.id==='switch-'+type));
+    syncBackgroundRuntime();
   }
   
-  window.addEventListener('resize', () =&gt; {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      columns = Math.floor(width / 20);
-      drops = [];
-      for(let i=0; i&lt;columns; i++) drops[i] = 1;
-  });
+  let matrixResizeFrame=0;
+  window.addEventListener('resize',()=&gt;{cancelAnimationFrame(matrixResizeFrame);matrixResizeFrame=requestAnimationFrame(()=&gt;{const nextWidth=window.innerWidth,nextHeight=window.innerHeight;if(nextWidth===width&amp;&amp;nextHeight===height)return;width=canvas.width=nextWidth;height=canvas.height=nextHeight;columns=Math.floor(width/20);drops=Array(columns).fill(1);});},{passive:true});
 
 
+
+  requestAnimationFrame(()=&gt;{syncBackgroundRuntime();requestAnimationFrame(syncBackgroundRuntime);});
 
   /* ==========================================================================
      CHAT STATE AND CONSTANTS
@@ -1519,14 +1596,9 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   }
 
   function mergeMessages(...groups) {
-    const byId = new Map();
-    groups.flat().forEach(raw =&gt; {
-      const m=normalizeMessage(raw); if(!m) return;
-      const prev=byId.get(m.id);
-      if(!prev || (Number.isFinite(m.hostSeq) &amp;&amp; !Number.isFinite(prev.hostSeq)) ||
-        Number(m.receivedAt||0) &gt; Number(prev.receivedAt||0)) byId.set(m.id,m);
-    });
-    return [...byId.values()].sort((a,b) =&gt; messageOrderValue(a)-messageOrderValue(b) || a.id.localeCompare(b.id));
+    const byId=new Map();
+    for(const group of groups){if(!Array.isArray(group))continue;for(const raw of group){const message=normalizeMessage(raw);if(!message)continue;const previous=byId.get(message.id);if(!previous||(Number.isFinite(message.hostSeq)&amp;&amp;!Number.isFinite(previous.hostSeq))||Number(message.receivedAt||0)&gt;Number(previous.receivedAt||0))byId.set(message.id,message);}}
+    return Array.from(byId.values()).sort((a,b)=&gt;messageOrderValue(a)-messageOrderValue(b)||a.id.localeCompare(b.id));
   }
 
   /* E01-J3 | HISTORY, OUTBOX AND LOCAL PERSISTENCE */
@@ -1540,20 +1612,23 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     } catch (e) { console.warn('履歴の読み込みに失敗:', e); messageJournal=[]; return []; }
   }
 
-  function saveHistory() {
+  let historySaveTimer=null,lastHistoryStoragePayload='',lastDistributedStoragePayload='';
+  function persistHistoryNow() {
+    clearTimeout(historySaveTimer);historySaveTimer=null;
     try {
-      messageJournal = mergeMessages(messageJournal, roomState.messages).slice(-JOURNAL_LIMIT);
-      const textHistory = messageJournal.filter(message =&gt; !message.image).slice(-HISTORY_LIMIT);
-      safeStorageSet(storageKey(), JSON.stringify(textHistory));safeStorageSet(storageKey()+':distributed',JSON.stringify({hostEpoch,stateVersion,backupHostIds,operations:operationLog.slice(-OPERATION_LOG_LIMIT)}));
-    } catch (e) {
-      console.warn('履歴の保存に失敗:', e);
-      try{
-        const fallback=messageJournal.filter(message=&gt;!message.image).slice(-30);
-        safeStorageSet(storageKey(),JSON.stringify(fallback));
-        safeStorageRemove(storageKey()+':distributed');
-      }catch(_){}
+      messageJournal=mergeMessages(messageJournal,roomState.messages).slice(-JOURNAL_LIMIT);
+      const textHistory=messageJournal.filter(message=&gt;!message.image).slice(-HISTORY_LIMIT);
+      const historyPayload=JSON.stringify(textHistory);
+      const distributedPayload=JSON.stringify({hostEpoch,stateVersion,backupHostIds,operations:operationLog.slice(-OPERATION_LOG_LIMIT)});
+      if(historyPayload!==lastHistoryStoragePayload){safeStorageSet(storageKey(),historyPayload);lastHistoryStoragePayload=historyPayload;}
+      if(distributedPayload!==lastDistributedStoragePayload){safeStorageSet(storageKey()+':distributed',distributedPayload);lastDistributedStoragePayload=distributedPayload;}
+    } catch (error) {
+      console.warn('履歴の保存に失敗:',error);
+      try{const fallback=messageJournal.filter(message=&gt;!message.image).slice(-30);safeStorageSet(storageKey(),JSON.stringify(fallback));safeStorageRemove(storageKey()+':distributed');}catch(_){}
     }
   }
+  function scheduleHistorySave(delay=220){if(historySaveTimer)return;historySaveTimer=setTimeout(persistHistoryNow,delay);}
+  function saveHistory(){persistHistoryNow();}
 
   function validReply(reply) {
     return reply === undefined || reply === null ||
@@ -1592,7 +1667,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     messageJournal=mergeMessages(messageJournal,[normalized]).slice(-JOURNAL_LIMIT);
     roomState.messages=messageJournal.slice(-HISTORY_LIMIT);
     seenMessageIds=new Set(roomState.messages.map(m=&gt;m.id));
-    saveHistory();
+    scheduleHistorySave();
     return !existed;
   }
 
@@ -2263,14 +2338,16 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     return '情報';
   }
   function validAuditEntry(entry){return entry&amp;&amp;typeof entry.id==='string'&amp;&amp;entry.id.length&lt;=180&amp;&amp;Number.isFinite(entry.at)&amp;&amp;typeof entry.kind==='string'&amp;&amp;entry.kind.length&lt;=20&amp;&amp;typeof entry.text==='string'&amp;&amp;entry.text.length&lt;=240;}
-  function renderAdminAudit() {
+  let lastAuditRenderSignature='';
+  function renderAdminAudit(force=false) {
     if(!isAdmin)return;
-    const list=document.getElementById('admin-audit-list'),count=document.getElementById('admin-audit-count');
-    count.textContent=String(adminAuditEntries.length);
-    list.replaceChildren();
-    if(!adminAuditEntries.length){const empty=document.createElement('div');empty.className='audit-empty';empty.textContent='ログはまだありません';list.appendChild(empty);return;}
-    for(const entry of adminAuditEntries){const row=document.createElement('div');row.className='audit-row';row.dataset.kind=entry.kind;const time=document.createElement('time');time.className='audit-time';time.dateTime=new Date(entry.at).toISOString();time.textContent=new Date(entry.at).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'});const kind=document.createElement('span');kind.className='audit-kind';kind.textContent=entry.kind;const text=document.createElement('span');text.className='audit-text';text.textContent=entry.text;row.append(time,kind,text);list.appendChild(row);}
-    list.scrollTop=list.scrollHeight;
+    const list=document.getElementById('admin-audit-list'),count=document.getElementById('admin-audit-count'),panel=document.getElementById('admin-audit-panel');if(!list||!count)return;
+    const countText=String(adminAuditEntries.length);if(count.textContent!==countText)count.textContent=countText;
+    if(!force&amp;&amp;panel&amp;&amp;!panel.classList.contains('open'))return;
+    const signature=(adminAuditEntries.at(-1)?.id||'')+':'+adminAuditEntries.length;if(!force&amp;&amp;signature===lastAuditRenderSignature)return;
+    const fragment=document.createDocumentFragment();
+    if(!adminAuditEntries.length){const empty=document.createElement('div');empty.className='audit-empty';empty.textContent='ログはまだありません';fragment.appendChild(empty);}else for(const entry of adminAuditEntries){const row=document.createElement('div');row.className='audit-row';row.dataset.kind=entry.kind;const date=new Date(entry.at);const time=document.createElement('time');time.className='audit-time';time.dateTime=date.toISOString();time.textContent=date.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'});const kind=document.createElement('span');kind.className='audit-kind';kind.textContent=entry.kind;const text=document.createElement('span');text.className='audit-text';text.textContent=entry.text;row.append(time,kind,text);fragment.appendChild(row);}
+    list.replaceChildren(fragment);lastAuditRenderSignature=signature;list.scrollTop=list.scrollHeight;
   }
   function receiveAdminAudit(entry){if(!isAdmin||!validAuditEntry(entry)||adminAuditEntries.some(item=&gt;item.id===entry.id))return;adminAuditEntries.push(entry);adminAuditEntries=adminAuditEntries.slice(-ADMIN_AUDIT_LIMIT);renderAdminAudit();}
   function sendAuditToAdmins(entry){if(!isHost)return;for(const link of connections){if(link&amp;&amp;link.open&amp;&amp;link.__admin){try{link.send({type:'adminAudit',entry})}catch(_){}}}}
@@ -2574,6 +2651,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     const roomInput=document.getElementById('room-num');if(roomInput)roomInput.focus();
   }
   document.getElementById('chat-return-to-site').addEventListener('click',returnToMainMenu);
+  document.getElementById('login-return-to-site').addEventListener('click',()=&gt;{window.parent.postMessage({type:'neko-return-to-site'},'*');});
   document.getElementById('emergency-exit').addEventListener('click',emergencyExitToGoogle);
   document.getElementById('cancel-reply').addEventListener('click',cancelReply);
   document.getElementById('chat-box').addEventListener('click',event=&gt;{
@@ -2720,14 +2798,18 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     input.placeholder=state==='online' ? 'Message' : '再接続中でも送信できます';
   }
 
+  let lastUsersRenderSignature='';
   function updateStatus() {
-    const users=Object.values(roomState.users).filter(validUser);
-    document.getElementById('online-count').textContent=String(Math.max(1,users.length));
-    const list=document.getElementById('users-list'); if(list){ list.textContent='';
-      users.sort((a,b)=&gt;a.name.localeCompare(b.name,'ja')).forEach(u=&gt;{const row=document.createElement('div');row.className='user-row';
-        const dot=document.createElement('span');dot.className='user-dot';const name=document.createElement('span');
-        name.textContent=visibleName(u.name,u.clientId)+(u.clientId===clientId?' (自分)':'');appendAdminBadge(name,Boolean(u.admin));appendHostRoleBadge(name,u.clientId===clientId?(isHost?'primary':localHostRole):roleForClient(u.clientId));row.append(dot,name);list.appendChild(row);}); }
-    const status=document.getElementById('room-status');status.title=isHost?'この端末が主ホストです':localHostRole==='backup'?'この端末が副ホストです':'参加者';updateReplicationStatus();
+    const users=Object.values(roomState.users).filter(validUser).sort((a,b)=&gt;a.name.localeCompare(b.name,'ja'));
+    const onlineCount=document.getElementById('online-count');const count=String(Math.max(1,users.length));if(onlineCount&amp;&amp;onlineCount.textContent!==count)onlineCount.textContent=count;
+    const list=document.getElementById('users-list');
+    const signature=users.map(u=&gt;[u.clientId,u.name,Boolean(u.admin),u.clientId===clientId?(isHost?'primary':localHostRole):roleForClient(u.clientId)].join(':')).join('|');
+    if(list&amp;&amp;signature!==lastUsersRenderSignature){
+      const fragment=document.createDocumentFragment();
+      for(const u of users){const row=document.createElement('div');row.className='user-row';const dot=document.createElement('span');dot.className='user-dot';const name=document.createElement('span');name.textContent=visibleName(u.name,u.clientId)+(u.clientId===clientId?' (自分)':'');appendAdminBadge(name,Boolean(u.admin));appendHostRoleBadge(name,u.clientId===clientId?(isHost?'primary':localHostRole):roleForClient(u.clientId));row.append(dot,name);fragment.appendChild(row);}
+      list.replaceChildren(fragment);lastUsersRenderSignature=signature;
+    }
+    const status=document.getElementById('room-status'),title=isHost?'この端末が主ホストです':localHostRole==='backup'?'この端末が副ホストです':'参加者';if(status&amp;&amp;status.title!==title)status.title=title;updateReplicationStatus();
   }
 
   function isNearLatest() {
@@ -2765,20 +2847,20 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
      ========================================================================== */
   document.addEventListener('visibilitychange',()=&gt;{
     pageVisible=!document.hidden;
-    document.body.classList.toggle('background-suspended',!pageVisible);
-    if(!pageVisible){ stopMatrixRendering(); saveHistory(); persistOutbox(); return; }
-    if(currentBackground==='matrix')startMatrixRendering();
-    // タブ復帰時は表示・未読・スクロール位置を勝手に変更しない。
-    // 現在の回線だけを検査する。
-    const healthy=isHost ? Boolean(peer &amp;&amp; peer.open) : Boolean(peer &amp;&amp; peer.open &amp;&amp; hostConnection &amp;&amp; hostConnection.open);
-    if(!healthy &amp;&amp; navigator.onLine){
-      setConnectionState('connecting','タブ復帰・接続確認中');
-      if(!isHost){ safelyDestroyPeer(false); createRecoveryPeer(); startRecoveryWatchdog(); }
-    } else { flushQueue(); }
+    syncBackgroundRuntime();
+    if(!pageVisible){saveHistory();persistOutbox();return;}
+    // 復帰直後はWebRTC状態の反映を待ち、正常な接続を自分から破壊しない。
+    const healthy=isHost?Boolean(peer&amp;&amp;peer.open):Boolean(peer&amp;&amp;peer.open&amp;&amp;hostConnection&amp;&amp;hostConnection.open);
+    if(healthy){flushQueue();return;}
+    if(navigator.onLine&amp;&amp;!isHost){setConnectionState('connecting','タブ復帰・接続確認中');scheduleRecoveryProbe(900);}
+  });
+  window.addEventListener('pageshow',event=&gt;{
+    pageVisible=true;syncBackgroundRuntime();
+    if(event.persisted&amp;&amp;!isHost)scheduleRecoveryProbe(700);
   });
   window.addEventListener('online',()=&gt;{
-    setConnectionState('connecting','通信復旧中');
-    if(!isHost){ safelyDestroyPeer(false); createRecoveryPeer(); startRecoveryWatchdog(); }
+    setConnectionState('connecting','通信復旧・接続確認中');
+    if(!isHost)scheduleRecoveryProbe(700);else flushQueue();
   });
   window.addEventListener('offline',()=&gt;{
     setConnectionState('offline','オフライン・送信は保留されます');
@@ -2801,17 +2883,15 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     document.getElementById('user-name').value=safeStorageGet('practical-chat-name')||'';document.getElementById('admin-password').value='';
   });
 
-  window.addEventListener('pagehide',event=&gt;{persistOutbox();saveHistory();if(event.persisted)stopMatrixRendering();});
-
-  window.addEventListener('beforeunload', () =&gt; {
-    if(emergencyEscapeActive)return;
-    persistOutbox();
-    clearInterval(retryTimer);
-    clearInterval(recoveryWatchdog);
-    clearTimeout(migrationTimer);
-    clearTimeout(replicaFlushTimer);
-    safelyDestroyPeer();
-  });
+  let lifecycleCleaned=false;
+  function cleanupChatLifecycle({destroyPeer=true}={}){
+    persistOutbox();saveHistory();stopMatrixRendering();
+    clearInterval(retryTimer);clearInterval(recoveryWatchdog);
+    clearTimeout(migrationTimer);clearTimeout(replicaFlushTimer);clearTimeout(recoveryProbeTimer);clearTimeout(historySaveTimer);persistHistoryNow();
+    if(destroyPeer&amp;&amp;!lifecycleCleaned&amp;&amp;!emergencyEscapeActive){lifecycleCleaned=true;safelyDestroyPeer();}
+  }
+  window.addEventListener('pagehide',event=&gt;cleanupChatLifecycle({destroyPeer:!event.persisted}));
+  window.addEventListener('beforeunload',()=&gt;cleanupChatLifecycle({destroyPeer:true}));
 
 // Right Arrow panic screen. Editable fields keep their normal cursor behavior.
 
@@ -2857,7 +2937,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     togglePanicMode();
   }, true);
 &lt;/script&gt;
-&lt;div id="site-version" data-version="3.05" aria-label="バージョン v3.05"&gt;v3.05&lt;/div&gt;
+&lt;div id="site-version" data-version="3.12" aria-label="バージョン v3.12"&gt;v3.12&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;</textarea>
   <script>
@@ -3217,10 +3297,15 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
   /* ==========================================================================
      J04 | APPLICATION STATE AND LOCAL STORAGE
      ========================================================================== */
-    const state={page:1,perPage:6,favorites:new Set(JSON.parse(localStorage.getItem('kd-favorites')||'[]')),cooked:new Set(JSON.parse(localStorage.getItem('kd-cooked')||'[]')),recent:JSON.parse(localStorage.getItem('kd-recent')||'[]')};
+    function safeLocalGet(key,fallback=null){try{const value=localStorage.getItem(key);return value===null?fallback:value}catch(error){console.warn('[台所日和] 保存データを読み込めません',error);return fallback}}
+    function safeLocalSet(key,value){try{localStorage.setItem(key,value);return true}catch(error){console.warn('[台所日和] 保存データを書き込めません',error);return false}}
+    function safeLocalRemove(key){try{localStorage.removeItem(key);return true}catch(error){console.warn('[台所日和] 保存データを削除できません',error);return false}}
+    function safeJsonRead(key,fallback){try{const value=JSON.parse(safeLocalGet(key,'null'));return value===null?fallback:value}catch(error){console.warn('[台所日和] 保存JSONが壊れています',key,error);return fallback}}
+    const favoriteData=safeJsonRead('kd-favorites',[]),cookedData=safeJsonRead('kd-cooked',[]),recentData=safeJsonRead('kd-recent',[]);
+    const state={page:1,perPage:6,favorites:new Set(Array.isArray(favoriteData)?favoriteData:[]),cooked:new Set(Array.isArray(cookedData)?cookedData:[]),recent:Array.isArray(recentData)?recentData:[]};
     const materialOptions=['鶏肉','豚肉','卵','玉ねぎ','じゃがいも','きのこ','鮭','豆腐','野菜'];
     const yen=n=>'¥'+n.toLocaleString();
-    function saveSets(){localStorage.setItem('kd-favorites',JSON.stringify([...state.favorites]));localStorage.setItem('kd-cooked',JSON.stringify([...state.cooked]));$('#favTotal').textContent=state.favorites.size}
+    function saveSets(){safeLocalSet('kd-favorites',JSON.stringify([...state.favorites]));safeLocalSet('kd-cooked',JSON.stringify([...state.cooked]));$('#favTotal').textContent=state.favorites.size}
 
 
   /* ==========================================================================
@@ -3346,7 +3431,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
       let r=recipes.find(x=>x.id===id);if(!r)return;
       const g=practicalGuide(r);
       let factor=1;
-      state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,8);localStorage.setItem('kd-recent',JSON.stringify(state.recent));
+      state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,8);safeLocalSet('kd-recent',JSON.stringify(state.recent));
       $('#detailBody').innerHTML=`<div class="modal-head"><div><span class="kicker">${r.category}・${r.genre}</span><h2>${r.title}</h2><div class="recipe-quality"><span class="quality-chip">分量付き</span><span class="quality-chip">火加減付き</span><span class="quality-chip">保存案内付き</span></div></div></div>
       <div class="detail-summary"><div><b id="servingCount">${r.serves}人分</b><small>分量</small></div><div><b>${r.time}分</b><small>調理時間</small></div><div><b>${yen(r.budget)}/人</b><small>費用目安</small></div><div><b>${r.kcal}kcal</b><small>1人分目安</small></div></div><p>${r.desc}</p>
       <div class="serving-control"><b>分量を変更：</b><button data-factor="0.5">半量</button><button class="active" data-factor="1">基本</button><button data-factor="1.5">1.5倍</button><button data-factor="2">2倍</button></div>
@@ -3392,7 +3477,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     $$('[data-info]').forEach(a=>a.onclick=e=>{e.preventDefault();let d=info[a.dataset.info];$('#infoTitle').textContent=d[0];$('#infoBody').innerHTML=d[1];$('#infoDialog').showModal()});
     materialOptions.forEach(x=>$('#materials').insertAdjacentHTML('beforeend',`<label class="check-chip"><input type="checkbox" value="${x}"> ${x}</label>`));
     ['q','category','time','sort','genre','budget','level','exclude'].forEach(id=>$('#'+id).addEventListener('input',()=>{state.page=1;renderRecipes()}));$('#materials').addEventListener('input',()=>{state.page=1;renderRecipes()});$('#reset').onclick=()=>{$('#q').value='';$('#category').value='';$('#time').value='99';$('#sort').value='popular';$('#genre').value='';$('#budget').value='9999';$('#level').value='';$('#exclude').value='';$$('#materials input').forEach(x=>x.checked=false);state.page=1;renderRecipes()};$$('[data-preset],.quick').forEach(x=>x.onclick=()=>setPreset(x.dataset.preset));
-    $('#randomRecipe').onclick=()=>showDetail(recipes[Math.floor(Math.random()*recipes.length)].id);$('#clearRecent').onclick=()=>{state.recent=[];localStorage.removeItem('kd-recent');renderRecent()};$('#openPost').onclick=()=>$('#postDialog').showModal();$('#postForm').onsubmit=e=>{e.preventDefault();let posts=JSON.parse(localStorage.getItem('kd-posts')||'[]');posts.unshift({title:$('#postTitle').value,ingredients:$('#postIngredients').value,steps:$('#postSteps').value,date:Date.now()});localStorage.setItem('kd-posts',JSON.stringify(posts.slice(0,20)));$('#postMessage').textContent='投稿レシピをこの端末内に保存しました。';e.target.reset()};$('#newsletter').onsubmit=e=>{e.preventDefault();alert('登録が完了しました。メールは送信されません。');e.target.reset()};
+    $('#randomRecipe').onclick=()=>showDetail(recipes[Math.floor(Math.random()*recipes.length)].id);$('#clearRecent').onclick=()=>{state.recent=[];safeLocalRemove('kd-recent');renderRecent()};$('#openPost').onclick=()=>$('#postDialog').showModal();$('#postForm').onsubmit=e=>{e.preventDefault();let posts=safeJsonRead('kd-posts',[]);posts.unshift({title:$('#postTitle').value,ingredients:$('#postIngredients').value,steps:$('#postSteps').value,date:Date.now()});safeLocalSet('kd-posts',JSON.stringify(posts.slice(0,20)));$('#postMessage').textContent='投稿レシピをこの端末内に保存しました。';e.target.reset()};$('#newsletter').onsubmit=e=>{e.preventDefault();alert('登録が完了しました。メールは送信されません。');e.target.reset()};
 
 
   /* ==========================================================================
@@ -3404,7 +3489,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
     if(matchMedia('(max-width:600px)').matches)setFilterCollapsed(true);
     const toTop=$('#toTop');addEventListener('scroll',()=>toTop.classList.toggle('show',scrollY>700),{passive:true});toTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
     $('#todayDate').textContent=new Intl.DateTimeFormat('ja-JP',{month:'long',day:'numeric',weekday:'short'}).format(new Date());
-    if(localStorage.getItem('kd-cookie'))$('#cookieBar').classList.add('hidden');$('#cookieAccept').onclick=()=>{localStorage.setItem('kd-cookie','accepted');$('#cookieBar').classList.add('hidden')};$('#cookieSettings').onclick=()=>{let d=info.cookies;$('#infoTitle').textContent=d[0];$('#infoBody').textContent=d[1];$('#infoDialog').showModal()};
+    if(safeLocalGet('kd-cookie'))$('#cookieBar').classList.add('hidden');$('#cookieAccept').onclick=()=>{safeLocalSet('kd-cookie','accepted');$('#cookieBar').classList.add('hidden')};$('#cookieSettings').onclick=()=>{let d=info.cookies;$('#infoTitle').textContent=d[0];$('#infoBody').textContent=d[1];$('#infoDialog').showModal()};
 
 
   /* ==========================================================================
@@ -3435,7 +3520,18 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
       history.pushState({nekoChat:true},'',location.href);
       chatHistoryArmed=true;
     }
+    let chatShellOpenIntent=false;
+    function persistChatShellIntent(open){chatShellOpenIntent=Boolean(open);try{sessionStorage.setItem('neko-chat-shell-open',open?'1':'0')}catch(_){}}
+    function enforceChatShellOpen(){
+      if(!chatShellOpenIntent)return;
+      const shell=$('#chatShell');
+      if(!loaded){$('#chatFrame').srcdoc=getNekoChatDocument();loaded=true}
+      document.body.classList.add('chat-shell-open');
+      shell.classList.add('on','reveal');shell.setAttribute('aria-hidden','false');
+      document.documentElement.style.overflow='hidden';
+    }
     function closeChatShell({fromPopState=false}={}){
+      persistChatShellIntent(false);
       const chat=$('#chatShell');
       const wasOpen=chat.classList.contains('on');
       document.body.classList.remove('chat-shell-open');
@@ -3451,16 +3547,19 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
       if(chatHistoryArmed&&$('#chatShell').classList.contains('on'))closeChatShell({fromPopState:true});
       else chatHistoryArmed=false;
     });
+    let viewportRepairRaf=0;
     function preserveChatShellOnViewportChange(){
-      const shell=$('#chatShell');
-      if(!document.body.classList.contains('chat-shell-open'))return;
-      shell.classList.add('on','reveal');
-      shell.setAttribute('aria-hidden','false');
-      document.documentElement.style.overflow='hidden';
+      if(!chatShellOpenIntent)return;
+      cancelAnimationFrame(viewportRepairRaf);
+      viewportRepairRaf=requestAnimationFrame(()=>requestAnimationFrame(enforceChatShellOpen));
     }
-    window.addEventListener('resize',preserveChatShellOnViewportChange,{passive:true});
-    window.addEventListener('orientationchange',()=>requestAnimationFrame(preserveChatShellOnViewportChange),{passive:true});
-    if(window.visualViewport)window.visualViewport.addEventListener('resize',preserveChatShellOnViewportChange,{passive:true});
+    for(const eventName of ['resize','orientationchange','pageshow'])window.addEventListener(eventName,preserveChatShellOnViewportChange,{passive:true});
+    if(window.visualViewport){window.visualViewport.addEventListener('resize',preserveChatShellOnViewportChange,{passive:true});window.visualViewport.addEventListener('scroll',preserveChatShellOnViewportChange,{passive:true});}
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)preserveChatShellOnViewportChange()});
+    const shellRepairObserver=new MutationObserver(()=>{if(chatShellOpenIntent&&!$('#chatShell').classList.contains('on'))preserveChatShellOnViewportChange()});
+    shellRepairObserver.observe($('#chatShell'),{attributes:true,attributeFilter:['class','aria-hidden','style']});
+    try{chatShellOpenIntent=sessionStorage.getItem('neko-chat-shell-open')==='1'}catch(_){}
+    if(chatShellOpenIntent)requestAnimationFrame(enforceChatShellOpen);
 
     function runCyberDoorTransition(){
       if(accessTransitionRunning)return Promise.resolve();accessTransitionRunning=true;
@@ -3478,7 +3577,7 @@ const ADMIN_VERIFIED_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAAT
         {at:1,n:100,stage:'READY',sub:'Workspace initialization complete',code:'OK.100'}
       ];
       function render(start){function frame(now){const raw=Math.max(0,now-start),holdStart=baseDuration*holdPoint,holdEnd=holdStart+holdDuration,isHolding=willHold&&raw>=holdStart&&raw<holdEnd;let effective=raw;if(willHold&&raw>=holdStart)effective=raw<holdEnd?holdStart:raw-holdDuration;const t=Math.min(effective/baseDuration,1);let a=phases[0],b=phases.at(-1);for(let i=1;i<phases.length;i++){if(t<=phases[i].at){a=phases[i-1];b=phases[i];break}}const local=(t-a.at)/Math.max(b.at-a.at,.001),n=Math.round(a.n+(b.n-a.n)*local);value.textContent=String(n).padStart(2,'0');track.style.setProperty('--progress',n+'%');bar.style.setProperty('--bar-progress',n+'%');overlay.classList.toggle('holding',isHolding);if(isHolding){stage.textContent='SYNC CHECK';sub.textContent='Confirming workspace consistency';code.textContent='WAIT.'+String(Math.max(1,Math.ceil((holdEnd-raw)/100))).padStart(2,'0')}else{stage.textContent=a.stage;sub.textContent=a.sub;code.textContent=a.code}time.textContent='00:'+String(Math.max(0,Math.ceil((totalDuration-raw)/1000))).padStart(2,'0');const active=Math.min(4,Math.floor(t*5));steps.forEach((el,i)=>{el.classList.toggle('active',i===active&&t<.99);el.classList.toggle('done',i<active||t>=.99)});if(raw<totalDuration)progressRaf=requestAnimationFrame(frame)}progressRaf=requestAnimationFrame(frame)}
-      return new Promise(resolve=>{const gate=$('#gate'),chat=$('#chatShell');value.textContent='00';stage.textContent=phases[0].stage;sub.textContent=phases[0].sub;code.textContent=phases[0].code;time.textContent='00:'+String(Math.ceil(totalDuration/1000)).padStart(2,'0');track.style.setProperty('--progress','0%');bar.style.setProperty('--bar-progress','0%');steps.forEach(el=>el.classList.remove('active','done'));overlay.classList.remove('finishing','complete','holding');void overlay.offsetWidth;overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';gate.classList.add('gate-leaving');later(()=>{if(gate.open)gate.close();gate.classList.remove('gate-leaving');render(performance.now());later(()=>overlay.classList.add('complete'),Math.max(0,totalDuration-(reduced?180:850)));later(()=>{stage.textContent='READY';sub.textContent='Workspace initialization complete';code.textContent='OK.100';value.textContent='100';track.style.setProperty('--progress','100%');bar.style.setProperty('--bar-progress','100%');overlay.classList.add('complete');requestAnimationFrame(()=>requestAnimationFrame(()=>later(()=>{armChatBackGuard();document.body.classList.add('chat-shell-open');chat.classList.add('on','reveal');chat.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';overlay.classList.add('finishing');later(()=>{cancelAnimationFrame(progressRaf);timers.forEach(clearTimeout);overlay.classList.remove('active','finishing','complete','holding');overlay.setAttribute('aria-hidden','true');accessTransitionRunning=false;resolve()},reduced?160:760)},handoffDelay)))},totalDuration)},entryDelay)});
+      return new Promise(resolve=>{const gate=$('#gate'),chat=$('#chatShell');value.textContent='00';stage.textContent=phases[0].stage;sub.textContent=phases[0].sub;code.textContent=phases[0].code;time.textContent='00:'+String(Math.ceil(totalDuration/1000)).padStart(2,'0');track.style.setProperty('--progress','0%');bar.style.setProperty('--bar-progress','0%');steps.forEach(el=>el.classList.remove('active','done'));overlay.classList.remove('finishing','complete','holding');void overlay.offsetWidth;overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';gate.classList.add('gate-leaving');later(()=>{if(gate.open)gate.close();gate.classList.remove('gate-leaving');render(performance.now());later(()=>overlay.classList.add('complete'),Math.max(0,totalDuration-(reduced?180:850)));later(()=>{stage.textContent='READY';sub.textContent='Workspace initialization complete';code.textContent='OK.100';value.textContent='100';track.style.setProperty('--progress','100%');bar.style.setProperty('--bar-progress','100%');overlay.classList.add('complete');requestAnimationFrame(()=>requestAnimationFrame(()=>later(()=>{armChatBackGuard();persistChatShellIntent(true);document.body.classList.add('chat-shell-open');chat.classList.add('on','reveal');chat.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';overlay.classList.add('finishing');later(()=>{cancelAnimationFrame(progressRaf);timers.forEach(clearTimeout);overlay.classList.remove('active','finishing','complete','holding');overlay.setAttribute('aria-hidden','true');accessTransitionRunning=false;resolve()},reduced?160:760)},handoffDelay)))},totalDuration)},entryDelay)});
     }
     function openHiddenGate(){
       const gate=$('#gate');
