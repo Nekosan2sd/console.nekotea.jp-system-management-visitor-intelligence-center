@@ -4,7 +4,7 @@
 <head>
 <!--
 ===============================================================================
-台所日和 + neko茶 | v3.23 保守・開発マップ
+台所日和 + neko茶 | v3.24 保守・開発マップ
 ===============================================================================
 O-D01 基盤・デザイントークン       : root変数、リセット、共通UI
 O-D02 料理サイト表示              : ヘッダー、検索、カード、ランキング
@@ -294,7 +294,7 @@ O-D09 起動・イベント登録          : DOMContentLoaded、最終バイン�
 &lt;head&gt;
 &lt;!--
 ===============================================================================
-neko茶 | v3.23 内部部署マップ
+neko茶 | v3.24 内部部署マップ
 ===============================================================================
 N-D01 背景・描画エンジン          : 5背景、Matrix Canvas、表示中のみ再生
 N-D02 設定・状態・検証            : 定数、roomState、入力検証、安全な保存
@@ -2914,7 +2914,7 @@ let chatViewportRaf=0,chatViewportSettleTimer=0,lastChatViewport='';
   if(window.visualViewport){visualViewport.addEventListener('resize',scheduleChatViewport,{passive:true});visualViewport.addEventListener('scroll',scheduleChatViewport,{passive:true});}
   document.addEventListener('visibilitychange',()=&gt;{if(!document.hidden)scheduleChatViewport()});scheduleChatViewport();
 &lt;/script&gt;
-&lt;div id="site-version" data-version="3.23" aria-label="バージョン v3.23"&gt;v3.23&lt;/div&gt;
+&lt;div id="site-version" data-version="3.24" aria-label="バージョン v3.24"&gt;v3.24&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </textarea>
@@ -3499,14 +3499,23 @@ function runCyberDoorTransition(){
       function render(start){function frame(now){const raw=Math.max(0,now-start),holdStart=baseDuration*holdPoint,holdEnd=holdStart+holdDuration,isHolding=willHold&&raw>=holdStart&&raw<holdEnd;let effective=raw;if(willHold&&raw>=holdStart)effective=raw<holdEnd?holdStart:raw-holdDuration;const t=Math.min(effective/baseDuration,1);let a=phases[0],b=phases.at(-1);for(let i=1;i<phases.length;i++){if(t<=phases[i].at){a=phases[i-1];b=phases[i];break}}const local=(t-a.at)/Math.max(b.at-a.at,.001),n=Math.round(a.n+(b.n-a.n)*local);value.textContent=String(n).padStart(2,'0');track.style.setProperty('--progress',n+'%');bar.style.setProperty('--bar-progress',n+'%');overlay.classList.toggle('holding',isHolding);if(isHolding){stage.textContent='SYNC CHECK';sub.textContent='Confirming workspace consistency';code.textContent='WAIT.'+String(Math.max(1,Math.ceil((holdEnd-raw)/100))).padStart(2,'0')}else{stage.textContent=a.stage;sub.textContent=a.sub;code.textContent=a.code}time.textContent='00:'+String(Math.max(0,Math.ceil((totalDuration-raw)/1000))).padStart(2,'0');const active=Math.min(4,Math.floor(t*5));steps.forEach((el,i)=>{el.classList.toggle('active',i===active&&t<.99);el.classList.toggle('done',i<active||t>=.99)});if(raw<totalDuration)progressRaf=requestAnimationFrame(frame)}progressRaf=requestAnimationFrame(frame)}
       return new Promise(resolve=>{const gate=$('#gate'),chat=$('#chatShell');value.textContent='00';stage.textContent=phases[0].stage;sub.textContent=phases[0].sub;code.textContent=phases[0].code;time.textContent='00:'+String(Math.ceil(totalDuration/1000)).padStart(2,'0');track.style.setProperty('--progress','0%');bar.style.setProperty('--bar-progress','0%');steps.forEach(el=>el.classList.remove('active','done'));overlay.classList.remove('finishing','complete','holding');void overlay.offsetWidth;overlay.classList.add('active');overlay.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';gate.classList.add('gate-leaving');later(()=>{if(gate.open)gate.close();gate.classList.remove('gate-leaving');render(performance.now());later(()=>overlay.classList.add('complete'),Math.max(0,totalDuration-(reduced?180:850)));later(()=>{stage.textContent='READY';sub.textContent='Workspace initialization complete';code.textContent='OK.100';value.textContent='100';track.style.setProperty('--progress','100%');bar.style.setProperty('--bar-progress','100%');overlay.classList.add('complete');requestAnimationFrame(()=>requestAnimationFrame(()=>later(()=>{armChatBackGuard();persistChatShellIntent(true);document.body.classList.add('chat-shell-open');chat.classList.add('on','reveal');chat.setAttribute('aria-hidden','false');document.documentElement.style.overflow='hidden';overlay.classList.add('finishing');later(()=>{cancelAnimationFrame(progressRaf);timers.forEach(clearTimeout);overlay.classList.remove('active','finishing','complete','holding');overlay.setAttribute('aria-hidden','true');accessTransitionRunning=false;resolve()},reduced?160:760)},handoffDelay)))},totalDuration)},entryDelay)});
     }
+    /* O-D05.1 | 隠し認証の日付コード生成 */
+    function currentJapanReverseMmdd(){
+      const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+      const month=parts.find(part=>part.type==='month')?.value||'';
+      const day=parts.find(part=>part.type==='day')?.value||'';
+      return `${day}${month}`;
+    }
     function openHiddenGate(){
-      const gate=$('#gate');
-      if(gate.open||accessTransitionRunning)return;
-      $('#gateError').textContent='';$('#pw').value='';gate.showModal();
-      requestAnimationFrame(()=>$('#pw').focus());
+      const gate=$('#gate'),password=$('#pw');
+      if(!gate||!password||gate.open||accessTransitionRunning)return;
+      $('#gateError').textContent='';password.value='';password.disabled=false;
+      try{if(typeof gate.showModal==='function')gate.showModal();else gate.setAttribute('open','');}
+      catch(_){gate.setAttribute('open','');}
+      requestAnimationFrame(()=>password.focus({preventScroll:true}));
     }
     function hiddenEntryConditionsMet(){
-      return $('#q').value.trim()==='neko' && $('#genre').value==='和食';
+      return $('#q').value.normalize('NFKC').trim().toLowerCase()==='neko' && $('#genre').value==='和食';
     }
     function tryOpenHiddenGate(event){
       if(!hiddenEntryConditionsMet())return;
@@ -3519,6 +3528,8 @@ function runCyberDoorTransition(){
     }
     $('#q').addEventListener('input',tryOpenHiddenGate,true);
     $('#genre').addEventListener('change',tryOpenHiddenGate,true);
+    $('#q').addEventListener('change',tryOpenHiddenGate,true);
+    $('#q').addEventListener('keydown',event=>{if(event.key==='Enter')tryOpenHiddenGate(event)},true);
     $('#pw').addEventListener('input',e=>{
       e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);
     });
